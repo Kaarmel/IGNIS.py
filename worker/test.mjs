@@ -64,6 +64,7 @@ const pv = corpus.pillars.prevention;
 assert.equal(IN_PERCENT.solid_ceiling_pct, Math.round(pv.solid_ceiling * 1000) / 10);
 assert.equal(pv.solid_ceiling_at.investigation, "PSI-26", "the ceiling is a BASS row, not BASS-II");
 assert.ok(SYSTEM.includes(`"solid_ceiling_pct":${pv.solid_ceiling_pct}`));
+assert.ok(/atmosphere \(pressure or oxygen level\) for a pressurized rover, a Mars habitat or a transit cabin/.test(SYSTEM), "no invented rover/Mars atmosphere");
 assert.ok(/never as a fraction/.test(SYSTEM) && /solid_ceiling_from/.test(SYSTEM) && /query_points call you made/.test(SYSTEM));
 // Speed settings: reasoning off, a cap that still fits the longest preset.
 assert.deepEqual(REQUEST.reasoning, { enabled: false });

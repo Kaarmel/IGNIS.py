@@ -193,9 +193,9 @@ Super-intelligent tools were used, as the challenge requires:
   oxygen or a cut-off ending is not written. The page shows one only when the live call fails or passes
   25 s, under the label "saved answer, recorded <date> — not live"; `node worker/test.mjs` re-checks every
   stored answer.
-- **Speed.** With the model's reasoning mode on and `max_tokens` 8000, the five presets took 3.8–11.8 s
+- **Speed.** With the model's reasoning mode on and `max_tokens` 8000, the five presets (one run each) took 3.8–11.8 s
   against the deployed worker (5–34 s in a local run), and two of five made no data query. With reasoning off
-  and `max_tokens` 4000 they took 2.7–7.6 s, and every one queried the points. Same model.
+  and `max_tokens` 4000 they took 2.7–7.6 s, and four of five queried the points (the Earth question, answered from quotes, did not). Same model.
 - **A script verifies those quotes.** `scripts/verify_insights.py` re-reads every named file (PDF text
   via `pdftotext`, DOCX via the stdlib XML reader), normalises whitespace only, and **exits non-zero if
   any quote is not literally present**. Changing one word of one quote makes it fail, so the claim is

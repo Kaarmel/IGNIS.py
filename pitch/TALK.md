@@ -33,7 +33,7 @@ About 440 spoken words — just under three minutes at a calm pace. Slide 5 is t
 
 ### Slide 3 — the funnel (0:55–1:15)
 
-> **2,870 published rows** in **22 tables**. Mapped by hand — three pressure units, two oxygen conventions —
+> **2,870 published rows** in **22 tables**. Specified by hand — three pressure units, two oxygen conventions —
 > they become **1,936** test points. **264** are solid materials. **Zero** are at 30 percent.
 
 ### Slide 4 — the map (1:15–1:40)
@@ -105,7 +105,7 @@ wierszu.
 Bo sprawdziliśmy to niezależnie. 252 z 264 punktów stałych ma ciśnienie zapisane gdzieś w korpusie —
 BASS w macierzy „as run", BASS-II w raporcie zbiorczym, Saffire-I w arkuszu czujników — a wszystkie
 252 leżą między 0,98 i 1,03 bar. Sufit 22,7% policzony jest z 261 punktów, które poziom tlenu
-faktycznie zapisują. Sam raport BASS-II mówi, że rozcieńczał powietrze ISS azotem — czyli sufit jest
+faktycznie zapisują; najwyższy z nich to wiersz 55 BASS (PSI-26). Sam raport BASS-II mówi, że rozcieńczał powietrze ISS azotem — czyli sufit jest
 granicą metody, nie granicą bezpieczeństwa. Rachunek się domyka i jest na slajdzie: 2 870 wierszy,
 959 odrzuconych, 1 911 wierszy dających punkty i 1 936 punktów, bo 18 wierszy BRE rozwija się w 43.
 

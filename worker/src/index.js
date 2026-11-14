@@ -8,10 +8,12 @@ const MAX_QUESTION = 600;
 const MAX_MISSION = 200;
 const MAX_TURNS = 5; // tool round-trips before we stop and say so
 // Generation settings, one place. REQUEST is spread into every model call.
-// Measured on the five presets (2026-11-14): with the model's reasoning mode on
-// and max_tokens 8000 answers took 5-34 s and two of five made no data query;
-// with reasoning off they took 3-10 s and every one queried the points. The
-// 4000-token cap leaves room for the longest preset (Rank, ~1,400 characters).
+// Measured on the five presets (2026-11-14, one run per preset): with the
+// model's reasoning mode on and max_tokens 8000 the deployed worker took
+// 3.8-11.8 s (5-34 s in a local run) and two of five made no data query; with
+// reasoning off it took 2.7-7.6 s and four of five queried the points (the
+// Earth question, answered from quotes, did not). The 4000-token cap leaves
+// room for the longest preset (Rank, ~1,400 characters).
 export const REQUEST = { max_tokens: 4000, reasoning: { enabled: false } };
 
 const TOOLS = [{ type: "function", function: {

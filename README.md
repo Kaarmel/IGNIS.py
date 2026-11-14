@@ -29,8 +29,8 @@ accession it rests on:
 The reference point is the challenge's own sentence: lunar oxygen **"will likely be 30 % or greater, with a
 corresponding pressure of 10.2 psi or less"**, with suits **"filled with 100 % oxygen to only 4.3 psi"**.
 NASA's reference design for a lunar surface habitat — 10.2 psia (0.703 bar) at 26.5 % oxygen, capability
-8.2 psia at 34 % (Kessler et al., NTRS 20220000245) — is the second marker. Neither the challenge nor that
-paper gives an atmosphere for a pressurised rover or a Mars habitat, so the solver offers that entry as
+8.2 psia at 34 % (Kessler et al., NTRS 20220000245) — is the second marker. That paper gives no atmosphere
+for a pressurised rover or a Mars habitat (we could not re-fetch the challenge page to re-check it), so the solver offers that entry as
 "atmosphere not given — enter your own" rather than a guessed preset.
 
 Every solid-material test in the NASA PSI corpus — 264 points across five investigations — stops at **22.7 %**,
@@ -182,9 +182,9 @@ Super-intelligent (SI) tools were used in this project, as required by the 2026 
   oxygen or a cut-off ending is not written. The page shows one only when the live call fails or passes
   25 s, under the label "saved answer, recorded <date> — not live"; `node worker/test.mjs` re-checks every
   stored answer.
-- **Speed.** With the model's reasoning mode on and `max_tokens` 8000, the five presets took 3.8–11.8 s
+- **Speed.** With the model's reasoning mode on and `max_tokens` 8000, the five presets (one run each) took 3.8–11.8 s
   against the deployed worker (5–34 s in a local run), and two of five made no data query. With reasoning off
-  and `max_tokens` 4000 they took 2.7–7.6 s, and every one queried the points. Same model.
+  and `max_tokens` 4000 they took 2.7–7.6 s, and four of five queried the points (the Earth question, answered from quotes, did not). Same model.
 - **A script verifies every quote.** `scripts/verify_insights.py` re-reads each named file (PDF via
   `pdftotext`, DOCX via the stdlib XML reader), normalises whitespace and nothing else, and **exits
   non-zero if any quote is not literally there**. Change one word of one quote and it fails. A PDF is

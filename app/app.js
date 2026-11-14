@@ -158,7 +158,7 @@
       $('#dp-air-n').textContent = fmt(DP.air.tests);
     }
     $('#foot-meta').textContent = L(
-      `${fmt(D.meta.investigations)} accessions mapped · ${fmt(D.meta.tables)} tables · ${fmt(D.meta.testpoints)} test points · ${fmt(both.length)} with O2 + pressure`,
+      `${fmt(D.meta.investigations)} accessions with a test table · ${fmt(D.meta.tables)} tables · ${fmt(D.meta.testpoints)} test points · ${fmt(both.length)} with O2 + pressure`,
       `${fmt(D.meta.investigations)} zmapowanych akcesji · ${fmt(D.meta.tables)} tabel · ${fmt(D.meta.testpoints)} punktów testowych · ${fmt(both.length)} z O2 + ciśnieniem`);
   };
 
@@ -231,7 +231,7 @@
   /* ---------------- funnel ---------------- */
   const renderFunnel = () => {
     const steps = [
-      { n: RAW, label: L(`Rows in the ${fmt(D.meta.tables)} mapped tables`, `Wiersze w ${fmt(D.meta.tables)} zmapowanych tabelach`),
+      { n: RAW, label: L(`Rows in the ${fmt(D.meta.tables)} published tables`, `Wiersze w ${fmt(D.meta.tables)} opublikowanych tabelach`),
         note: L('as published by NASA PSI', 'w postaci opublikowanej przez NASA PSI') },
       { n: ROWS.length, label: L('Test points', 'Punkty testowe'),
         note: L('rows that parse into a point — BRE turns 18 test-day rows into 43 points, one per oxygen level', 'wiersze dające punkt — BRE zamienia 18 wierszy dni testowych w 43 punkty, po jednym na poziom tlenu') },
@@ -1463,12 +1463,12 @@
       cards.push({ earth: true,
         tag: L('On Earth', 'Na Ziemi'),
         n: '0',
-        k: L(`water-mist tests among the ${fmt(D.meta.investigations)} PSI accessions mapped here`, `testów mgły wodnej wśród ${fmt(D.meta.investigations)} zmapowanych tu akcesji PSI`),
+        k: L(`water-mist tests among the ${fmt(D.meta.investigations)} PSI accessions with a test table`, `testów mgły wodnej wśród ${fmt(D.meta.investigations)} akcesji PSI z tabelą testów`),
         p: L(`<b>Detection.</b> ${q('smoke')} SAME and SAME-R (${fmt(det['PSI-102'] ? det['PSI-102'].rows : 0)} and ${fmt(det['PSI-101'] ? det['PSI-101'].rows : 0)} rows) measure exactly that difference in the smoke. Among the achievements NASA's guide lists in this area is a detector that reads particles and gases together: ${q('detector')} ${src}<br><br>
-             <b>Suppression.</b> ${q('mist')} ${src} None of the accessions mapped here is a water-mist test, so this page cannot rank mist against the inert gases in the suppression card.<br><br>
+             <b>Suppression.</b> ${q('mist')} ${src} None of these accessions is a water-mist test, so this page cannot rank mist against the inert gases in the suppression card.<br><br>
              <b>Fuels.</b> FLEX burned heptane and methanol droplets; the guide calls their models the building blocks for diesel and jet-fuel models: ${q('fuels')} ${src}`,
              `<b>Wykrywanie.</b> ${q('smoke')} SAME i SAME-R (${fmt(det['PSI-102'] ? det['PSI-102'].rows : 0)} i ${fmt(det['PSI-101'] ? det['PSI-101'].rows : 0)} wierszy) mierzą właśnie tę różnicę w dymie. Wśród osiągnięć tego obszaru przewodnik NASA wymienia czujnik, który odczytuje cząstki i gazy jednocześnie: ${q('detector')} ${src}<br><br>
-             <b>Gaszenie.</b> ${q('mist')} ${src} Żadna ze zmapowanych tu akcesji nie jest testem mgły wodnej, więc ta strona nie może porównać mgły z gazami obojętnymi z karty o gaszeniu.<br><br>
+             <b>Gaszenie.</b> ${q('mist')} ${src} Żadna z tych akcesji nie jest testem mgły wodnej, więc ta strona nie może porównać mgły z gazami obojętnymi z karty o gaszeniu.<br><br>
              <b>Paliwa.</b> FLEX spalał krople heptanu i metanolu; przewodnik nazywa ich modele podstawą modeli oleju napędowego i paliwa lotniczego: ${q('fuels')} ${src}`),
         note: L(`NASA spin-offs the challenge points to — heritage technology, not results from this archive: ${so(9407, 'a fire detector that tells combustion particles from dust (1978)', '')}, ${so(9582, 'lighter firefighter air tanks (1976)', '')}, ${so(9918, 'protective clothing from spacesuit materials (1982)', '')}.`,
                 `Spin-offy NASA wskazane w challenge'u — dziedzictwo technologiczne, nie wyniki z tego archiwum: ${so(9407, '', 'czujnik pożaru odróżniający cząstki spalania od pyłu (1978)')}, ${so(9582, '', 'lżejsze butle powietrza dla strażaków (1976)')}, ${so(9918, '', 'odzież ochronna z materiałów skafandrów (1982)')}.`),
