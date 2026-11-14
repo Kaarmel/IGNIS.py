@@ -14,9 +14,11 @@ and what would inform the next generation of fire-safety controls (the three-pil
 The page opens with these four cards, each with one number, one conclusion, one limit and a link to the
 accession it rests on:
 
-- **Suppression — cut the ventilation.** The BASS operators recorded **18** attempts to put a burning solid
+- **Suppression — test cutting the air flow first.** The BASS operators recorded **18** attempts to put a burning solid
   out with nitrogen; **16** left the flame lit, and in **10** of those the flame went out when the air flow
-  was turned off. *Limit:* operator log entries at 17.5–22.6 % O₂ and cabin pressure, not a controlled comparison.
+  was turned off. *Limit:* operator log entries at 17.5–22.6 % O₂ and cabin pressure, small glovebox samples — a
+  signal to test at cabin scale, not a procedure. Operations teams already know air flow matters; the point is
+  where the open data shows it.
 - **Design atmosphere — do not count on self-extinction.** **0 of 17** FLEX droplets near the 10.2 psi design
   pressure at 30–34 % O₂ self-extinguished, against **14 of 29** in the same nitrogen series at cabin air.
   *Limit:* droplets, not cabin materials, and both axes differ between the cohorts — an analogue.
@@ -29,8 +31,9 @@ accession it rests on:
 The reference point is the challenge's own sentence: lunar oxygen **"will likely be 30 % or greater, with a
 corresponding pressure of 10.2 psi or less"**, with suits **"filled with 100 % oxygen to only 4.3 psi"**.
 NASA's reference design for a lunar surface habitat — 10.2 psia (0.703 bar) at 26.5 % oxygen, capability
-8.2 psia at 34 % (Kessler et al., NTRS 20220000245) — is the second marker. That paper gives a cabin atmosphere
-only for the Surface Habitat — none for the pressurised rover or the Mars transit habitat, so the solver offers that entry as
+8.2 psia at 34 % (Kessler et al., NTRS 20220000245) — is the second marker. The challenge gives that one
+atmosphere to the Moon Base and the pressurised rovers alike, and none for Mars; Kessler gives none for the Mars
+transit habitat either, so the solver offers that entry as
 "atmosphere not given — enter your own" rather than a guessed preset.
 
 Every solid-material test in the NASA PSI corpus — 264 points across five investigations — stops at **22.7 %**,
@@ -40,7 +43,7 @@ IGNIS maps the columns of 18 of the 22 published test tables (16 accessions yiel
 rows of the other four by name — three ACME tables, CLD Flame, E-FIELD and s-Flame (82 rows), whose columns
 this build does not map, and the cross-experiment summary sheet — measures the gap, and states, per
 destination and per material class, what the evidence does and does not support. PSI-115 and PSI-117 have no
-test table. When the answer is a gap, it names the experiment that would close it: the untested oxygen band,
+test table. When the answer is a gap, it names the experiment that would close it: the oxygen band PSI has no test for,
 the pressure to run at, and how far the nearest real measurement sits. That answer prints as a one-page
 evidence gap report.
 
@@ -56,8 +59,12 @@ evidence gap report.
 | **solid points above the habitat's nominal level (26.5 % O₂)** | **0** |
 
 - Solid-material oxygen ceiling: **22.7 %** — the highest of the 261 solid points that record a level. Against the
-  challenge's 30 % that is **7.3 pp untested**; against the Artemis nominal, **3.8 pp** — and **11.3 pp** to the
-  34 % capability mode, where no solid test exists within 0.03 bar of 0.565 bar either.
+  challenge's 30 % that is **7.3 pp with no solid test in PSI**; against the Artemis nominal, **3.8 pp** — and
+  **11.3 pp** to the 34 % capability mode, where PSI has no solid test within 0.03 bar of 0.565 bar either.
+- **This is a gap in the open archive, not in all of science.** Outside PSI, SoFIE-GEL on the ISS burned 4 cm
+  PMMA spheres at 13–34 % O₂ and 0.15–1.1 atm (James et al., *Combustion and Flame* 277, 114244, 2025). Its
+  points are not in PSI, so a dashboard built on the open archive cannot use them; the first step of closing
+  the gap is to publish them there.
 - The only materials-flammability study in PSI above cabin air is **BRE**, the Burning Rate Emulator: a
   gas burner that emulates a burning surface, **194 flames over 18 test days**, **21–40 % O₂**, 25 and 50 mm
   burners, ethylene and methane. It is its own class in the app — a material-flammability emulator, not a

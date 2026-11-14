@@ -1,5 +1,5 @@
 // node scripts/capture_ask_cache.mjs [endpoint]
-// Records real answers from the deployed Ask IGNIS worker for the five preset
+// Records real answers from the deployed Ask IGNIS worker for the six preset
 // questions and the three mission buttons, in English and Polish, and writes
 // app/data/ask_cache.js — the page's fallback when the network fails or the
 // 25 s limit passes. Nothing here is written by hand: an answer with an
@@ -21,6 +21,8 @@ const PRESETS = {
           "Co te badania w mikrograwitacji znaczą dla bezpieczeństwa pożarowego na Ziemi?"],
   gap: ["What single test would most reduce the uncertainty for materials in a 30% oxygen cabin?",
         "Jaki pojedynczy test najbardziej zmniejszyłby niepewność dla materiałów w kabinie z 30% tlenu?"],
+  beyond: ["How would polyurethane foam burn at 30% O₂ and 10.2 psi, compared with Nomex?",
+           "Jak paliłaby się pianka poliuretanowa przy 30% O₂ i 10,2 psi w porównaniu z Nomexem?"],
 };
 const MISSIONS = {
   rover: ["Pressurized rover", "Łazik ciśnieniowy"],
@@ -37,7 +39,8 @@ const post = async (body) => {
   return { j, s: Math.round((Date.now() - t0) / 100) / 10 };
 };
 const clean = (c) => !c || ((c.unknown_investigations || []).length + (c.unknown_quotes || []).length
-  + (c.unverified_free_quotes || []).length + (c.fraction_oxygen || []).length === 0);
+  + (c.unverified_free_quotes || []).length + (c.fraction_oxygen || []).length
+  + (c.quote_credited_to_other_study || []).length === 0);
 
 let prev = { ask: {}, rank: {} };
 if (fs.existsSync(OUT)) { const s = fs.readFileSync(OUT, "utf8"); prev = JSON.parse(s.slice(s.indexOf("{"), s.lastIndexOf("}") + 1)); }

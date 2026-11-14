@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Extract real flame time series from CFI-G raw telemetry.
 
-Joins the CFI-G experimental tables (atmosphere + outcome) to the raw 1 Hz
+Joins the CFI-G experimental tables (atmosphere + outcome) to the raw 125 Hz
 telemetry files (ion current, chamber pressure, burner temperature, fuel flow)
 via the Test column, which matches the raw file name prefix once spaces are
 stripped. Emits a small set of downsampled series for the dashboard.
@@ -62,7 +62,13 @@ def read_series(path):
         if t is None:
             continue
         rows.append((t, {CHANNELS[c][0]: _f(p[i]) for c, i in want.items()}))
+    # The sampling rate is measured from the timestamps (8 ms steps), not typed.
+    steps = sorted(b[0] - a[0] for a, b in zip(rows, rows[1:]) if b[0] > a[0])
+    if steps:
+        STEPS.append(steps[len(steps) // 2])
     return rows
+
+STEPS = []
 
 def _f(v):
     try:
@@ -193,7 +199,8 @@ with open(OUT, "w") as fh:
     json.dump({"series": picked, "channels": CHANNELS,
                "events": {"total": total_events, "by_investigation": events,
                           "joinable": len(tests),
-                          "joined_series": len(picked)}},
+                          "joined_series": len(picked)},
+               "sample_rate_hz": round(1 / sorted(STEPS)[len(STEPS) // 2]) if STEPS else None},
               fh, separators=(",", ":"))
     fh.write(";\n")
 

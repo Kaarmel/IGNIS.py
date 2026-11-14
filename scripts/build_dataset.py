@@ -554,6 +554,28 @@ near_alt = [r for r in rows_out
             if r["p"] is not None and abs(r["p"] - ALT_P) <= 0.03
             and r["o2"] is not None and r["o2"] >= ALT_O2]
 
+# ---- evidence outside PSI ------------------------------------------------
+# Not test points: the archive does not hold them, and nothing below is drawn
+# on the map or counted in the envelope. It is named so the page can say where
+# the PSI gap is a publication gap rather than a knowledge gap. Values are the
+# abstract's own: "diffusion flame extinction limits of 4-cm diameter PMMA
+# (polymethacrylate) spheres", "oxygen concentrations (13 % to 34 %)",
+# "pressure (0.15-1.1 atm)", "forced flows (0.2 to 80 cm/s)", "aboard the
+# International Space Station" (James, Li, Ferkul, Olson, Johnston,
+# Combustion and Flame 277, 114244, 2025).
+ATM_BAR = 1.01325
+OUTSIDE_PSI = {
+    "sofie_gel": {
+        "name": "SoFIE-GEL", "where": "ISS", "fuel": "PMMA spheres, 4 cm diameter",
+        "fuel_en": "4 cm PMMA spheres", "fuel_pl": "kule PMMA o średnicy 4 cm",
+        "o2_pct": [13, 34], "p_atm": [0.15, 1.1],
+        "p_bar": [round(0.15 * ATM_BAR, 3), round(1.1 * ATM_BAR, 3)],
+        "flow_cm_s": [0.2, 80], "year": 2025,
+        "source": "James, Li, Ferkul, Olson & Johnston, Combustion and Flame 277, 114244 (2025)",
+        "doi": "10.1016/j.combustflame.2025.114244",
+    },
+}
+
 lunar = {
     "target_pressure_bar": LUNAR_P,
     "target_o2_frac": LUNAR_O2,
@@ -881,6 +903,25 @@ def funnel_math(rows, blanks, bre_info, pretest):
         "pretest_rows": pretest,
     }
 
+# Figures the documents and the deck quote, computed here so none is typed by
+# hand (scripts/check_docs.py fails on any number not in this file).
+_flow = [r for r in rows_out if r["f"] is not None and r["o2"] is not None]
+_flow_solid = [r for r in _flow if r["ph"] == "solid"]
+_ext = [r for r in _flow_solid if r.get("fl", {}).get("out") == "extinction"]
+_blow = [r for r in _flow_solid if r.get("fl", {}).get("out") == "blowoff"]
+_rng = lambda rs: [round(min(r["o2"] for r in rs) * 100, 1), round(max(r["o2"] for r in rs) * 100, 1)] if rs else None
+DOC_FIGURES = {
+    "flow": {
+        "points_with_flow_and_o2": len(_flow), "solid": len(_flow_solid),
+        "with_outcome": len(_ext) + len(_blow), "extinction": len(_ext), "blowoff": len(_blow),
+        "extinction_after_reducing_flow": sum(1 for r in _ext if r["fl"].get("ramp")),
+        "o2_range_extinction_pct": _rng(_ext), "o2_range_blowoff_pct": _rng(_blow),
+    },
+    "points_by_phase": {ph: sum(1 for r in rows_out if r["ph"] == ph) for ph in sorted({r["ph"] for r in rows_out})},
+    "smoke_and_dust_points": sum(1 for r in rows_out if r["ph"] in ("aerosol", "dust")),
+    "psia": {"artemis_nominal": 10.2, "artemis_capability": 8.2, "suit": 4.3, "sea_level": 14.7},
+}
+
 data = {
     "meta": {
         "source": "NASA Physical Science Informatics (PSI)",
@@ -902,6 +943,8 @@ data = {
     "grid": {"o2_edges": EDGES_O2, "p_edges": EDGES_P,
              "counts": cell_counts, "phases": cell_phases},
     "lunar": lunar,
+    "outside_psi": OUTSIDE_PSI,
+    "doc_figures": DOC_FIGURES,
     "challenge": challenge,
     "pillars": PILLAR_FACTS,
     "bre": bre,
@@ -931,7 +974,7 @@ quotes |= {f"EARTH.{k}": v for k, v in
            json.loads(_earth[_earth.index("{"):_earth.rindex("}") + 1]).items()}
 os.makedirs(os.path.dirname(WORKER_OUT), exist_ok=True)
 with open(WORKER_OUT, "w", encoding="utf-8") as fh:
-    json.dump({k: data[k] for k in ("meta", "funnel", "lunar", "challenge", "pillars",
+    json.dump({k: data[k] for k in ("meta", "funnel", "lunar", "outside_psi", "challenge", "pillars",
                                     "bre", "investigations", "testpoints")}
               | {"quotes": quotes}, fh, separators=(",", ":"), ensure_ascii=False)
 

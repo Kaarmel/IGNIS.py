@@ -64,7 +64,8 @@ const pv = corpus.pillars.prevention;
 assert.equal(IN_PERCENT.solid_ceiling_pct, Math.round(pv.solid_ceiling * 1000) / 10);
 assert.equal(pv.solid_ceiling_at.investigation, "PSI-26", "the ceiling is a BASS row, not BASS-II");
 assert.ok(SYSTEM.includes(`"solid_ceiling_pct":${pv.solid_ceiling_pct}`));
-assert.ok(/atmosphere \(pressure or oxygen level\) for a pressurized rover, a Mars habitat or a transit cabin/.test(SYSTEM), "no invented rover/Mars atmosphere");
+assert.ok(/Moon Base and pressurized rovers one atmosphere/.test(SYSTEM), "rover atmosphere is the challenge's");
+assert.ok(/atmosphere \(pressure or oxygen level\) for a Mars habitat or a transit cabin/.test(SYSTEM), "no invented Mars atmosphere");
 assert.ok(/never as a fraction/.test(SYSTEM) && /solid_ceiling_from/.test(SYSTEM) && /query_points call you made/.test(SYSTEM));
 // Speed settings: reasoning off, a cap that still fits the longest preset.
 assert.deepEqual(REQUEST.reasoning, { enabled: false });
@@ -127,6 +128,45 @@ assert.equal(r2.error, "invalid_ranking");
 assert.equal(r2.ranking, undefined);
 console.log("ok — percent rule, number check, correction turn, mission ranking");
 
+// Distance from evidence: no weight between the axes, a missing material falls
+// back to its phase and says so, and the loop runs the second tool.
+import { nearestEvidence, paretoOrder } from "./src/tools.js";
+const pts = [{ o2: 0.22, p: 1.0 }, { o2: 0.30, p: 2.0 }, { o2: 0.21, p: 0.71 }, { o2: 0.20, p: 1.5 }];
+const po = paretoOrder(pts, 0.30, 0.703);
+assert.deepEqual(po.slice(0, 3), [pts[1], pts[0], pts[2]], "layer 1 is ordered by oxygen distance");
+assert.equal(po[3], pts[3], "a point beaten on both axes comes after layer 1");
+const pu = nearestEvidence({ o2_pct: 30, p_bar: 0.703, phase: "solid", material_contains: "polyurethane" });
+assert.equal(pu.material_in_archive, "no");
+assert.equal(pu.compared_against, "all solid points");
+assert.equal(pu.within_tolerance, 0);
+assert.equal(pu.class_oxygen_range_pct[1], IN_PERCENT.solid_ceiling_pct);
+assert.equal(pu.nearest[0].o2_pct, IN_PERCENT.solid_ceiling_pct, "nearest solid is the ceiling row");
+assert.equal(pu.nearest[0].oxygen_distance_pp, -IN_PERCENT.challenge_gap_pp);
+assert.ok(nearestEvidence({ o2_pct: 0, p_bar: 1 }).error);
+assert.ok(/nearest_evidence/.test(SYSTEM) && /outside_psi/.test(SYSTEM) && SYSTEM.includes("SoFIE-GEL"));
+let n4 = 0;
+const fake4 = async (req) => {
+  n4++;
+  if (n4 === 1) return { model: "m", choices: [{ finish_reason: "tool_calls", message: { role: "assistant", content: null,
+    tool_calls: [{ id: "n1", type: "function", function: { name: "nearest_evidence", arguments: '{"o2_pct":30,"p_bar":0.703,"phase":"solid"}' } }] } }] };
+  const fed = JSON.parse(req.messages.at(-1).content);
+  return { model: "m", choices: [{ finish_reason: "stop", message: { role: "assistant",
+    content: `Nearest: ${fed.nearest[0].o2_pct}% at ${fed.nearest[0].p_bar} bar [PSI-26], ${fed.nearest[0].pressure_distance_pct}% off in pressure.` } }] };
+};
+const out4 = await ask(fake4, "PU foam at 30%?", "en");
+assert.equal(out4.queries, 1);
+assert.deepEqual(out4.check.unsourced_numbers, [], "numbers from nearest_evidence count as sourced");
+console.log("ok — distance from evidence (Pareto, no weight), nearest_evidence tool");
+// Quotes credited to the right study; brackets hold ids only; no Cyrillic look-alikes.
+import { quoteMismatches } from "./src/tools.js";
+assert.deepEqual(quoteMismatches("SAME-R found it [Q:PSI-102.conclusion]."), ["[Q:PSI-102.conclusion] after PSI-101"]);
+assert.deepEqual(quoteMismatches("SAME found it [Q:PSI-102.conclusion]. SAME-R too [Q:PSI-101.conclusion]."), []);
+assert.deepEqual(quoteMismatches("Detectors with more moments help [Q:PSI-101.conclusion]."), []);
+assert.equal(tidy("faz\u0430 [query_points: aerosol] x [PSI-26] [Q:PSI-26.fuel]"), "faza x [PSI-26] [Q:PSI-26.fuel]");
+assert.match(reviewAnswer("SAME-R found it [Q:PSI-102.conclusion].", ""), /different investigation/);
+assert.equal(tidy("see [PSI-101.objective]"), "see [Q:PSI-101.objective]");
+console.log("ok — quote attribution, bracket and look-alike cleanup");
+
 // Saved fallback answers (app/data/ask_cache.js): every one must still pass the
 // same check the live panel applies, or it does not belong in the file.
 import fs from "node:fs";
@@ -139,6 +179,8 @@ if (fs.existsSync(cachePath)) {
     const c = checkAnswer(e.answer);
     assert.equal(c.unknown_investigations.length + c.unknown_quotes.length + c.unverified_free_quotes.length, 0, `cache ${key}: unresolved citation`);
     assert.deepEqual(c.fraction_oxygen, [], `cache ${key}: oxygen as a fraction`);
+    assert.deepEqual(c.quote_credited_to_other_study, [], `cache ${key}: quote credited to another study`);
+    assert.equal(tidy(e.answer), e.answer, `cache ${key}: stray brackets or look-alike letters`);
     assert.ok(e.model && e.saved && !e.truncated, `cache ${key}: model, date, complete`);
     n++;
   }

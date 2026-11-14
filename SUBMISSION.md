@@ -14,9 +14,10 @@ then with where the archive stops.
 **What to do differently** — one number, one conclusion and one limit each, every number computed from the
 PSI tables:
 
-- **Suppression: cut the ventilation.** Of **18** BASS operator-logged attempts to put a burning solid out
+- **Suppression: test cutting the air flow first.** Of **18** BASS operator-logged attempts to put a burning solid out
   with nitrogen, **16** left the flame lit; in **10** of those the flame went out when the air flow was turned
-  off. An operator log at 17.5–22.6 % O₂, not a controlled comparison.
+  off. An operator log at 17.5–22.6 % O₂ on small glovebox samples, not a controlled comparison — a signal to
+  test at cabin scale, not a procedure.
 - **Design atmosphere: do not count on self-extinction.** **0 of 17** FLEX droplets near the 10.2 psi design
   pressure at 30–34 % O₂ self-extinguished, against **14 of 29** in the same nitrogen series at cabin air.
   Droplets, not cabin materials; both axes differ — an analogue.
@@ -34,8 +35,8 @@ the gap. It has three parts:
 
 1. **Every solid-material test in the corpus stops at 22.7 % oxygen.** That is 264 points across five
    investigations — the highest of the 261 that record a level at all. The habitat's nominal level is
-   26.5 %, its capability mode 34 %. **3.8 percentage points of the relevant range are untested at the
-   nominal point, 11.3 at the capability point** — and no solid test exists within 0.03 bar of either
+   26.5 %, its capability mode 34 %. **3.8 percentage points of the relevant range have no solid test in PSI
+   at the nominal point, 11.3 at the capability point** — and no solid test exists within 0.03 bar of either
    design pressure. The highest point is a BASS test (PSI-26, row 55). The ceiling is not a safety limit:
    both BASS campaigns varied oxygen by diluting ISS air with nitrogen inside the Microgravity Science
    Glovebox at one atmosphere, a method that can only go down from ambient.
@@ -52,6 +53,14 @@ the gap. It has three parts:
    **none of them self-extinguished**, against **14 of 29** in the same nitrogen-diluted FLEX
    series held at cabin air (21 % O₂ ±0.5). Both axes differ between the cohorts, so this is an
    analogue, not a controlled comparison.
+
+**The gap is in the open archive, not in all of science.** Outside PSI, SoFIE-GEL on the ISS burned 4 cm
+PMMA spheres at 13–34 % O₂ and 0.15–1.1 atm (James et al., *Combustion and Flame* 277, 114244, 2025).
+Its points are not in PSI, so no one building on the open archive can use them; the first step of closing
+the gap is to publish them there. Ground qualification (NASA-STD-6001) runs in normal gravity, and the
+corpus itself says that is not the worst case: BASS found flammability enhanced in microgravity for a
+geometry that self-extinguishes in normal-gravity air (PSI-26), and BASS-II set out to compare the
+microgravity worst case with "the terrestrial upward burning used to screen the materials" (PSI-25).
 
 IGNIS is an **SI-powered fire-safety dashboard** in the sense the challenge asks for: it summarizes
 (an SI summary on every documented accession, visible in the Atlas), ranks (by a stated rule, or by the SI
@@ -73,8 +82,8 @@ corpus. (Prose is written by hand; the numbers are not.)
 
 ## Final Project Link
 
-- **Repository:** _(new repository URL — to be filled in)_
-- **Demo:** _(demo URL — to be filled in)_
+- **Repository:** https://github.com/Kaarmel/IGNIS.py
+- **Demo:** https://kaarmel.github.io/IGNIS.py/ (opens the dashboard; the deck is at `/pitch/`)
 - **Application:** `app/index.html` — open it directly. No build step. Only live SI (Ask IGNIS and the Atlas mission ranking) uses the network, through the Cloudflare Worker in `worker/`; without it, those show saved answers labelled with their date, and every other section works from `file://`.
 - **Deck:** [`pitch/IGNIS-pitch.pdf`](pitch/IGNIS-pitch.pdf)
 
@@ -119,7 +128,7 @@ slower than 25 s, the page shows a real answer recorded earlier from the live se
 date and "not live", with a retry button; the rest of the page is unaffected.
 
 Describe an atmosphere and a material class and the solver returns a verdict, the evidence rows behind
-it, **and the experiment that would close the gap** — the oxygen band that has never been tested, the
+it, **and the experiment that would close the gap** — the oxygen band PSI holds no test for, the
 pressure at which to run it, and how far the nearest real measurement sits. Every parameter in that
 plan is computed from the corpus, not written by hand, so the plan is a measurement of what is
 missing rather than a proposed test design. The same answer prints as a one-page evidence gap

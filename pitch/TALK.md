@@ -93,7 +93,8 @@ identified in this summary table". Dlatego w obwiedni dwuosiowej liczy się jako
 to, czym jest — jedyne badanie w PSI sięgające powyżej 22,7% dla materiałów palnych.
 
 **4. „Dlaczego nie ma modelu predykcyjnego?"**
-Bo powyżej 22,7% dla materiałów stałych nie ma ani jednego punktu treningowego — model w tym miejscu
+Challenge prosi o wyciągnięcie danych, które wspierają modelowanie („Extract data that supports predictive
+modeling”), a nie o sam model. A powyżej 22,7% dla materiałów stałych w PSI nie ma ani jednego punktu treningowego — model w tym miejscu
 byłby pewną siebie odpowiedzią nad dziurą, a w bezpieczeństwie pożarowym pewna siebie zła odpowiedź
 zabija ludzi. Zamiast modelu dostarczamy to, czego model potrzebuje: znormalizowany zbiór do pobrania
 w CSV i JSON, z jednostkami, akcesją, numerem wiersza i informacją, skąd wzięło się ciśnienie — plus
@@ -112,12 +113,13 @@ granicą metody, nie granicą bezpieczeństwa. Rachunek się domyka i jest na sl
 **6. Czy to działa bez internetu?**
 Wszystko poza SI na żywo — otwiera się z pliku, zero zależności. Gdy serwer SI nie odpowiada albo minie
 25 s, strona pokazuje prawdziwą odpowiedź zapisaną wcześniej z działającego serwera, z etykietą „odpowiedź
-zapisana <data>, nie na żywo”, i przyciskiem ponowienia. Dotyczy to pięciu gotowych pytań i trzech misji.
+zapisana <data>, nie na żywo”, i przyciskiem ponowienia. Dotyczy to sześciu gotowych pytań i trzech misji.
 
 **7. Czy liczby są wpisane ręcznie?**
 Nie. Każda liczba jest liczona z tabel NASA przez `scripts/build_dataset.py` i
-`scripts/build_telemetry.py`, a cytaty sprawdza `scripts/verify_insights.py`. Zmień wiersz w źródle,
-przebuduj, liczba się zmieni.
+`scripts/build_telemetry.py`, a cytaty sprawdza `scripts/verify_insights.py`. Liczby w README, zgłoszeniu,
+tym skrypcie i decku sprawdza `scripts/check_docs.py`: każda musi występować w `dataset.js`, a wyjątki
+(lata, zmierzone czasy odpowiedzi) są wypisane z powodem. Wszystko naraz: `sh scripts/check_all.sh`.
 
 **8. Co z tego ma NASA?**
 Cztery rzeczy: nazwany zakres, którego nie wolno ekstrapolować (powyżej 22,7% O₂ dla materiałów
@@ -129,9 +131,33 @@ modelowania z jawnie podanym zakresem ważności.
 **9. Co z tego ma Ziemia?**
 Karta *Na Ziemi*: wykrywanie (SAME mierzy, czym dym w mikrograwitacji różni się od ziemskiego; wśród
 osiągnięć tego obszaru przewodnik NASA wymienia czujnik, który w testach z FAA pokonał lotnicze czujniki dymu w odrzucaniu
-fałszywych alarmów), gaszenie (mgła wodna na ISS, z jasnym zaznaczeniem, że w zmapowanych akcesjach
+fałszywych alarmów), gaszenie (mgła wodna na ISS, z jasnym zaznaczeniem, że w tych akcesjach
 nie ma testu mgły) i paliwa (modele heptanu i metanolu z FLEX są podstawą modeli diesla i paliwa
 lotniczego). Cytaty z przewodnika NASA przechodzą przez ten sam weryfikator.
+
+**10. „SoFIE badał wyższy tlen na ISS. Czy luki naprawdę nie ma?"**
+Jest — w otwartym archiwum. SoFIE-GEL spalał na ISS kule PMMA 4 cm przy 13–34% O₂ i 0,15–1,1 atm
+(James i in., *Combustion and Flame* 277, 114244, 2025). Tych punktów nie ma w PSI, więc nikt, kto
+pracuje na otwartych danych, ich nie użyje. Dlatego pierwszy krok kampanii to opublikować je w PSI.
+Na stronie stoi to w werdykcie, z tym samym źródłem.
+
+**11. „Materiały kwalifikuje się na Ziemi w docelowej atmosferze (NASA-STD-6001), więc luki nie ma."**
+Test na Ziemi biegnie w 1 g. Sam korpus mówi, że to nie jest najgorszy przypadek: BASS zobaczył
+podwyższoną palność w mikrograwitacji w geometrii, w której w powietrzu przy 1 g płomień sam gaśnie
+(PSI-26), a cel BASS-II to porównać najgorszy przypadek w statku z „terrestrial upward burning used to
+screen the materials” (PSI-25). Oba cytaty przechodzą weryfikator. Pytanie brzmi więc nie „czy materiał
+przeszedł Test 1”, tylko „czy w mikrograwitacji przy 30% jest gorzej” — i tego PSI nie zawiera.
+
+**12. „Wyłączenie wentylacji to wiedza operacyjna NASA od dawna."**
+Zgadza się — i nie sprzedajemy tego jako odkrycia. Pokazujemy, skąd to wiadomo w otwartych danych:
+18 prób gaszenia azotem w notatkach operatorów BASS, 16 nieudanych, w 10 płomień zgasł po odcięciu
+przepływu. To małe próbki w komorze rękawicowej — sygnał do sprawdzenia w skali kabiny, nie przepis.
+
+**13. „To tylko SQL w języku naturalnym — na większość pytań odpowie »brak danych«."**
+Na pytanie spoza archiwum (gotowy przycisk *Poza danymi*: pianka poliuretanowa przy 30% O₂) SI nie
+odpowiada „brak danych”. Mówi, czego brakuje, podaje najbliższy zmierzony punkt z odległością od dowodu
+— osobno w tlenie (pp) i w ciśnieniu (%), bez wag — i nazywa test, który by tę lukę zamknął. To samo
+liczy solver. Model nie zgaduje, ale odpowiedź jest użyteczna dla inżyniera.
 
 ---
 

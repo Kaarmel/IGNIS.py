@@ -3,7 +3,7 @@
 Unit-safe normalization and coverage verdicts for NASA PSI microgravity
 combustion data. No dependencies, `#![forbid(unsafe_code)]`.
 
-This is the reusable core of [IGNIS](https://github.com/Kaarmel/hakaton_nasa_2026),
+This is the reusable core of [IGNIS](https://github.com/Kaarmel/IGNIS.py),
 extracted from the build so the parts that are easy to get wrong can be reused
 and tested on their own. It is not a port of the app — the table-specific
 mapping (which accession uses which column names) stays in the Python build

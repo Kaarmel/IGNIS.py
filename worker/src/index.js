@@ -1,6 +1,6 @@
 // "Ask IGNIS": a Cloudflare Worker that holds the OpenRouter key, lets the
 // model query the PSI test points, and checks every cited source before answering.
-import { SYSTEM, QUERY_TOOL, queryPoints, checkAnswer, tidy, rankPrompt, parseRanking } from "./tools.js";
+import { SYSTEM, QUERY_TOOL, queryPoints, NEAREST_TOOL, nearestEvidence, checkAnswer, tidy, rankPrompt, parseRanking } from "./tools.js";
 
 export const MODEL = "deepseek/deepseek-v4.1-flash-1017";
 const ENDPOINT = "https://openrouter.ai/api/v1/chat/completions";
@@ -16,8 +16,9 @@ const MAX_TURNS = 5; // tool round-trips before we stop and say so
 // room for the longest preset (Rank, ~1,400 characters).
 export const REQUEST = { max_tokens: 4000, reasoning: { enabled: false } };
 
-const TOOLS = [{ type: "function", function: {
-  name: QUERY_TOOL.name, description: QUERY_TOOL.description, parameters: QUERY_TOOL.input_schema } }];
+const TOOLS = [QUERY_TOOL, NEAREST_TOOL].map((t) => ({ type: "function", function: {
+  name: t.name, description: t.description, parameters: t.input_schema } }));
+const RUN = { [QUERY_TOOL.name]: queryPoints, [NEAREST_TOOL.name]: nearestEvidence };
 
 function cors(request, env) {
   const origin = request.headers.get("Origin") || "";
@@ -73,8 +74,8 @@ async function loop(complete, messages, review) {
       queries++;
       let args;
       try { args = JSON.parse(call.function.arguments || "{}"); } catch { args = null; }
-      const result = args && call.function.name === QUERY_TOOL.name
-        ? queryPoints(args) : { error: "invalid tool call; send query_points with a JSON object" };
+      const fn = RUN[call.function.name];
+      const result = args && fn ? fn(args) : { error: "invalid tool call; send query_points or nearest_evidence with a JSON object" };
       const s = JSON.stringify(result);
       toolText += s + "\n";
       messages.push({ role: "tool", tool_call_id: call.id, content: s });
@@ -91,6 +92,9 @@ export function reviewAnswer(text, toolText) {
   if (c.unsourced_numbers.length) asks.push(
     `These numbers are not in the corpus summary or in any query_points result of this answer: ${c.unsourced_numbers.join(", ")}. ` +
     "Call query_points to obtain each one, or remove it.");
+  if (c.quote_credited_to_other_study.length) asks.push(
+    `These quotes are credited to a different investigation than the one they come from: ${c.quote_credited_to_other_study.join("; ")}. ` +
+    "Name the investigation the quote id belongs to.");
   if (c.fraction_oxygen.length) asks.push(
     `Oxygen is written as a fraction here: ${c.fraction_oxygen.join(", ")}. Write it as a percentage with one decimal place.`);
   return asks.length ? asks.join(" ") + " Then give the complete answer again, nothing else, and do not mention this check or the correction." : null;

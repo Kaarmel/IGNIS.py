@@ -176,12 +176,13 @@
     const nm = det ? (det.q.match(/below (\d+) nm/) || [])[1] : null;
     const link = id => `<a class="tk-link" href="#atlas-${id}">${esc((INV_BY[id] || {}).acronym || id)} · ${id} →</a>`;
     const cards = [];
+    const SGT = D.outside_psi.sofie_gel;
     if (sn) cards.push({
       tag: L('a · Suppression', 'a · Gaszenie'),
       n: `${fmt(sn.nitrogen_recorded_failing)}/${fmt(sn.nitrogen_attempts)}`,
       k: L('attempts to put a burning solid out with nitrogen that left the flame lit', 'prób zgaszenia palącej się próbki azotem, po których płomień się utrzymał'),
-      c: L(`Plan suppression around cutting the ventilation, not around which inert gas is carried: in ${fmt(sn.failed_ended_flow_off)} of those ${fmt(sn.nitrogen_recorded_failing)} the flame went out when the air flow was turned off.`,
-           `Planuj gaszenie wokół odcięcia wentylacji, a nie wyboru gazu obojętnego: w ${fmt(sn.failed_ended_flow_off)} z tych ${fmt(sn.nitrogen_recorded_failing)} przypadków płomień zgasł po wyłączeniu przepływu powietrza.`),
+      c: L(`A signal worth testing at cabin scale: cutting the air flow may matter more than which inert gas is carried — in ${fmt(sn.failed_ended_flow_off)} of those ${fmt(sn.nitrogen_recorded_failing)} the flame went out when the air flow was turned off.`,
+           `Sygnał do sprawdzenia w skali kabiny: odcięcie przepływu powietrza może znaczyć więcej niż wybór gazu obojętnego — w ${fmt(sn.failed_ended_flow_off)} z tych ${fmt(sn.nitrogen_recorded_failing)} przypadków płomień zgasł po wyłączeniu przepływu.`),
       lim: L(`BASS operator log entries at ${fmt(sn.o2_range[0] * 100, 1)}–${fmt(sn.o2_range[1] * 100, 1)}% O₂ and cabin pressure — an operator's log, not a controlled comparison.`,
              `Wpisy z dziennika operatora BASS przy ${fmt(sn.o2_range[0] * 100, 1)}–${fmt(sn.o2_range[1] * 100, 1)}% O₂ i ciśnieniu kabinowym — dziennik operatora, nie porównanie kontrolowane.`),
       id: 'PSI-26',
@@ -215,8 +216,8 @@
            `najwyższy tlen w teście materiału stałego (${PV.solid_ceiling_at.acronym}, wiersz ${PV.solid_ceiling_at.row}), wobec ${fmt(CH_O2 * 100, 0)}% z challenge'u`),
       c: L(`No solid material in PSI has been burned in the top ${fmt(CH.gap_pp, 1)} points of the challenge's oxygen range — so a–c are analogues, not an answer for the materials a habitat interior is made of.`,
            `Żadnego materiału stałego w PSI nie spalono w górnych ${fmt(CH.gap_pp, 1)} punktach zakresu tlenu z challenge'u — dlatego a–c są analogiami, a nie odpowiedzią dla materiałów wnętrza habitatu.`),
-      lim: L(`Every solid test with a documented pressure ran at ${fmt(PDOC.min_bar, 2)}–${fmt(PDOC.max_bar, 2)} bar; closing the gap takes a new test, not more analysis.`,
-             `Każdy test materiału stałego z udokumentowanym ciśnieniem pracował przy ${fmt(PDOC.min_bar, 2)}–${fmt(PDOC.max_bar, 2)} bar; lukę zamknie nowy test, nie dalsza analiza.`),
+      lim: L(`Every solid test with a documented pressure ran at ${fmt(PDOC.min_bar, 2)}–${fmt(PDOC.max_bar, 2)} bar. A gap in the open archive: ${SGT.name} burned PMMA on the ${SGT.where} up to ${fmt(SGT.o2_pct[1])}% O₂, but its points are not in PSI.`,
+             `Każdy test materiału stałego z udokumentowanym ciśnieniem pracował przy ${fmt(PDOC.min_bar, 2)}–${fmt(PDOC.max_bar, 2)} bar. To luka w otwartym archiwum: ${SGT.name} spalał PMMA na ${SGT.where} do ${fmt(SGT.o2_pct[1])}% O₂, ale jego punktów nie ma w PSI.`),
       id: PV.solid_ceiling_at.investigation,
     });
     host.innerHTML = '';
@@ -462,7 +463,7 @@
     gt.textContent = `${fmt((CH_O2 - solidMaxO2) * 100, 1)} pp`;
     svg.append(gt);
     const gt2 = svgEl('text', { x: gx, y: gy + 30, fill: '#ef4444', 'font-size': 10, 'text-anchor': 'middle', 'letter-spacing': '.4', ...knockout });
-    gt2.textContent = L('untested', 'niezbadane');
+    gt2.textContent = L('not in PSI', 'brak w PSI');
     svg.append(gt2);
 
     // legend
@@ -1054,9 +1055,23 @@
   };
 
   /* ---------------- solver ---------------- */
+  function paretoOrder(points, o2, p, limit = Infinity) {
+    const d = points.map(t => ({ t, a: Math.abs(t.o2 - o2), b: Math.abs(Math.log(t.p / p)) }));
+    const out = [];
+    let rest = d;
+    while (rest.length && out.length < limit) {
+      const front = rest.filter(x => !rest.some(y => y !== x && y.a <= x.a && y.b <= x.b && (y.a < x.a || y.b < x.b)));
+      front.sort((x, y) => x.a - y.a || x.b - y.b);
+      out.push(...front.map(x => x.t));
+      const used = new Set(front);
+      rest = rest.filter(x => !used.has(x));
+    }
+    return out;
+  }
   // Every preset is a published or stated atmosphere, not a guessed one. The
-  // first is the challenge's own sentence — lunar oxygen "30% or greater, at
-  // 10.2 psi or less" — because that is the question the submission is asked
+  // first is the challenge's own sentence — the Moon Base and pressurized
+  // rovers at "30% or greater, with a corresponding pressure of 10.2 psi or
+  // less" — because that is the question the submission is asked
   // to answer. The next two are the Artemis Surface Habitat reference design
   // (NTRS 20220000245) and the ISS cabin it also names. No Mars preset: the
   // challenge gives no numbers for it, and inventing a pressure would make the
@@ -1270,8 +1285,13 @@
       return;
     }
 
-    const dist = r => Math.hypot(Math.log(r.p / p), (r.o2 - o2) * 3);
-    const ranked = pool.slice().sort((a, b) => dist(a) - dist(b));
+    // Distance from evidence, with no weight joining the two axes: points are
+    // ordered in Pareto layers (layer 1 = no other point is closer on both
+    // oxygen and pressure at once), and within a layer by the oxygen distance,
+    // the axis of the gap. The SI uses the same rule (worker/src/tools.js,
+    // paretoOrder). This replaced a hypot() with oxygen weighted ×3, a factor
+    // no source justified.
+    const ranked = paretoOrder(pool, o2, p, 60);
     // Eight rows that all read "BASS · 22.1% · 0.983 bar" say nothing. BASS ran
     // dozens of tests at the same condition; collapse them and keep the nearest.
     const seenCond = new Set();
@@ -1360,8 +1380,8 @@
     ctx.metrics = [
       [L('points within tolerance', plPts(tight, 'punkt w tolerancji', 'punkty w tolerancji', 'punktów w tolerancji')), tight, state === 'covered' ? '#34d399' : state === 'partial' ? '#f59e0b' : '#ef4444'],
       [L(`${phase} points usable`, plPts(pool.length, `punkt użyteczny ${phaseFor(phase)}`, `punkty użyteczne ${phaseFor(phase)}`, `punktów użytecznych ${phaseFor(phase)}`)), pool.length],
-      [L('pressure gap', 'luka ciśnienia'), fmt(dpPct, 0) + '%'],
-      [L('oxygen gap', 'luka tlenu'), fmt(dpO2, 1) + ' pp'],
+      [L('distance from evidence · O₂', 'odległość od dowodu · O₂'), fmt(dpO2, 1) + ' pp'],
+      [L('distance from evidence · pressure', 'odległość od dowodu · ciśnienie'), fmt(dpPct, 0) + '%'],
     ];
 
     out.append(el('div', { class: 's-verdict ' + state, html: `<h3>${ctx.title}</h3><p>${ctx.summary}</p>` }));
@@ -1382,8 +1402,9 @@
   if (reportBtn) reportBtn.onclick = () => window.print();
 
   svD.onchange = () => {
-    // Rover and Mars: the cited paper (Kessler et al.) gives no atmosphere for
-    // them, so the option says so and hands over to Custom.
+    // Mars habitat and transit cabin: neither the challenge (which gives one
+    // atmosphere for the Moon Base and pressurized rovers) nor Kessler et al.
+    // states one, so the option says so and hands over to Custom.
     const unstated = svD.value === 'unstated';
     $('#sv-unstated').hidden = !unstated;
     if (unstated) { svD.value = 'custom'; svP.focus(); }
@@ -1584,23 +1605,26 @@
   // page; these cards say what would close it, without repeating them.
   const renderVerdict = () => {
     const CA = D.pillars.prevention.solid_ceiling_at;
+    const SG = D.outside_psi.sofie_gel;
     const cards = [
       {
         rank: '01', tag: L('Test gap', 'Luka testowa'),
         h: L(`Test solid materials in the ${fmt(solidMaxO2 * 100, 1)}–${fmt(CH_O2 * 100, 0)}% O₂ band`, `Przetestować materiały stałe w paśmie ${fmt(solidMaxO2 * 100, 1)}–${fmt(CH_O2 * 100, 0)}% O₂`),
         p: L(
           `Every solid-material test in PSI stops at ${fmt(solidMaxO2 * 100, 1)}% oxygen — the highest of the ${fmt(solidO2.length)} points that record a level is ${CA.acronym} (${CA.investigation}) row ${CA.row}, ${esc(CA.material)}.
-           The challenge puts lunar oxygen at ${fmt(CH_O2 * 100, 0)}% or more, so ${fmt(CH.gap_pp, 1)} percentage points of that atmosphere have never been tested for the materials a habitat interior is made of.
-           NASA's nominal design point — ${fmt(LUNAR_O2 * 100, 1)}% oxygen at ${fmt(LUNAR_P, 3)} bar — sits inside that band, ${fmt(D.lunar.gap_nominal_pp, 1)} points above the ceiling, and no measurement exists there either.
+           The challenge puts lunar oxygen at ${fmt(CH_O2 * 100, 0)}% or more, so ${fmt(CH.gap_pp, 1)} percentage points of that atmosphere have no solid-material test in PSI — the materials a habitat interior is made of.
+           NASA's nominal design point — ${fmt(LUNAR_O2 * 100, 1)}% oxygen at ${fmt(LUNAR_P, 3)} bar — sits inside that band, ${fmt(D.lunar.gap_nominal_pp, 1)} points above the ceiling, and PSI holds no measurement there either.
            The second mode the same paper describes — ${fmt(ALT_O2 * 100, 0)}% at ${fmt(ALT_P, 3)} bar — is ${fmt(D.lunar.gap_capability_pp, 1)} points beyond the ceiling, and no solid test was run within ${fmt(DP_TOL, 2)} bar of that pressure either.
            The ceiling is not a safety limit: both BASS campaigns varied oxygen by adding nitrogen to the glovebox air (the BASS-II report and the BASS operator notes say so), a method that can only go down from cabin air.
-           A test above cabin air is a different experiment, and PSI does not contain it.`,
+           A test above cabin air is a different experiment, and PSI does not contain it.
+           Such experiments exist outside PSI: ${SG.name} on the ${SG.where} burned ${SG.fuel_en} at ${fmt(SG.o2_pct[0])}–${fmt(SG.o2_pct[1])}% O₂ and ${fmt(SG.p_atm[0], 2)}–${fmt(SG.p_atm[1], 1)} atm (${esc(SG.source)}). Its points are not in the archive, so the first step is to publish them there.`,
           `Każdy test materiału stałego w PSI kończy się na ${fmt(solidMaxO2 * 100, 1)}% tlenu — najwyższy z ${fmt(solidO2.length)} punktów zapisujących poziom to ${CA.acronym} (${CA.investigation}) wiersz ${CA.row}, ${esc(CA.material)}.
-           Challenge podaje tlen księżycowy na ${fmt(CH_O2 * 100, 0)}% lub więcej, więc ${fmt(CH.gap_pp, 1)} punktu procentowego tej atmosfery nigdy nie przetestowano dla materiałów, z których zbudowane jest wnętrze habitatu.
-           Nominalny punkt projektu NASA — ${fmt(LUNAR_O2 * 100, 1)}% tlenu przy ${fmt(LUNAR_P, 3)} bar — leży w tym paśmie, ${fmt(D.lunar.gap_nominal_pp, 1)} punktu nad sufitem, i tam też nie istnieje żaden pomiar.
+           Challenge podaje tlen księżycowy na ${fmt(CH_O2 * 100, 0)}% lub więcej, więc dla ${fmt(CH.gap_pp, 1)} punktu procentowego tej atmosfery PSI nie ma żadnego testu materiału stałego — a z takich materiałów zbudowane jest wnętrze habitatu.
+           Nominalny punkt projektu NASA — ${fmt(LUNAR_O2 * 100, 1)}% tlenu przy ${fmt(LUNAR_P, 3)} bar — leży w tym paśmie, ${fmt(D.lunar.gap_nominal_pp, 1)} punktu nad sufitem, i tam też PSI nie ma pomiaru.
            Drugi opisany tryb — ${fmt(ALT_O2 * 100, 0)}% przy ${fmt(ALT_P, 3)} bar — leży ${fmt(D.lunar.gap_capability_pp, 1)} punktu za sufitem, a w granicach ${fmt(DP_TOL, 2)} bar od tego ciśnienia nie wykonano też żadnego testu materiału stałego.
            Sufit nie jest granicą bezpieczeństwa: obie kampanie BASS zmieniały tlen, dodając azot do powietrza w rękawicy (mówią to raport BASS-II i notatki operatorów BASS), czyli metodą, która potrafi tylko schodzić w dół od powietrza kabinowego.
-           Test powyżej powietrza kabinowego to inny eksperyment i korpus PSI go nie zawiera.`)
+           Test powyżej powietrza kabinowego to inny eksperyment i korpus PSI go nie zawiera.
+           Takie eksperymenty istnieją poza PSI: ${SG.name} na ${SG.where} spalał ${SG.fuel_pl} przy ${fmt(SG.o2_pct[0])}–${fmt(SG.o2_pct[1])}% O₂ i ${fmt(SG.p_atm[0], 2)}–${fmt(SG.p_atm[1], 1)} atm (${esc(SG.source)}). Ich punktów nie ma w archiwum, więc pierwszym krokiem jest ich tam opublikowanie.`)
       },
       {
         rank: '02', tag: L('Pressure gap', 'Luka ciśnienia'),
@@ -1659,6 +1683,10 @@
                              'Co te badania w mikrograwitacji znaczą dla bezpieczeństwa pożarowego na Ziemi?')],
     ['gap', L('Gap', 'Luka'), L('What single test would most reduce the uncertainty for materials in a 30% oxygen cabin?',
                          'Jaki pojedynczy test najbardziej zmniejszyłby niepewność dla materiałów w kabinie z 30% tlenu?')],
+    // A question the archive cannot answer, on purpose: the SI has to say what
+    // is missing and how far the nearest measurement is, not guess.
+    ['beyond', L('Beyond the data', 'Poza danymi'), L('How would polyurethane foam burn at 30% O₂ and 10.2 psi, compared with Nomex?',
+                                             'Jak paliłaby się pianka poliuretanowa przy 30% O₂ i 10,2 psi w porównaniu z Nomexem?')],
   ];
   const askHtml = text => esc(text)
     .replace(/\[Q:([^\]]*)\]/g, (m, id) => {
