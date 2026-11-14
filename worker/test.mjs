@@ -54,7 +54,13 @@ assert.match(calls[0][1].content, /^Answer in Polish/);
 assert.equal(JSON.parse(calls[1][3].content).matched, 0, "tool result fed back");
 assert.ok(JSON.parse(calls[1][4].content).error, "bad arguments answered, not thrown");
 assert.deepEqual(out.check.unknown_quotes, []);
-console.log("ok — tool loop");
+// Progress events for the streaming client, in order, and the provider pin.
+calls.length = 0;
+const steps = [];
+await ask(fake, "solids at 30%?", "en", (e) => steps.push(e.stage + (e.n ? e.n : "")));
+assert.deepEqual(steps, ["think", "query1", "query2", "write", "check"]);
+assert.deepEqual(REQUEST.provider, { only: ["inference-net/us"], allow_fallbacks: false });
+console.log("ok — tool loop, progress events");
 
 // ---- what changed on 2026-11-14 -------------------------------------------
 import { IN_PERCENT, numbersIn, parseRanking, rankPrompt } from "./src/tools.js";

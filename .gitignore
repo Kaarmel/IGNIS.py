@@ -17,3 +17,6 @@ target/
 # Cloudflare Worker
 .wrangler/
 .dev.vars
+
+# design checker scratch
+.taste-skill/

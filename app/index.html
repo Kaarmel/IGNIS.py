@@ -14,17 +14,12 @@
 
 <nav class="nav">
   <a class="brand" href="#top"><span class="brand-mark"></span>IGNIS</a>
-  <div class="nav-links">
-    <a href="#takeaways" data-en="Findings" data-pl="Wnioski"></a>
-    <a href="#ask" data-en="Ask SI" data-pl="Zapytaj SI"></a>
-    <a href="#funnel" data-en="Corpus" data-pl="Korpus"></a>
-    <a href="#map" data-en="Coverage" data-pl="Pokrycie"></a>
-    <a href="#flowmap" data-en="O₂ × flow" data-pl="O₂ × przepływ"></a>
-    <a href="#atlas" data-en="Atlas" data-pl="Atlas"></a>
-    <a href="#solver" data-en="Solver" data-pl="Solver"></a>
-    <a href="#pillars" data-en="Pillars" data-pl="Filary"></a>
-    <a href="#telemetry" data-en="Telemetry" data-pl="Telemetria"></a>
-    <a href="#verdict" data-en="Verdict" data-pl="Werdykt"></a>
+  <span class="nav-here" id="nav-here" aria-live="polite"></span>
+  <div class="nav-right">
+    <!-- Section menu, built by app.js from one list (NAV) so labels and descriptions stay in step. -->
+    <button class="nav-burger" id="nav-burger" type="button" aria-expanded="false" aria-controls="nav-menu"
+            data-en="Sections" data-pl="Sekcje"></button>
+    <div class="nav-menu" id="nav-menu"></div>
     <button class="lang" id="lang-toggle" type="button" aria-label="Language / Język">
       <span data-lang="en" class="on">EN</span><span data-lang="pl">PL</span>
     </button>
@@ -41,6 +36,11 @@
     <p class="hero-lede"
        data-en-html="What NASA's microgravity combustion archive tells a habitat designer to do differently — and, at <span class=&quot;hot&quot; id=&quot;hs-ceil&quot;>—</span> O₂ for solid materials, where it stops."
        data-pl-html="Co archiwum spalania w mikrograwitacji NASA każe projektantowi habitatu zrobić inaczej — i gdzie się kończy: na <span class=&quot;hot&quot; id=&quot;hs-ceil&quot;>—</span> O₂ dla materiałów stałych."></p>
+    <div class="purpose" id="purpose">
+      <p class="purpose-k" data-en="What IGNIS is for" data-pl="Do czego służy IGNIS"></p>
+      <div class="purpose-grid" id="purpose-cards"></div>
+      <p class="purpose-warn" id="purpose-warn"></p>
+    </div>
   </div>
 </header>
 
@@ -51,6 +51,9 @@
   <div class="sec-head">
     <p class="kicker" data-en="Findings first" data-pl="Najpierw wnioski"></p>
     <h2 data-en="What a habitat designer should do differently" data-pl="Co projektant habitatu powinien zrobić inaczej"></h2>
+    <p class="sec-lede"
+       data-en="Four suggestions read from the data. Each card gives one number, what it suggests, where that number stops being valid, and a link to the investigation it comes from — click it to see the source."
+       data-pl="Cztery sugestie odczytane z danych. Każda karta podaje jedną liczbę, co z niej wynika, gdzie ta liczba przestaje obowiązywać, i odnośnik do badania, z którego pochodzi — kliknij, żeby zobaczyć źródło."></p>
   </div>
   <div class="takeaways" id="takeaway-cards"></div>
   <details class="hero-ref">
@@ -69,12 +72,28 @@
 <!-- ============ ASK IGNIS ============ -->
 <section id="ask" class="sec">
   <div class="sec-head">
-    <p class="kicker" data-en="SI — Ask the archive" data-pl="SI — Zapytaj archiwum"></p>
-    <h2 data-en="Ask IGNIS" data-pl="Zapytaj IGNIS"></h2>
+    <p class="kicker" data-en="Search or ask the archive" data-pl="Przeszukaj archiwum lub zapytaj"></p>
+    <h2 data-en="Search and ask IGNIS" data-pl="Szukaj i pytaj IGNIS"></h2>
     <p class="sec-lede"
-       data-en-html="A language model (DeepSeek V4.1 Flash) reads the same <span class=&quot;n-tp&quot;></span> test points and verified quotes this page draws, queries the points itself, and cites every claim. Every citation and quotation is checked against the corpus; one that cannot be backed is marked in red, not shown as a source."
-       data-pl-html="Model językowy (DeepSeek V4.1 Flash) czyta te same <span class=&quot;n-tp&quot;></span> punktów testowych i zweryfikowane cytaty, które rysuje ta strona, sam odpytuje punkty i podaje źródło każdego twierdzenia. Każdy odnośnik i cytat jest sprawdzany względem korpusu; taki, którego nie da się potwierdzić, jest oznaczony na czerwono, a nie pokazany jako źródło."></p>
+       data-en-html="Two ways into the same records. <b>Search the data</b> filters every test point yourself — no model involved. <b>Ask the SI</b> gives a written answer: a language model (DeepSeek V4.1 Flash) queries the <span class=&quot;n-tp&quot;></span> test points and verified quotes and cites every claim. Every source in either view opens the file and row it comes from; a citation the corpus cannot back is marked in red."
+       data-pl-html="Dwie drogi do tych samych rekordów. <b>Przeszukaj dane</b> filtruje każdy punkt testowy samodzielnie — bez modelu. <b>Zapytaj SI</b> daje odpowiedź opisową: model językowy (DeepSeek V4.1 Flash) odpytuje <span class=&quot;n-tp&quot;></span> punktów testowych i zweryfikowane cytaty i podaje źródło każdego twierdzenia. Każde źródło w obu widokach otwiera plik i wiersz, z którego pochodzi; odnośnik, którego korpus nie potwierdza, jest oznaczony na czerwono."></p>
   </div>
+  <div class="tabs" role="tablist" id="ask-tabs">
+    <button type="button" role="tab" id="tab-search" aria-controls="pane-search" aria-selected="true">
+      <b data-en="Search the data" data-pl="Przeszukaj dane"></b>
+      <small data-en="every test point, filterable — no SI" data-pl="każdy punkt testowy, z filtrami — bez SI"></small>
+    </button>
+    <button type="button" role="tab" id="tab-si" aria-controls="pane-si" aria-selected="false">
+      <b data-en="Ask the SI" data-pl="Zapytaj SI"></b>
+      <small data-en="a written answer with clickable sources" data-pl="odpowiedź opisowa z klikalnymi źródłami"></small>
+    </button>
+  </div>
+  <div id="pane-search" role="tabpanel" aria-labelledby="tab-search">
+    <div class="ds" id="ds"></div>
+  </div>
+  <div id="pane-si" role="tabpanel" aria-labelledby="tab-si" hidden>
+  <p class="si-warn" data-en-html="<b>A suggestion, not a decision.</b> The SI summarises and points to evidence; it can be wrong. Click any source tag, quote or row reference to open the data it rests on and check it yourself. Do not use an answer on its own for a decision about crew safety."
+     data-pl-html="<b>Sugestia, nie decyzja.</b> SI streszcza i wskazuje dowody; może się mylić. Kliknij dowolny znacznik źródła, cytat lub odwołanie do wiersza, żeby otworzyć dane, na których się opiera, i sprawdzić je samodzielnie. Nie opieraj na samej odpowiedzi decyzji o bezpieczeństwie załogi."></p>
   <div class="ask-presets" id="ask-presets"></div>
   <form class="ask-form" id="ask-form">
     <textarea id="ask-q" rows="2" maxlength="600"
@@ -83,6 +102,7 @@
     <button class="btn-report" type="submit" id="ask-go" data-en="Ask" data-pl="Zapytaj"></button>
   </form>
   <div class="ask-out" id="ask-out" aria-live="polite"></div>
+  </div>
 </section>
 
 <!-- ============ FUNNEL ============ -->
@@ -268,6 +288,9 @@
   <div class="sec-head">
     <p class="kicker" data-en="08 — Verdict" data-pl="08 — Werdykt"></p>
     <h2 data-en="Three things worth acting on" data-pl="Trzy rzeczy warte działania"></h2>
+    <p class="sec-lede"
+       data-en="Where IGNIS suggests new tests are needed. The cards state what the archive does not cover; the table below proposes a test campaign to cover it — a suggestion for researchers, sized from the gaps, not a plan NASA has adopted."
+       data-pl="Gdzie według IGNIS potrzebne są nowe testy. Karty mówią, czego archiwum nie pokrywa; tabela niżej proponuje kampanię testów, która to pokryje — sugestia dla badaczy, wyznaczona z luk, a nie plan przyjęty przez NASA."></p>
   </div>
   <div class="verdict" id="verdict-cards"></div>
   <div class="campaign" id="campaign"></div>
@@ -282,6 +305,12 @@
   <span data-en="IGNIS · built on NASA PSI open data (CC0-1.0)" data-pl="IGNIS · zbudowane na otwartych danych NASA PSI (CC0-1.0)"></span>
   <span id="foot-meta"></span>
 </footer>
+
+<!-- Source popup: what a claim rests on (investigation, quote or table row). Filled by app.js. -->
+<dialog class="src-pop" id="src-pop" aria-labelledby="src-pop-h">
+  <div class="src-pop-in" id="src-pop-body"></div>
+  <form method="dialog" class="src-pop-close"><button type="submit" data-en-al="Close" data-pl-al="Zamknij" aria-label="Close">×</button></form>
+</dialog>
 
 <!-- Populated by app.js on every solve; revealed only by the print stylesheet. -->
 <section id="report"></section>

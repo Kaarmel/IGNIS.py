@@ -190,8 +190,10 @@ Super-intelligent tools were used, as the challenge requires:
   verified quotes by id (`[Q:PSI-26.objective]`); the page prints the quote from `insights.js`. Before an
   answer is returned, every cited id and every quoted string of 12+ characters is checked against the
   corpus; a draft with oxygen written as a fraction or with a number found in neither the summary nor a
-  query result is sent back once for correction. The page gives the worker 25 s, shows a seconds counter and
-  a retry button.
+  query result is sent back once for correction. The page gives the worker 25 s and shows what it is doing as it does it — reading the question,
+  querying the test points, writing, checking numbers and quotes, correcting — streamed from the worker, plus a
+  retry button. All model calls go to one OpenRouter provider (inference-net/us) with no fallback, so latency
+  does not depend on which host OpenRouter picks; if that provider is down, the page shows the saved answer.
 - **SI ranks the Atlas for a mission.** Above the Atlas, "Describe the mission" (with *Pressurized rover*,
   *Lunar surface base*, *Transit cabin* buttons) asks the same worker for an ordered list of accessions with
   one reason each. The worker accepts it only if every id exists, none repeats and every reason passes the

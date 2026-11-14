@@ -174,7 +174,8 @@
     const det = SI['PSI-102'] && SI['PSI-102'].conclusion;
     // The particle size is read out of the verified SAME quote, not typed here.
     const nm = det ? (det.q.match(/below (\d+) nm/) || [])[1] : null;
-    const link = id => `<a class="tk-link" href="#atlas-${id}">${esc((INV_BY[id] || {}).acronym || id)} · ${id} →</a>`;
+    const link = id => `<a class="tk-link" href="#atlas-${id}" data-src-kind="inv" data-src-id="${id}">${L('Source', 'Źródło')}: ${esc((INV_BY[id] || {}).acronym || id)} · ${id} →</a>`;
+    const rowLink = (id, acr, rn) => `<a class="ask-row" href="#takeaways" data-src-kind="row" data-src-id="${id}" data-src-row="${rn}">${esc(acr)}, ${L('row', 'wiersz')} ${rn}</a>`;
     const cards = [];
     const SGT = D.outside_psi.sofie_gel;
     if (sn) cards.push({
@@ -212,8 +213,8 @@
     cards.push({
       tag: L('d · The gap', 'd · Luka'), gap: true,
       n: `${fmt(PV.solid_ceiling_pct, 1)}%`,
-      k: L(`highest oxygen any solid-material test reached (${PV.solid_ceiling_at.acronym}, row ${PV.solid_ceiling_at.row}), against the challenge's ${fmt(CH_O2 * 100, 0)}%`,
-           `najwyższy tlen w teście materiału stałego (${PV.solid_ceiling_at.acronym}, wiersz ${PV.solid_ceiling_at.row}), wobec ${fmt(CH_O2 * 100, 0)}% z challenge'u`),
+      k: L(`highest oxygen any solid-material test reached (${rowLink(PV.solid_ceiling_at.investigation, PV.solid_ceiling_at.acronym, PV.solid_ceiling_at.row)}), against the challenge's ${fmt(CH_O2 * 100, 0)}%`,
+           `najwyższy tlen w teście materiału stałego (${rowLink(PV.solid_ceiling_at.investigation, PV.solid_ceiling_at.acronym, PV.solid_ceiling_at.row)}), wobec ${fmt(CH_O2 * 100, 0)}% z challenge'u`),
       c: L(`No solid material in PSI has been burned in the top ${fmt(CH.gap_pp, 1)} points of the challenge's oxygen range — so a–c are analogues, not an answer for the materials a habitat interior is made of.`,
            `Żadnego materiału stałego w PSI nie spalono w górnych ${fmt(CH.gap_pp, 1)} punktach zakresu tlenu z challenge'u — dlatego a–c są analogiami, a nie odpowiedzią dla materiałów wnętrza habitatu.`),
       lim: L(`Every solid test with a documented pressure ran at ${fmt(PDOC.min_bar, 2)}–${fmt(PDOC.max_bar, 2)} bar. A gap in the open archive: ${SGT.name} burned PMMA on the ${SGT.where} up to ${fmt(SGT.o2_pct[1])}% O₂, but its points are not in PSI.`,
@@ -224,7 +225,7 @@
     cards.forEach(c => host.append(el('article', { class: 'tk' + (c.gap ? ' tk-gap' : ''), html:
       `<span class="tag">${c.tag}</span><div class="tk-n">${c.n}</div><div class="tk-k">${c.k}</div>` +
       `<p class="tk-c">${c.c}</p>` +
-      (c.q ? `<details class="tk-qd"><summary>${L('verified quote', 'cytat zweryfikowany')}</summary><p class="tk-q">“${esc(c.q.q)}”<small>${esc(c.q.f)}</small></p></details>` : '') +
+      (c.q ? `<details class="tk-qd"><summary>${L('verified quote', 'cytat zweryfikowany')}</summary><p class="tk-q src-link" role="button" tabindex="0" data-src-kind="quote" data-src-id="${c.id}" data-src-field="conclusion">“${esc(c.q.q)}”<small>${esc(c.q.f)} · <u>${L('open source', 'otwórz źródło')}</u></small></p></details>` : '') +
       `<p class="tk-lim"><b>${L('Limit', 'Ograniczenie')}:</b> ${c.lim}</p>${link(c.id)}` })));
   };
   const INV_BY = Object.fromEntries(D.investigations.map(i => [i.id, i]));
@@ -363,22 +364,22 @@
     [0, 10, 20, 30, 40, 50, 60, 70, 80, 90].forEach(v => {
       const x = xOf(v / 100);   // xOf takes a fraction, not a percentage
       svg.append(svgEl('line', { x1: x, y1: M.t, x2: x, y2: M.t + PH, stroke: '#1d222a', 'stroke-width': 1 }));
-      const t = svgEl('text', { x, y: M.t + PH + 24, fill: '#626a76', 'font-size': 11, 'text-anchor': 'middle' });
+      const t = svgEl('text', { x, y: M.t + PH + 24, fill: '#8b93a0', 'font-size': 11, 'text-anchor': 'middle' });
       t.textContent = v + '%';
       svg.append(t);
     });
     [0.5, 0.7, 1, 1.5, 2, 3, 5].forEach(v => {
       const y = yOf(v);
       svg.append(svgEl('line', { x1: M.l, y1: y, x2: M.l + PW, y2: y, stroke: '#1d222a', 'stroke-width': 1 }));
-      const t = svgEl('text', { x: M.l - 12, y: y + 4, fill: '#626a76', 'font-size': 11, 'text-anchor': 'end' });
+      const t = svgEl('text', { x: M.l - 12, y: y + 4, fill: '#8b93a0', 'font-size': 11, 'text-anchor': 'end' });
       t.textContent = fmt(v, 1) + ' bar';
       svg.append(t);
     });
     // axis titles
-    const xt = svgEl('text', { x: M.l + PW / 2, y: M.t + PH + 54, fill: '#9aa2ae', 'font-size': 12, 'text-anchor': 'middle', 'letter-spacing': '1.5' });
+    const xt = svgEl('text', { x: M.l + PW / 2, y: M.t + PH + 54, fill: '#b3bac5', 'font-size': 12, 'text-anchor': 'middle', 'letter-spacing': '1.5' });
     xt.textContent = L('OXYGEN CONCENTRATION', 'STĘŻENIE TLENU');
     svg.append(xt);
-    const yt = svgEl('text', { x: 16, y: M.t + PH / 2, fill: '#9aa2ae', 'font-size': 12, 'text-anchor': 'middle', 'letter-spacing': '1.5', transform: `rotate(-90 16 ${M.t + PH / 2})` });
+    const yt = svgEl('text', { x: 16, y: M.t + PH / 2, fill: '#b3bac5', 'font-size': 12, 'text-anchor': 'middle', 'letter-spacing': '1.5', transform: `rotate(-90 16 ${M.t + PH / 2})` });
     yt.textContent = L('CHAMBER PRESSURE (log)', 'CIŚNIENIE W KOMORZE (log)');
     svg.append(yt);
 
@@ -392,8 +393,8 @@
       // A row whose pressure came from a report rather than the test table has
       // to say so in the tooltip, or the map shows a measurement that was never
       // made at that condition.
-      const pSrc = r.pd ? L(' <span style="color:#626a76">(from the report, not a per-test reading)</span>',
-                            ' <span style="color:#626a76">(z raportu, nie z pomiaru per test)</span>') : '';
+      const pSrc = r.pd ? L(' <span style="color:#8b93a0">(from the report, not a per-test reading)</span>',
+                            ' <span style="color:#8b93a0">(z raportu, nie z pomiaru per test)</span>') : '';
       c.dataset.tip = `${esc(r.a)} · ${esc(r.i)}<br>O2 ${fmt(r.o2 * 100, 1)}% · ${fmt(r.p, 3)} bar${pSrc}<br>${esc(phaseName(r.ph))}${r.fu ? ' · ' + esc(r.fu) : ''}${r.m ? ' · ' + esc(r.m) : ''}`;
       pts.append(c);
     });
@@ -419,7 +420,7 @@
     const st1 = svgEl('text', { x: xOf(npLo) - 10, y: stripY + 4, fill: '#f59e0b', 'font-size': 10.5, 'letter-spacing': '.6', 'text-anchor': 'end' });
     st1.textContent = L(`SOLID · ${solidNoP.length}`, `STAŁE · ${solidNoP.length}`);
     svg.append(st1);
-    const st2 = svgEl('text', { x: xOf(LUNAR_O2) + 14, y: stripY + 4, fill: '#626a76', 'font-size': 10.5 });
+    const st2 = svgEl('text', { x: xOf(LUNAR_O2) + 14, y: stripY + 4, fill: '#8b93a0', 'font-size': 10.5 });
     st2.textContent = L('no pressure anywhere → cannot be placed on the chart',
       'brak ciśnienia nigdzie → nie da się nanieść na wykres');
     svg.append(st2);
@@ -513,20 +514,20 @@
     const step = (X1 - X0) <= 20 ? 2 : 10;
     for (let v = X0; v <= X1; v += step) {
       host.append(svgEl('line', { x1: X(v / 100), y1: M2.t, x2: X(v / 100), y2: M2.t + PH2, stroke: '#1d222a' }));
-      const t = svgEl('text', { x: X(v / 100), y: M2.t + PH2 + 20, fill: '#626a76', 'font-size': 11, 'text-anchor': 'middle' });
+      const t = svgEl('text', { x: X(v / 100), y: M2.t + PH2 + 20, fill: '#8b93a0', 'font-size': 11, 'text-anchor': 'middle' });
       t.textContent = v + '%';
       host.append(t);
     }
     [0, 2, 5, 10, 20, 50].filter(v => v <= fMax).forEach(v => {
       host.append(svgEl('line', { x1: M2.l, y1: Y(v), x2: M2.l + PW2, y2: Y(v), stroke: '#1d222a' }));
-      const t = svgEl('text', { x: M2.l - 10, y: Y(v) + 4, fill: '#626a76', 'font-size': 11, 'text-anchor': 'end' });
+      const t = svgEl('text', { x: M2.l - 10, y: Y(v) + 4, fill: '#8b93a0', 'font-size': 11, 'text-anchor': 'end' });
       t.textContent = fmt(v) + ' cm/s';
       host.append(t);
     });
-    const xt = svgEl('text', { x: M2.l + PW2 / 2, y: M2.t + PH2 + 46, fill: '#9aa2ae', 'font-size': 12, 'text-anchor': 'middle', 'letter-spacing': '1.5' });
+    const xt = svgEl('text', { x: M2.l + PW2 / 2, y: M2.t + PH2 + 46, fill: '#b3bac5', 'font-size': 12, 'text-anchor': 'middle', 'letter-spacing': '1.5' });
     xt.textContent = L('OXYGEN CONCENTRATION', 'STĘŻENIE TLENU');
     host.append(xt);
-    const yt = svgEl('text', { x: 16, y: M2.t + PH2 / 2, fill: '#9aa2ae', 'font-size': 12, 'text-anchor': 'middle', 'letter-spacing': '1.5', transform: `rotate(-90 16 ${M2.t + PH2 / 2})` });
+    const yt = svgEl('text', { x: 16, y: M2.t + PH2 / 2, fill: '#b3bac5', 'font-size': 12, 'text-anchor': 'middle', 'letter-spacing': '1.5', transform: `rotate(-90 16 ${M2.t + PH2 / 2})` });
     // "Air display" is duct flow speed in cm/s, per the BASS-II ReadMe. A dot is
     // the setting a test opened at; a ring is the last setting its log records.
     yt.textContent = L('AIR DISPLAY SETTING (cm/s)', 'NASTAWA AIR DISPLAY (cm/s)');
@@ -561,8 +562,8 @@
       const where = ramps ? `${RAMP_LABEL} ${fmt(r.f, 0)} cm/s — ${L('final setting not recorded', 'nastawa końcowa niezapisana')}`
         : fl.to != null ? `${L('final setting', 'nastawa końcowa')} ${fmt(fl.to, 1)} cm/s`
         : '';
-      const raw = fl.raw ? `<br><span style="color:#626a76">air display: “${esc(fl.raw)}”</span>` : '';
-      const obs = r.ob ? `<br><span style="color:#626a76">${esc(r.ob.slice(0, 150))}${r.ob.length > 150 ? '…' : ''}</span>` : '';
+      const raw = fl.raw ? `<br><span style="color:#8b93a0">air display: “${esc(fl.raw)}”</span>` : '';
+      const obs = r.ob ? `<br><span style="color:#8b93a0">${esc(r.ob.slice(0, 150))}${r.ob.length > 150 ? '…' : ''}</span>` : '';
       node.dataset.tip = `${esc(r.a)} · ${esc(r.i)} #${r.r}<br>O₂ ${fmt(r.o2 * 100, 1)}% · ${fmt(r.f, 1)} cm/s`
         + `<br>${out ? (out === 'extinction' ? L('extinguished', 'wygaśnięcie') : L('blew off', 'zdmuchnięcie')) : L('no outcome recorded', 'brak zapisanego wyniku')}`
         + (where ? `<br>${where}` : '') + raw + obs;
@@ -832,10 +833,17 @@
       }
       if (siRankMsg) banner.append(el('p', { class: 'ask-bad' }, siRankMsg));
       atlas.append(banner);
+      // Column heads: what each part of a row is.
+      atlas.append(el('div', { class: 'a-row a-head', 'aria-hidden': 'true' },
+        el('div', {}, L('Investigation', 'Badanie')),
+        el('div', {}, L('Full name · accession · fire-safety area', 'Pełna nazwa · akcesja · obszar')),
+        el('div', {}, L('Material class', 'Klasa')),
+        el('div', {}, L('O₂ / pressure tested', 'Zakres O₂ / ciśnienia')),
+        el('div', { title: L('test points inside the environment chosen above · at or above its oxygen · all', 'punkty w środowisku wybranym wyżej · z tlenem co najmniej takim · wszystkie') }, L('Points: in env. · ≥ O₂ · all', 'Punkty: w środ. · ≥ O₂ · razem'))));
       orderedRows().filter(x => filters.find(f => f.k === atlasActive).f(x.i)).forEach(x => {
         const i = x.i;
         const row = el('div', { class: 'a-row' + (x.unranked ? ' a-unranked' : ''), id: 'atlas-' + i.id });
-        row.append(el('div', { class: 'a-acr' }, (x.siPos ? `${x.siPos}. ` : '') + i.acronym));
+        row.append(el('div', { class: 'a-acr', html: (x.siPos ? `${x.siPos}. ` : '') + `<a class="a-src" href="#atlas-${i.id}" data-src-kind="inv" data-src-id="${i.id}" title="${L('Open the source record', 'Otwórz rekord źródłowy')}">${esc(i.acronym)}</a>` }));
         row.append(el('div', { class: 'a-name', html: `${i.name}<small>${i.id} · ${i.pillars.map(pillarName).join(' · ') || L('reference', 'referencja')}</small>` }));
         row.append(el('div', {}, el('span', { class: 'a-pill ' + (i.phase === 'n/a' ? 'na' : i.phase) }, phaseShort(i.phase))));
         const rng = [];
@@ -855,6 +863,47 @@
     drawRows();
   };
 
+  // What the worker is doing right now, sent as it happens (see worker/src/index.js).
+  // Consecutive data queries collapse into one line with a count.
+  const STAGE = {
+    start:   ['Question sent to the SI', 'Pytanie wysłane do SI'],
+    think:   ['Reading the question, choosing what data to pull', 'Czytam pytanie, wybieram, jakie dane pobrać'],
+    query:   ['Querying the PSI test points', 'Przeszukuję punkty pomiarowe PSI'],
+    nearest: ['Finding the nearest real measurements', 'Szukam najbliższych prawdziwych pomiarów'],
+    write:   ['Writing the answer from the query results', 'Piszę odpowiedź na podstawie wyników'],
+    check:   ['Checking every number and quote against the corpus', 'Sprawdzam każdą liczbę i cytat w korpusie'],
+    fix:     ['The check flagged something — the SI is correcting it', 'Sprawdzian coś wykrył — SI poprawia odpowiedź'],
+  };
+  const stageKind = st => (st === 'query' || st === 'nearest') ? 'data' : st;
+  const addStage = (list, e) => {
+    if (!STAGE[e.stage]) return;
+    const last = list[list.length - 1];
+    if (last && stageKind(last.stage) === stageKind(e.stage)) { last.stage = e.stage; last.n = (last.n || 1) + 1; }
+    else list.push({ stage: e.stage, n: 1 });
+  };
+  const stageText = x => L(...STAGE[x.stage]) +
+    (stageKind(x.stage) === 'data' && x.n > 1 ? ` · ${fmt(x.n)} ${L('queries', plFew(x.n) ? 'zapytania' : 'zapytań')}` : '');
+  // POST to the worker asking for a progress stream (one JSON object per line);
+  // a worker without streaming answers with plain JSON, which is read the same way.
+  const askWorker = async (payload, onStage, signal) => {
+    const r = await fetch(ASK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+                                     body: JSON.stringify({ ...payload, stream: true }), signal });
+    if (!r.body || !/ndjson/.test(r.headers.get('Content-Type') || '')) return r.json().catch(() => ({ error: 'http_' + r.status }));
+    const rd = r.body.getReader(), dec = new TextDecoder();
+    let buf = '', fin = null;
+    const line = l => { if (!l.trim()) return; let o; try { o = JSON.parse(l); } catch (e) { return; }
+      if (o.done) { delete o.done; fin = o; } else onStage(o); };
+    for (;;) {
+      const { value, done } = await rd.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      const parts = buf.split('\n'); buf = parts.pop();
+      parts.forEach(line);
+    }
+    line(buf);
+    return fin || { error: 'empty' };
+  };
+
   // Ask the worker to rank the Atlas for a mission. A response that fails
   // validation (the worker's or ours) leaves the rule in force and says why.
   let missionBusy = false;
@@ -864,21 +913,21 @@
     const lookupKey = key || (MISSIONS().find(([, lab]) => lab === mission) || [])[0] || null;
     const go = $('#mission-go');
     missionBusy = true; go.disabled = true;
-    const t0 = Date.now();
-    const tick = setInterval(() => { go.textContent = `${fmt(Math.floor((Date.now() - t0) / 1000))} s / ${ASK_LIMIT_S} s`; }, 1000);
+    const steps = [];
+    go.textContent = L(...STAGE.start);
+    go.classList.add('busy');
     let res;
     const ctl = new AbortController();
     const kill = setTimeout(() => ctl.abort(), ASK_LIMIT_S * 1000);
     try {
       if (!ASK_URL) throw new Error('offline');
-      const r = await fetch(ASK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' },
-                                       body: JSON.stringify({ mode: 'rank', mission, lang: LANG }), signal: ctl.signal });
-      res = await r.json().catch(() => ({ error: 'http_' + r.status }));
+      res = await askWorker({ mode: 'rank', mission, lang: LANG },
+        e => { addStage(steps, e); go.textContent = stageText(steps[steps.length - 1]) + '…'; }, ctl.signal);
     } catch (e) {
       res = { error: e.name === 'AbortError' ? 'timeout' : 'network' };
     }
-    clearTimeout(kill); clearInterval(tick);
-    missionBusy = false; go.disabled = false;
+    clearTimeout(kill);
+    missionBusy = false; go.disabled = false; go.classList.remove('busy');
     go.textContent = L('Rank with SI', 'Uszereguj przez SI');
     // The worker validated it; check again here that every id is one the Atlas has.
     const valid = r => r && Array.isArray(r.ranking) && r.ranking.length
@@ -934,6 +983,11 @@
       `${fmt(T.events.total)} extinction events across the raw archives; ${series.length} of ${fmt(T.events.joinable || 0)} joinable streams reconstructed here.`,
       `${fmt(T.events.total)} zdarzeń wygaśnięcia w surowych archiwach; ${series.length} z ${fmt(T.events.joinable || 0)} łączących się strumieni odtworzonych tutaj.`);
     tc.innerHTML = '';
+    tc.append(el('p', { class: 'tele-pick' }, L('Pick a test run — each button is one run, named by its ID in the raw PSI archive:', 'Wybierz przebieg testu — każdy przycisk to jeden przebieg, nazwany identyfikatorem z surowego archiwum PSI:')));
+    const sel = el('select', { class: 'tele-sel', 'aria-label': L('Test run', 'Przebieg testu') });
+    series.forEach((s, idx) => { const o = el('option', { value: idx }, s.id); if (idx === teleCur) o.selected = true; sel.append(o); });
+    sel.onchange = () => { teleCur = +sel.value; tc.querySelectorAll('.chip').forEach((c, k) => c.classList.toggle('on', k === teleCur)); drawTele(); };
+    tc.append(sel);
     series.forEach((s, idx) => {
       const b = el('button', { class: 'chip' + (idx === teleCur ? ' on' : '') }, `${s.id}`);
       b.onclick = () => { teleCur = idx; tc.querySelectorAll('.chip').forEach(c => c.classList.remove('on')); b.classList.add('on'); drawTele(); };
@@ -970,9 +1024,9 @@
       // it "chamber pressure" asserts an identity the data does not confirm: the
       // channel mean differs from the table's pressure by more than 10% in 27 of
       // the 40 series.
-      [y1, hP, 'PTA1']].forEach(([y, h, lab]) => {
+      [y1, hP, L('PTA1 — raw instrument channel; the corpus does not say what it measures', 'PTA1 — surowy kanał przyrządu; korpus nie mówi, co mierzy')]].forEach(([y, h, lab]) => {
         tsvg.append(svgEl('rect', { x: TM.l, y, width: pw, height: h, fill: '#0e1014', stroke: '#1d222a' }));
-        const t = svgEl('text', { x: TM.l, y: y - 9, fill: '#626a76', 'font-size': 10.5, 'letter-spacing': '1.2' });
+        const t = svgEl('text', { x: TM.l, y: y - 9, fill: '#8b93a0', 'font-size': 10.5, 'letter-spacing': '1.2' });
         t.textContent = lab;
         tsvg.append(t);
       });
@@ -1007,7 +1061,7 @@
       // x axis
       [0, .25, .5, .75, 1].forEach(f => {
         const tt = tMax * f, x = X(tt);
-        const t = svgEl('text', { x, y: y1 + hP + 20, fill: '#626a76', 'font-size': 10.5, 'text-anchor': 'middle' });
+        const t = svgEl('text', { x, y: y1 + hP + 20, fill: '#8b93a0', 'font-size': 10.5, 'text-anchor': 'middle' });
         t.textContent = tt.toFixed(0) + 's';
         tsvg.append(t);
       });
@@ -1703,8 +1757,7 @@
   const CACHE = window.ASK_CACHE || { ask: {}, rank: {} };
   const ASK_LIMIT_S = 25;
   const INV = Object.fromEntries(D.investigations.map(i => [i.id, i]));
-  let askLast = null; // { q, key, res, t0 } — re-rendered on language switch
-  let askTimer = null;
+  let askLast = null; // { q, key, res, steps } — re-rendered on language switch
   const ASK_PRESETS = () => [
     ['rank', L('Rank', 'Ranking'), L('Rank the investigations most relevant to a lunar base at 30% O₂ and 10.2 psi, and say what each can and cannot tell us.',
                               'Uszereguj badania najważniejsze dla bazy księżycowej przy 30% O₂ i 10,2 psi i powiedz, co każde może, a czego nie może nam powiedzieć.')],
@@ -1726,14 +1779,18 @@
       const [acc, field] = id.split('.');
       const cell = acc === 'EARTH' ? (window.EARTH || {})[field] : SI[acc] && SI[acc][field];
       return cell && cell.q
-        ? `<span class="ask-q">“${esc(cell.q)}”<small>${esc(acc)} · ${esc(cell.ext ? L('NASA Researcher\'s Guide (2015), outside PSI', 'NASA Researcher\'s Guide (2015), spoza PSI') : cell.f)} · ${L('verified quote', 'cytat zweryfikowany')}</small></span>`
+        ? `<span class="ask-q src-link" role="button" tabindex="0" data-src-kind="quote" data-src-id="${esc(acc)}" data-src-field="${esc(field)}">“${esc(cell.q)}”<small>${esc(acc)} · ${esc(cell.ext ? L('NASA Researcher\'s Guide (2015), outside PSI', 'NASA Researcher\'s Guide (2015), spoza PSI') : cell.f)} · ${L('verified quote', 'cytat zweryfikowany')} · <u>${L('open source', 'otwórz źródło')}</u></small></span>`
         : `<span class="ask-bad">[${L('unverified quote', 'niezweryfikowany cytat')}: ${id}]</span>`;
     })
     // Bracketed ids become links; a bare PSI-26 in running text stays text (the
     // model usually brackets the same id right after, and two links read as one).
+    // "PSI-26 row 55" (with or without brackets) opens that table row.
+    .replace(/\[?\b(PSI-\d+)\]?[ \u00a0]+(?:rows?|wiersze?|wierszu|wierszach)[ \u00a0]+(\d+)\]?/g, (m, id, rn) => INV[id]
+      ? `<a class="ask-row src-link" href="#ask" data-src-kind="row" data-src-id="${id}" data-src-row="${rn}">${esc(INV[id].acronym)} · ${id} · ${L('row', 'wiersz')} ${rn}</a>`
+      : m)
     .replace(/\[(PSI-\d+(?:,\s*PSI-\d+)*)\]/g, (m, ids) => ids.split(/,\s*/).map(id => `[${id}]`).join(''))
     .replace(/\[(PSI-[^\]\s]*)\]/g, (m, id) => INV[id]
-      ? `<a class="ask-cite" href="#atlas-${id}">${esc(INV[id].acronym)} · ${id}</a>`
+      ? `<a class="ask-cite src-link" href="#atlas-${id}" data-src-kind="inv" data-src-id="${id}">${esc(INV[id].acronym)} · ${id}</a>`
       : `<span class="ask-bad">[${L('unknown source', 'nieznane źródło')}: ${id}]</span>`)
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
     .split(/\n{2,}/).map(p => /^- /m.test(p)
@@ -1762,7 +1819,7 @@
   const dateFmt = iso => { try { return new Date(iso + 'T12:00:00Z').toLocaleDateString(LOC(), { year: 'numeric', month: 'long', day: 'numeric' }); } catch (e) { return iso; } };
   const askMeta = (res, c) => {
     const bad = (c.unknown_investigations || []).length + (c.unknown_quotes || []).length + (c.unverified_free_quotes || []).length;
-    return `<p class="ask-meta">${esc(res.model || '')} · ${L('data queries', 'zapytania o dane')}: ${fmt(res.queries || 0)} · ` +
+    return `<p class="ask-sugg">${L('SI suggestion — not a decision. Click any source above to see the data it rests on.', 'Sugestia SI — nie decyzja. Kliknij dowolne źródło powyżej, żeby zobaczyć dane, na których się opiera.')}</p><p class="ask-meta">${esc(res.model || '')} · ${L('data queries', 'zapytania o dane')}: ${fmt(res.queries || 0)} · ` +
       `${L('investigations cited', 'cytowane badania')}: ${fmt((c.cited_investigations || []).length - (c.unknown_investigations || []).length)} · ` +
       `${L('verified quotes', 'zweryfikowane cytaty')}: ${fmt((c.cited_quotes || []).length - (c.unknown_quotes || []).length + (c.free_quotes || 0) - (c.unverified_free_quotes || []).length)}` +
       (bad ? ` · <span class="ask-bad">${L('unresolved citations', 'nierozpoznane odnośniki')}: ${fmt(bad)}</span>` : '') +
@@ -1775,8 +1832,11 @@
       'W tej kopii SI na żywo nie jest podłączona (brak skonfigurowanego adresu). Gotowe pytania pokazują odpowiedzi zapisane z usługi na żywo.')}</p>`; return; }
     const { q, res } = askLast;
     if (res === 'pending') {
-      const secs = Math.floor((Date.now() - askLast.t0) / 1000);
-      out.innerHTML = `<p class="ask-note ask-wait">${L('Querying the archive…', 'Odpytuję archiwum…')} <span class="ask-secs">${fmt(secs)} s / ${ASK_LIMIT_S} s</span></p>`;
+      // A step list: finished steps get a tick, the current one pulses.
+      const st = askLast.steps.length ? askLast.steps : [{ stage: 'start', n: 1 }];
+      out.innerHTML = `<p class="ask-asked">${esc(q)}</p><ol class="ask-steps" aria-live="polite">` +
+        st.map((x, i) => `<li class="${i === st.length - 1 ? 'now' : 'done'}"><span class="ask-dot" aria-hidden="true"></span>${esc(stageText(x))}</li>`).join('') +
+        '</ol>';
       return;
     }
     const retry = `<button class="chip ask-retry" type="button">${L('Try the live SI again', 'Spróbuj ponownie na żywo')}</button>`;
@@ -1796,29 +1856,25 @@
       if (b) b.onclick = () => askSend(askLast.q, askLast.key);
       return;
     }
-    out.innerHTML = `<p class="ask-asked">${esc(q)}</p><div class="ask-a">${askHtml(res.answer)}</div>` + askMeta(res, res.check || {});
+    out.innerHTML = `<p class="ask-asked">${esc(q)}</p><div class="ask-a ask-in">${askHtml(res.answer)}</div>` + askMeta(res, res.check || {});
   };
   const askSend = async (q, key = presetKeyOf(q)) => {
     if (!q.trim()) return;
-    askLast = { q, key, res: 'pending', t0: Date.now() };
+    askLast = { q, key, res: 'pending', steps: [] };
     renderAskOut();
     if (!ASK_URL) { askLast.res = { error: 'network' }; renderAskOut(); return; }
     $('#ask-go').disabled = true;
-    clearInterval(askTimer);
-    askTimer = setInterval(renderAskOut, 1000);
     const ctl = new AbortController();
     const kill = setTimeout(() => ctl.abort(), ASK_LIMIT_S * 1000);
     const mine = askLast;
     try {
-      const r = await fetch(ASK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' },
-                                       body: JSON.stringify({ question: q, lang: LANG }), signal: ctl.signal });
-      mine.res = await r.json().catch(() => ({ error: 'http_' + r.status }));
+      mine.res = await askWorker({ question: q, lang: LANG },
+        e => { addStage(mine.steps, e); if (askLast === mine) renderAskOut(); }, ctl.signal);
     } catch (e) {
       mine.res = { error: e.name === 'AbortError' ? 'timeout' : 'network' };
     }
     clearTimeout(kill);
     if (askLast !== mine) return;   // a newer question replaced this one
-    clearInterval(askTimer);
     $('#ask-go').disabled = false;
     renderAskOut();
   };
@@ -1835,6 +1891,327 @@
     renderAskOut();
   };
   $('#ask-form').onsubmit = e => { e.preventDefault(); askSend($('#ask-q').value); };
+
+  /* ---------------- source popup ---------------- */
+  // Any source on the page — an investigation tag, a quote, a "PSI-26 row 55"
+  // in an SI answer, a row in the data search — opens this one dialog, which
+  // shows the record itself: the file it comes from, the row, the values. The
+  // SI suggests; this is where the reader checks what the suggestion rests on.
+  const SRC_FIELD = {
+    objective:  ['Objective', 'Cel'],
+    fuel:       ['Fuel', 'Paliwo'],
+    sample:     ['Sample', 'Próbka'],
+    varied:     ['What changed between tests', 'Co zmieniano między testami'],
+    sensors:    ['Sensors', 'Czujniki'],
+    apparatus:  ['Apparatus', 'Aparatura'],
+    conclusion: ['Fire-safety conclusion', 'Wniosek dla bezpieczeństwa pożarowego'],
+  };
+  const pctTxt = v => v == null ? '—' : `${fmt(v * 100, 1)}%`;
+  const barTxt = v => v == null ? '—' : `${fmt(v, 3)} bar`;
+  const rangeTxt = (a, f) => a ? (f(a[0]) === f(a[1]) ? f(a[0]) : `${f(a[0])} – ${f(a[1])}`) : L('not recorded', 'nie zapisano');
+  const srcAttr = (kind, id, extra = {}) =>
+    `data-src-kind="${kind}" data-src-id="${esc(id)}"` + Object.entries(extra).map(([k, v]) => ` data-src-${k}="${esc(v)}"`).join('');
+  const tableOf = r => { const i = INV[r.i]; return i && i.tables && i.tables[r.t || 0] || L('table file not recorded', 'nie zapisano pliku tabeli'); };
+  const dl = pairs => '<dl class="src-dl">' + pairs.filter(p => p).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('') + '</dl>';
+  const popFoot = () => `<p class="src-foot">${L(
+    'IGNIS shows what the archive contains; it does not certify a material or an atmosphere. Check the source before relying on it.',
+    'IGNIS pokazuje, co zawiera archiwum; nie certyfikuje materiału ani atmosfery. Sprawdź źródło, zanim się na nim oprzesz.')}</p>`;
+  const quoteHtml = (acc, field, cell) =>
+    `<blockquote class="src-q">“${esc(cell.q)}”</blockquote>` + dl([
+      [L('Field', 'Pole'), esc(SRC_FIELD[field] ? L(...SRC_FIELD[field]) : field)],
+      [L('File', 'Plik'), `<code>${esc(cell.f)}</code>` + (cell.ext ? ` · <span class="si-ext">${L('outside PSI — NASA Researcher\'s Guide (2015)', 'spoza PSI — NASA Researcher\'s Guide (2015)')}</span>` : ` · ${L('in this accession\'s PSI folder', 'w folderze PSI tej akcesji')}`)],
+      [L('Checked', 'Sprawdzono'), L('the sentence appears word for word in that file — scripts/verify_insights.py re-reads it on every build',
+                                     'zdanie występuje dosłownie w tym pliku — scripts/verify_insights.py czyta go ponownie przy każdej budowie')],
+    ]);
+  const openSource = (kind, id, extra = {}) => {
+    const body = $('#src-pop-body');
+    const btns = [];
+    let h = '';
+    if (kind === 'inv') {
+      const i = INV[id];
+      if (!i) return;
+      const s = SI[id] || {};
+      h = `<p class="src-k">${L('Investigation', 'Badanie')} · ${esc(id)}</p><h3 id="src-pop-h">${esc(i.acronym)}<small>${esc(i.name)}</small></h3>` + dl([
+        [L('Material class', 'Klasa materiału'), esc(phaseName(i.phase))],
+        [L('Test points', 'Punkty testowe'), `${fmt(i.rows)} ${L('usable', 'użytecznych')} · ${fmt(i.raw_rows)} ${L('rows in the table', 'wierszy w tabeli')}`],
+        [L('Oxygen', 'Tlen'), rangeTxt(i.o2, pctTxt)],
+        [L('Pressure', 'Ciśnienie'), rangeTxt(i.p, barTxt)],
+        [L('Air flow column', 'Kolumna przepływu'), i.has_flow ? L('yes', 'tak') : L('no', 'nie')],
+        i.materials.length ? [L('Samples', 'Próbki'), esc(i.materials.join(' · ')) + (i.n_materials > i.materials.length ? ' …' : '')] : null,
+        [L('Source table', 'Tabela źródłowa'), (i.tables || []).map(f => `<code>${esc(f)}</code>`).join('<br>') || '—'],
+      ]);
+      const qs = Object.keys(SRC_FIELD).filter(k => s[k] && s[k].q);
+      if (qs.length) h += `<p class="src-sub">${L('Verified quotes from its documents', 'Zweryfikowane cytaty z jego dokumentów')}</p>` +
+        qs.map(k => `<button type="button" class="src-qline" ${srcAttr('quote', id, { field: k })}><b>${esc(L(...SRC_FIELD[k]))}</b> “${esc(s[k].q.length > 140 ? s[k].q.slice(0, 140) + '…' : s[k].q)}”</button>`).join('');
+      if (i.rows) btns.push([L('Show its test points in the search', 'Pokaż jego punkty w wyszukiwarce'), () => { dsSet({ q: '', inv: id }); goTab('search'); }]);
+      btns.push([L('Open its Atlas card', 'Otwórz jego kartę w Atlasie'), () => { const n = document.getElementById('atlas-' + id); if (n) n.scrollIntoView({ behavior: 'smooth', block: 'start' }); }]);
+    } else if (kind === 'quote') {
+      const cell = id === 'EARTH' ? (window.EARTH || {})[extra.field] : SI[id] && SI[id][extra.field];
+      if (!cell || !cell.q) return;
+      h = `<p class="src-k">${L('Verified quote', 'Zweryfikowany cytat')} · ${esc(id)}</p><h3 id="src-pop-h">${esc(id === 'EARTH' ? 'NASA Researcher\'s Guide (2015)' : (INV[id] ? INV[id].acronym : id))}</h3>` + quoteHtml(id, extra.field, cell);
+      if (INV[id]) btns.push([L('About this investigation', 'O tym badaniu'), () => openSource('inv', id)]);
+    } else if (kind === 'row') {
+      const rn = +extra.row;
+      const pts = ROWS.filter(r => r.i === id && r.r === rn);
+      const i = INV[id];
+      h = `<p class="src-k">${L('Test point', 'Punkt testowy')} · ${esc(id)} · ${L('row', 'wiersz')} ${fmt(rn)}</p><h3 id="src-pop-h">${esc(i ? i.acronym : id)}</h3>`;
+      if (!pts.length) h += `<p class="ask-bad">${L('No test point with this row number in the dataset — the reference cannot be backed.', 'W danych nie ma punktu o tym numerze wiersza — odwołania nie da się potwierdzić.')}</p>`;
+      pts.forEach(r => {
+        h += dl([
+          [L('File', 'Plik'), `<code>${esc(tableOf(r))}</code>`],
+          [L('Row', 'Wiersz'), `${fmt(r.r)} <span class="src-dim">${L('(data row, counted from the first row under the header)', '(wiersz danych, licząc od pierwszego pod nagłówkiem)')}</span>`],
+          [L('Material class', 'Klasa materiału'), esc(phaseName(r.ph))],
+          r.m ? [L('Sample', 'Próbka'), esc(r.m)] : null,
+          r.fu ? [L('Fuel', 'Paliwo'), esc(r.fu)] : null,
+          [L('Oxygen', 'Tlen'), pctTxt(r.o2)],
+          [L('Pressure', 'Ciśnienie'), barTxt(r.p) + (r.pd ? ` <span class="src-dim">${L('(from the report, not the table)', '(z raportu, nie z tabeli)')}</span>` : '')],
+          r.f != null ? [L('Flow / rate', 'Przepływ / tempo'), `${fmt(r.f, 2)} <span class="src-dim">${L('(units as in the table)', '(jednostki jak w tabeli)')}</span>`] : null,
+          r.o ? [L('Outcome', 'Wynik'), esc(r.o)] : null,
+          r.ob ? [L('Operator note', 'Notatka operatora'), esc(r.ob)] : null,
+          ...Object.entries(r.x || {}).map(([k, v]) => [esc(k), typeof v === 'number' ? fmt(v, 3) : esc(v)]),
+        ]);
+      });
+      if (i) btns.push([L('About this investigation', 'O tym badaniu'), () => openSource('inv', id)]);
+      if (pts.length) btns.push([L('Show nearby rows in the search', 'Pokaż sąsiednie wiersze w wyszukiwarce'), () => { dsSet({ q: '', inv: id, sort: 'row' }); goTab('search'); }]);
+    }
+    body.innerHTML = h + '<div class="src-btns"></div>' + popFoot();
+    const bx = body.querySelector('.src-btns');
+    btns.forEach(([t, fn]) => { const b = el('button', { type: 'button', class: 'chip' }, t); b.onclick = () => { pop.close(); fn(); }; bx.append(b); });
+    if (!pop.open) pop.showModal();
+    body.scrollTop = 0;
+  };
+  const pop = $('#src-pop');
+  pop.addEventListener('click', e => { if (e.target === pop) pop.close(); });   // click on the backdrop
+  document.addEventListener('click', e => {
+    // Links to an Atlas card from the findings cards open the source first.
+    const at = e.target.closest('a[href^="#atlas-PSI-"]:not([data-src-kind])');
+    if (at && !at.closest('.src-pop')) { e.preventDefault(); openSource('inv', at.getAttribute('href').slice(7)); return; }
+    const a = e.target.closest('[data-src-kind]');
+    if (!a) return;
+    e.preventDefault();
+    openSource(a.dataset.srcKind, a.dataset.srcId, { field: a.dataset.srcField, row: a.dataset.srcRow });
+  });
+  document.addEventListener('keydown', e => {
+    const a = e.target.closest && e.target.closest('[data-src-kind]');
+    if (a && (e.key === 'Enter' || e.key === ' ') && a.tagName !== 'BUTTON' && a.tagName !== 'A') { e.preventDefault(); a.click(); }
+  });
+
+  /* ---------------- data search (no SI) ---------------- */
+  // Plain filtering over every test point: no model, no network. Each result
+  // row opens its source record.
+  const HAY = ROWS.map(r => [r.i, r.a, r.m, r.fu, r.o, r.ob, INV[r.i] && INV[r.i].name, r.ph].filter(Boolean).join(' ').toLowerCase());
+  const DS0 = { q: '', inv: '', ph: '', o2lo: '', o2hi: '', phi: '', both: false, sort: 'o2', n: 40 };
+  let DS = { ...DS0 };
+  const numIn = v => { const x = parseFloat(String(v).replace(',', '.')); return isFinite(x) ? x : null; };
+  const dsMatch = () => {
+    const words = DS.q.toLowerCase().split(/\s+/).filter(Boolean);
+    const lo = numIn(DS.o2lo), hi = numIn(DS.o2hi), phi = numIn(DS.phi);
+    const out = [];
+    ROWS.forEach((r, k) => {
+      if (DS.inv && r.i !== DS.inv) return;
+      if (DS.ph && r.ph !== DS.ph) return;
+      if (DS.both && (r.o2 == null || r.p == null)) return;
+      if (lo != null && !(r.o2 != null && r.o2 * 100 >= lo - 1e-9)) return;
+      if (hi != null && !(r.o2 != null && r.o2 * 100 <= hi + 1e-9)) return;
+      if (phi != null && !(r.p != null && r.p <= phi + 1e-9)) return;
+      if (words.length && !words.every(w => HAY[k].includes(w))) return;
+      out.push(r);
+    });
+    const by = {
+      o2: (a, b) => (b.o2 ?? -1) - (a.o2 ?? -1),
+      p: (a, b) => (a.p ?? 99) - (b.p ?? 99),
+      row: (a, b) => a.i.localeCompare(b.i) || (a.t || 0) - (b.t || 0) || a.r - b.r,
+    }[DS.sort];
+    return by ? out.sort(by) : out;
+  };
+  const dsSet = patch => { DS = { ...DS, ...patch, n: DS0.n }; renderSearch(); };
+  const renderSearch = () => {
+    const host = $('#ds');
+    const phases = [...new Set(ROWS.map(r => r.ph))];
+    const invs = D.investigations.filter(i => i.rows);
+    // Quick filters, each built from a definition the page already uses.
+    const QUICK = [
+      [L('Solid materials', 'Materiały stałe'), { ph: 'solid' }],
+      [L(`Oxygen ≥ ${fmt(CH_O2 * 100, 0)}% (challenge)`, `Tlen ≥ ${fmt(CH_O2 * 100, 0)}% (challenge)`), { o2lo: String(CH_O2 * 100) }],
+      [L(`Pressure ≤ ${fmt(CH_P, 3)} bar (challenge)`, `Ciśnienie ≤ ${fmt(CH_P, 3)} bar (challenge)`), { phi: String(CH_P) }],
+      [L('With oxygen and pressure', 'Z tlenem i ciśnieniem'), { both: true }],
+    ];
+    host.innerHTML = `
+      <p class="ds-help">${L(
+        `Filter all ${fmt(ROWS.length)} test points from the PSI tables. Type a sample, fuel, investigation or outcome (all words must match), narrow by class, oxygen and pressure, then click any row to see its source file and every value recorded for it.`,
+        `Filtruj wszystkie ${fmt(ROWS.length)} punkty testowe z tabel PSI. Wpisz próbkę, paliwo, badanie lub wynik (muszą pasować wszystkie słowa), zawęź klasą, tlenem i ciśnieniem, a potem kliknij dowolny wiersz, żeby zobaczyć plik źródłowy i wszystkie zapisane wartości.`)}</p>
+      <div class="ds-row">
+        <label class="ds-q"><span>${L('Text', 'Tekst')}</span><input id="ds-q" type="search" value="${esc(DS.q)}" placeholder="${L('e.g. Nomex, PMMA, BASS, extinguished', 'np. Nomex, PMMA, BASS, extinguished')}"></label>
+        <label><span>${L('Investigation', 'Badanie')}</span><select id="ds-inv"><option value="">${L('all', 'wszystkie')}</option>${invs.map(i => `<option value="${i.id}"${DS.inv === i.id ? ' selected' : ''}>${esc(i.acronym)} · ${i.id}</option>`).join('')}</select></label>
+        <label><span>${L('Material class', 'Klasa materiału')}</span><select id="ds-ph"><option value="">${L('all', 'wszystkie')}</option>${phases.map(p => `<option value="${p}"${DS.ph === p ? ' selected' : ''}>${esc(phaseName(p))}</option>`).join('')}</select></label>
+        <label class="ds-n"><span>${L('O₂ from %', 'O₂ od %')}</span><input id="ds-o2lo" inputmode="decimal" value="${esc(DS.o2lo && fmt(numIn(DS.o2lo), 1))}"></label>
+        <label class="ds-n"><span>${L('O₂ to %', 'O₂ do %')}</span><input id="ds-o2hi" inputmode="decimal" value="${esc(DS.o2hi && fmt(numIn(DS.o2hi), 1))}"></label>
+        <label class="ds-n"><span>${L('Pressure ≤ bar', 'Ciśnienie ≤ bar')}</span><input id="ds-phi" inputmode="decimal" value="${esc(DS.phi && fmt(numIn(DS.phi), 3))}"></label>
+        <label><span>${L('Sort', 'Sortuj')}</span><select id="ds-sort">
+          <option value="o2"${DS.sort === 'o2' ? ' selected' : ''}>${L('highest oxygen first', 'najwyższy tlen najpierw')}</option>
+          <option value="p"${DS.sort === 'p' ? ' selected' : ''}>${L('lowest pressure first', 'najniższe ciśnienie najpierw')}</option>
+          <option value="row"${DS.sort === 'row' ? ' selected' : ''}>${L('table order', 'kolejność w tabeli')}</option></select></label>
+      </div>
+      <div class="ds-quick"><span>${L('Quick filters:', 'Szybkie filtry:')}</span></div>
+      <div id="ds-res"></div>`;
+    const qk = host.querySelector('.ds-quick');
+    QUICK.forEach(([t, patch]) => { const b = el('button', { type: 'button', class: 'chip' }, t); b.onclick = () => dsSet(patch); qk.append(b); });
+    const clr = el('button', { type: 'button', class: 'chip ds-clear' }, L('Clear all', 'Wyczyść wszystko'));
+    clr.onclick = () => { DS = { ...DS0 }; renderSearch(); };
+    qk.append(clr);
+    const bind = (id, key, ev = 'change') => { const n = $('#' + id); n.addEventListener(ev, () => { DS = { ...DS, [key]: n.type === 'checkbox' ? n.checked : n.value, n: DS0.n }; renderResults(); }); };
+    bind('ds-q', 'q', 'input'); bind('ds-inv', 'inv'); bind('ds-ph', 'ph'); bind('ds-sort', 'sort');
+    ['o2lo', 'o2hi', 'phi'].forEach(k => bind('ds-' + k, k, 'input'));
+    renderResults();
+  };
+  const renderResults = () => {
+    const res = $('#ds-res');
+    const hits = dsMatch();
+    const nInv = new Set(hits.map(r => r.i)).size;
+    // Quotes are searched too: a word typed here may be in a document, not a table.
+    const words = DS.q.toLowerCase().split(/\s+/).filter(w => w.length > 2);
+    const qhits = [];
+    if (words.length) Object.entries(SI).forEach(([acc, s]) => Object.keys(SRC_FIELD).forEach(k => {
+      const c = s[k];
+      if (c && c.q && words.every(w => c.q.toLowerCase().includes(w))) qhits.push([acc, k, c]);
+    }));
+    const shown = hits.slice(0, DS.n);
+    const cell = v => v == null ? '<span class="src-dim">—</span>' : v;
+    res.innerHTML =
+      `<div class="ds-sum"><b>${fmt(hits.length)}</b> ${L('of', 'z')} ${fmt(ROWS.length)} ${L('test points', 'punktów testowych')} · ${fmt(nInv)} ${L(nInv === 1 ? 'investigation' : 'investigations', nInv === 1 ? 'badanie' : plFew(nInv) ? 'badania' : 'badań')}
+        <button type="button" class="chip" id="ds-csv"${hits.length ? '' : ' disabled'}>${L('Download these rows (CSV)', 'Pobierz te wiersze (CSV)')}</button></div>` +
+      (qhits.length ? `<div class="ds-quotes"><p class="src-sub">${L('Also in the documents — verified quotes', 'Także w dokumentach — zweryfikowane cytaty')} (${fmt(qhits.length)})</p>` +
+        qhits.slice(0, 6).map(([acc, k, c]) => `<button type="button" class="src-qline" ${srcAttr('quote', acc, { field: k })}><b>${esc(INV[acc] ? INV[acc].acronym : acc)} · ${esc(L(...SRC_FIELD[k]))}</b> “${esc(c.q.length > 150 ? c.q.slice(0, 150) + '…' : c.q)}”</button>`).join('') + '</div>' : '') +
+      (hits.length ? `<div class="ds-table-w"><table class="ds-table"><thead><tr>
+          <th>${L('Investigation', 'Badanie')}</th><th>${L('Row', 'Wiersz')}</th><th>${L('Class', 'Klasa')}</th><th>${L('Sample or fuel', 'Próbka lub paliwo')}</th>
+          <th class="num">O₂</th><th class="num">${L('Pressure', 'Ciśnienie')}</th><th>${L('Outcome', 'Wynik')}</th></tr></thead><tbody>` +
+        shown.map(r => `<tr tabindex="0" ${srcAttr('row', r.i, { row: r.r })} title="${L('Open the source record', 'Otwórz rekord źródłowy')}">
+          <td><b>${esc(r.a)}</b> <span class="src-dim">${r.i}</span></td><td class="num">${fmt(r.r)}</td><td><i class="ds-dot" style="background:${PHASE_COLOR[r.ph] || '#888'}"></i>${esc(phaseName(r.ph))}</td>
+          <td>${cell(esc(r.m || r.fu || ''))}</td><td class="num">${cell(r.o2 == null ? null : pctTxt(r.o2))}</td>
+          <td class="num">${cell(r.p == null ? null : fmt(r.p, 3) + ' bar')}</td><td>${cell(r.o ? esc(r.o) : null)}</td></tr>`).join('') +
+        '</tbody></table></div>' : `<p class="ds-none">${L('No test point matches. Loosen a filter — an empty result here is itself a finding: the archive has nothing there.', 'Żaden punkt nie pasuje. Poluzuj filtr — pusty wynik też jest wnioskiem: archiwum nic tam nie ma.')}</p>`) +
+      (hits.length > shown.length ? `<button type="button" class="chip ds-more" id="ds-more">${L(`Show more (${fmt(hits.length - shown.length)} left)`, `Pokaż więcej (zostało ${fmt(hits.length - shown.length)})`)}</button>` : '');
+    const more = $('#ds-more');
+    if (more) more.onclick = () => { DS.n += DS0.n; renderResults(); };
+    $('#ds-csv').onclick = () => {
+      const head = EXPORT_COLS.map(c => c[0]).join(',');
+      download('ignis-search.csv', 'text/csv;charset=utf-8', head + '\n' + hits.map(r => EXPORT_COLS.map(([, f]) => csvCell(f(r))).join(',')).join('\n') + '\n');
+    };
+  };
+
+  /* ---------------- tabs: search / SI ---------------- */
+  let TAB = 'search';
+  const goTab = (t, scroll = true) => {
+    TAB = t;
+    $('#tab-search').setAttribute('aria-selected', String(t === 'search'));
+    $('#tab-si').setAttribute('aria-selected', String(t === 'si'));
+    $('#pane-search').hidden = t !== 'search';
+    $('#pane-si').hidden = t !== 'si';
+    if (scroll) $('#ask').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  $('#tab-search').onclick = () => goTab('search', false);
+  $('#tab-si').onclick = () => goTab('si', false);
+
+  /* ---------------- purpose ---------------- */
+  const renderPurpose = () => {
+    const cards = [
+      [L('Where to test next', 'Gdzie testować dalej'),
+       L('Shows where NASA\'s open combustion data stops — by oxygen, pressure and material — and suggests the tests that would close the gap. A starting point for researchers, not a safety rating.',
+         'Pokazuje, gdzie kończą się otwarte dane NASA o spalaniu — według tlenu, ciśnienia i materiału — i sugeruje testy, które zamknęłyby lukę. Punkt wyjścia dla badaczy, nie ocena bezpieczeństwa.'), 'verdict'],
+      [L('Faster access to the data', 'Szybszy dostęp do danych'),
+       L(`Search and filter all ${fmt(ROWS.length)} test points from ${fmt(D.meta.tables)} NASA tables in one place and one set of units, without opening a spreadsheet.`,
+         `Przeszukuj i filtruj wszystkie ${fmt(ROWS.length)} punkty testowe z ${fmt(D.meta.tables)} tabel NASA w jednym miejscu i w jednych jednostkach, bez otwierania arkusza.`), 'ask'],
+      [L('Every claim has a source', 'Każde twierdzenie ma źródło'),
+       L('Click any source tag, quote or row reference to see the file and row behind it. The SI writes suggestions; the cited tests are the evidence.',
+         'Kliknij dowolny znacznik źródła, cytat lub odwołanie do wiersza, żeby zobaczyć plik i wiersz, na którym się opiera. SI pisze sugestie; dowodem są cytowane testy.'), 'takeaways'],
+    ];
+    const host = $('#purpose-cards');
+    host.innerHTML = '';
+    cards.forEach(([h, p, to], k) => {
+      const a = el('a', { class: 'purpose-c', href: '#' + to }, el('b', {}, h), el('span', {}, p));
+      if (k === 1) a.onclick = e => { e.preventDefault(); goTab('search'); };
+      host.append(a);
+    });
+    $('#purpose-warn').innerHTML = L(
+      '<b>A research aid, not a safety authority.</b> IGNIS does not certify materials or atmospheres. Decisions about crew safety belong to engineers working from the cited tests and NASA\'s standards.',
+      '<b>Narzędzie badawcze, nie autorytet bezpieczeństwa.</b> IGNIS nie certyfikuje materiałów ani atmosfer. Decyzje o bezpieczeństwie załogi należą do inżynierów pracujących na cytowanych testach i normach NASA.');
+  };
+
+  /* ---------------- section menu ---------------- */
+  // One list for the menu: a group, then [section id, title, what it is, tab].
+  const NAV = () => [
+    [L('Start here', 'Zacznij tutaj'), [
+      ['top', L('What IGNIS is for', 'Do czego służy IGNIS'), L('a research aid: where to test next, faster access to the data', 'narzędzie badawcze: gdzie testować dalej, szybszy dostęp do danych')],
+      ['takeaways', L('Findings', 'Wnioski'), L('four suggestions, each with its limit and its source', 'cztery sugestie, każda z ograniczeniem i źródłem')],
+      ['verdict', L('Where to test next', 'Gdzie testować dalej'), L('what the archive does not cover and a proposed test campaign', 'czego archiwum nie pokrywa i proponowana kampania testów')],
+    ]],
+    [L('Search & ask', 'Szukaj i pytaj'), [
+      ['ask', L('Search the data', 'Przeszukaj dane'), L('every test point, filterable, each with its source row — no SI', 'każdy punkt testowy, z filtrami i wierszem źródłowym — bez SI'), 'search'],
+      ['ask', L('Ask the SI', 'Zapytaj SI'), L('a written answer with clickable sources — a suggestion, not a decision', 'odpowiedź opisowa z klikalnymi źródłami — sugestia, nie decyzja'), 'si'],
+      ['solver', L('Check an atmosphere', 'Sprawdź atmosferę'), L('pick a cabin; see the nearest real tests and how far away they are', 'wybierz kabinę; zobacz najbliższe prawdziwe testy i ich odległość')],
+    ]],
+    [L('Explore the archive', 'Przeglądaj archiwum'), [
+      ['funnel', L('From raw tables to points', 'Od tabel do punktów'), L('how the published rows become usable test points', 'jak opublikowane wiersze stają się punktami testowymi')],
+      ['map', L('Coverage map', 'Mapa pokrycia'), L('oxygen against pressure: where tests exist and where none do', 'tlen względem ciśnienia: gdzie są testy, a gdzie ich brak')],
+      ['flowmap', L('Oxygen × air flow', 'Tlen × przepływ'), L('the second axis, with the outcome of each test', 'druga oś, z wynikiem każdego testu')],
+      ['atlas', L('Atlas of investigations', 'Atlas badań'), L('every investigation, what it measured, ranked for a mission', 'każde badanie, co mierzyło, uszeregowane dla misji')],
+      ['pillars', L('Prevention, detection, suppression', 'Zapobieganie, wykrywanie, gaszenie'), L('one number per area, and the model-ready export', 'jedna liczba na obszar i eksport dla modeli')],
+      ['telemetry', L('Flame telemetry', 'Telemetria płomienia'), L('one real test, instrument by instrument', 'jeden prawdziwy test, przyrząd po przyrządzie')],
+    ]],
+  ];
+  const NAV_FLAT = () => NAV().flatMap(([g, items]) => items.map(x => [g, ...x]));
+  let navHere = 'top';
+  const closeMenu = () => { $('.nav').classList.remove('open'); $('#nav-burger').setAttribute('aria-expanded', 'false'); document.querySelectorAll('.nav-group').forEach(g => g.classList.remove('open')); };
+  const renderNav = () => {
+    const host = $('#nav-menu');
+    host.innerHTML = '';
+    NAV().forEach(([g, items]) => {
+      const grp = el('div', { class: 'nav-group' });
+      const gb = el('button', { type: 'button', class: 'nav-gbtn', 'aria-expanded': 'false' }, g);
+      gb.onclick = e => {
+        e.stopPropagation();
+        const was = grp.classList.contains('open');
+        document.querySelectorAll('.nav-group').forEach(x => { x.classList.remove('open'); x.firstChild.setAttribute('aria-expanded', 'false'); });
+        if (!was) { grp.classList.add('open'); gb.setAttribute('aria-expanded', 'true'); }
+      };
+      const drop = el('div', { class: 'nav-drop' });
+      items.forEach(([id, t, d, tab]) => {
+        const a = el('a', { href: '#' + id, 'data-nav': id + (tab ? ':' + tab : '') }, el('b', {}, t), el('span', {}, d));
+        a.onclick = e => {
+          e.preventDefault(); closeMenu();
+          if (tab) goTab(tab); else document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+          try { history.replaceState(null, '', '#' + id); } catch (er) { /* file:// */ }
+        };
+        drop.append(a);
+      });
+      grp.append(gb, drop);
+      host.append(grp);
+    });
+    markHere();
+  };
+  const markHere = () => {
+    const key = navHere === 'ask' ? 'ask:' + TAB : navHere;
+    const hit = NAV_FLAT().find(x => x[1] === navHere && (!x[4] || 'ask:' + x[4] === key));
+    $('#nav-here').textContent = hit ? `${hit[0]} › ${hit[2]}` : '';
+    document.querySelectorAll('.nav-drop a').forEach(a => a.classList.toggle('here', a.dataset.nav === key));
+    document.querySelectorAll('.nav-group').forEach(g => g.classList.toggle('here', !!g.querySelector('a.here')));
+  };
+  $('#nav-burger').onclick = e => {
+    e.stopPropagation();
+    const open = !$('.nav').classList.contains('open');
+    $('.nav').classList.toggle('open', open);
+    $('#nav-burger').setAttribute('aria-expanded', String(open));
+  };
+  document.addEventListener('click', e => { if (!e.target.closest('.nav')) closeMenu(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+  // Which section is under the top third of the screen: the menu marks it.
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => {
+      es.forEach(en => { if (en.isIntersecting) { navHere = en.target.id; markHere(); } });
+    }, { rootMargin: '-30% 0px -65% 0px' });
+    ['top', ...new Set(NAV_FLAT().map(x => x[1]))].forEach(id => { const n = document.getElementById(id); if (n) io.observe(n); });
+  }
+  ['#tab-search', '#tab-si'].forEach(s => $(s).addEventListener('click', markHere));
 
   /* ---------------- language switch ---------------- */
   const langBtn = $('#lang-toggle');
@@ -1857,6 +2234,7 @@
   };
 
   const render = () => {
+    renderPurpose(); renderNav(); renderSearch(); goTab(TAB, false);
     renderHero(); renderTakeaways(); renderAsk(); renderFunnel(); renderMap(); renderFlowMap(); renderAtlas(); renderTele(); solve(); renderPillars(); renderExport(); renderVerdict(); renderCampaign();
   };
 

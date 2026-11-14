@@ -14,7 +14,11 @@ const MAX_TURNS = 5; // tool round-trips before we stop and say so
 // reasoning off it took 2.7-7.6 s and four of five queried the points; after
 // the last prompt changes, 3.3-6.4 s with all five querying. The 4000-token cap leaves
 // room for the longest preset (Rank, ~1,400 characters).
-export const REQUEST = { max_tokens: 4000, reasoning: { enabled: false } };
+// One provider, no fallback: OpenRouter otherwise routes each call to whichever
+// host is up, and one of eleven calls on 2026-11-14 took 26 s. Pinning keeps the
+// latency predictable; if inference-net is down the page shows its saved answer.
+export const PROVIDER = { only: ["inference-net/us"], allow_fallbacks: false };
+export const REQUEST = { max_tokens: 4000, reasoning: { enabled: false }, provider: PROVIDER };
 
 const TOOLS = [QUERY_TOOL, NEAREST_TOOL].map((t) => ({ type: "function", function: {
   name: t.name, description: t.description, parameters: t.input_schema } }));
@@ -51,9 +55,12 @@ export function openRouter(apiKey, fetchFn = fetch) {
 
 // The tool loop shared by questions and rankings. `review(text, toolText)`
 // may return a follow-up instruction once; the model then gets one more turn.
-async function loop(complete, messages, review) {
+// `step(event)` reports progress (what the worker is doing now) to a streaming client.
+async function loop(complete, messages, review, step = () => {}) {
   let queries = 0, reviewed = false, toolText = "";
   for (let turn = 0; turn < MAX_TURNS; turn++) {
+    if (turn === 0) step({ stage: "think" });
+    else if (messages[messages.length - 1].role === "tool") step({ stage: "write" });
     const res = await complete({ model: MODEL, ...REQUEST, tools: TOOLS, messages });
     const choice = res.choices?.[0];
     if (!choice) return { error: "empty" };
@@ -62,9 +69,11 @@ async function loop(complete, messages, review) {
     if (!msg.tool_calls?.length) {
       const text = tidy(msg.content || "");
       if (!text.trim()) return { error: "empty" };
+      step({ stage: "check" });
       const again = !reviewed && turn < MAX_TURNS - 1 && review ? review(text, toolText) : null;
       if (again) {
         reviewed = true;
+        step({ stage: "fix" });
         messages.push({ role: "user", content: again });
         continue;
       }
@@ -75,6 +84,7 @@ async function loop(complete, messages, review) {
       let args;
       try { args = JSON.parse(call.function.arguments || "{}"); } catch { args = null; }
       const fn = RUN[call.function.name];
+      step({ stage: call.function.name === NEAREST_TOOL.name ? "nearest" : "query", n: queries });
       const result = args && fn ? fn(args) : { error: "invalid tool call; send query_points or nearest_evidence with a JSON object" };
       const s = JSON.stringify(result);
       toolText += s + "\n";
@@ -100,12 +110,12 @@ export function reviewAnswer(text, toolText) {
   return asks.length ? asks.join(" ") + " Then give the complete answer again, nothing else, and do not mention this check or the correction." : null;
 }
 
-export async function ask(complete, question, lang) {
+export async function ask(complete, question, lang, step) {
   const messages = [
     { role: "system", content: SYSTEM },
     { role: "user", content: `${lang === "pl" ? "Answer in Polish." : "Answer in English."}\n\n${question}` },
   ];
-  const r = await loop(complete, messages, reviewAnswer);
+  const r = await loop(complete, messages, reviewAnswer, step);
   if (r.error) return r;
   return { answer: r.text, truncated: r.truncated, queries: r.queries, model: r.model, reviewed: r.reviewed,
            check: checkAnswer(r.text, r.toolText) };
@@ -113,12 +123,12 @@ export async function ask(complete, question, lang) {
 
 // Rank the Atlas for a mission. The model returns JSON; the worker accepts it
 // only if every id exists, none repeats and every reason passes checkAnswer.
-export async function rank(complete, mission, lang) {
+export async function rank(complete, mission, lang, step) {
   const messages = [{ role: "system", content: SYSTEM }, { role: "user", content: rankPrompt(mission, lang) }];
   const r = await loop(complete, messages, (text, toolText) => {
     const p = parseRanking(text, toolText);
     return p.ok ? null : `That ranking was rejected: ${p.errors.join("; ")}. Return the corrected JSON object only.`;
-  });
+  }, step);
   if (r.error) return r;
   const p = parseRanking(r.text, r.toolText);
   if (!p.ok) return { error: "invalid_ranking", detail: p.errors, model: r.model };
@@ -145,12 +155,29 @@ export default {
       return json({ error: isRank ? "bad_mission" : "bad_question" }, 400, headers);
     }
 
-    try {
-      const complete = openRouter(env.OPENROUTER_API_KEY);
-      const out = isRank ? await rank(complete, text, lang) : await ask(complete, text, lang);
+    const complete = openRouter(env.OPENROUTER_API_KEY);
+    const run = async (step) => {
+      try {
+        return isRank ? await rank(complete, text, lang, step) : await ask(complete, text, lang, step);
+      } catch (err) {
+        return { error: err.status === 429 ? "busy" : "upstream", status: err.status };
+      }
+    };
+    if (body?.stream !== true) {
+      const out = await run();
       return json(out, out.error ? 502 : 200, headers);
-    } catch (err) {
-      return json({ error: err.status === 429 ? "busy" : "upstream", status: err.status }, 502, headers);
     }
+    // Streaming: one JSON object per line. Progress lines carry `stage`; the last
+    // line is the same object the non-streaming call returns, plus `done: true`.
+    const { readable, writable } = new TransformStream();
+    const w = writable.getWriter(), enc = new TextEncoder();
+    const send = (o) => w.write(enc.encode(JSON.stringify(o) + "\n")).catch(() => {});
+    (async () => {
+      send({ stage: "start" });
+      const out = await run(send);
+      await send({ ...out, done: true });
+      await w.close().catch(() => {});
+    })();
+    return new Response(readable, { status: 200, headers: { ...headers, "Content-Type": "application/x-ndjson", "Cache-Control": "no-store" } });
   },
 };

@@ -379,6 +379,10 @@ rows_out = []
 cohorts = defaultdict(list)
 per_inv = {}
 raw_rows = {}
+# The table files each investigation's points come from, so the page can say
+# "file X, data row N" for any point. A point carries "t" (index into this list)
+# only when its investigation has more than one table.
+tables_used = defaultdict(list)
 warnings = []
 pretest_rows = 0
 blank_rows = 0
@@ -395,6 +399,8 @@ for acc in sorted(SPEC):
         if not path:
             warnings.append(f"{acc}: table {suffix} not found")
             continue
+        tables_used[acc].append(os.path.basename(path))
+        tix = len(tables_used[acc]) - 1
         with open(path, encoding="utf-8-sig", errors="replace", newline="") as fh:
             rd = csv.reader(fh)
             header = next(rd, [])
@@ -480,6 +486,7 @@ for acc in sorted(SPEC):
                     "o": outc or None, "x": out, **({"pd": 1} if pdoc else {}),
                     **({"fl": fr} if fr and fr["out"] else {}),
                     **({"ob": obs} if obs else {}),
+                    **({"t": tix} if tix else {}),
                 })
                 got += 1
     per_inv[acc] = got
@@ -499,6 +506,8 @@ for _rn, _d in enumerate(BRE_DAYS, 1):
             "day": _d["d"], "raw": _d["raw"],
         })
 per_inv["PSI-20"] = sum(1 for r in rows_out if r["i"] == "PSI-20")
+if BRE_DAYS:
+    tables_used["PSI-20"].append(BRE_FILE)
 
 # ---- coverage grid -------------------------------------------------------
 # The operational question: at which (O2, pressure) combinations do we have data?
@@ -854,6 +863,7 @@ for acc in sorted(INV):
         "p": [round(min(ps), 3), round(max(ps), 3)] if ps else None,
         "materials": mats[:12], "n_materials": len(mats),
         "outcomes": sorted({k for r in rs for k in r["x"]}),
+        "tables": tables_used.get(acc, []),
     })
 
 # Size of the corpus actually sitting in data/, so the page never hardcodes it.

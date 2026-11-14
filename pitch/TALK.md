@@ -157,6 +157,8 @@ liczy solver. Model nie zgaduje, ale odpowiedź jest użyteczna dla inżyniera.
 - Na pytanie „a co jeśli dane są złe?" — odpowiedź 5 jest gotowa; „SoFIE?" — 10; „STD-6001?" — 11;
   „to tylko SQL?" — 13. Slajdy zapasowe: strzałka w prawo za slajdem 5.
 - Nie mów „model", jeśli nie chcesz pytania 4. Mów „zbiór gotowy do modelowania".
-- Demo SI: kliknij *Beyond the data*, nie wpisuj na żywo. Zmierzone 14.11 na wdrożeniu końcowym: zwykle 2.6–11.0 s, raz 26.0 s; licznik sekund jest na
-  ekranie, limit 25 s. Jeśli sieć padnie, strona sama pokaże zapisaną odpowiedź z datą — powiedz to głośno.
+- Demo SI: w sekcji *Search and ask* kliknij zakładkę *Ask the SI*, potem *Beyond the data*, nie wpisuj na żywo. Zmierzone 14.11 na wdrożeniu końcowym: zwykle 2.6–11.0 s, raz 26.0 s; na ekranie widać kolejne
+  etapy (zapytania o dane, pisanie, sprawdzanie cytatów) — możesz je czytać na głos; limit 25 s. Jeśli sieć padnie, strona sama pokaże zapisaną odpowiedź z datą — powiedz to głośno.
+  Potem kliknij w odpowiedzi odwołanie „BASS · PSI-26 · row 55” — otworzy się okienko z plikiem i wierszem źródłowym.
+  To odpowiedź na uwagę mentorów: SI tylko sugeruje, a każdą sugestię można sprawdzić w danych.
   Zapas: nagranie `pitch/img/demo.gif`.
