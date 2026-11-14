@@ -10,6 +10,7 @@ Standard library only.
 """
 import html
 import json
+import os
 import re
 import sys
 
@@ -86,6 +87,8 @@ def main():
     allowed = {float(k) for k in allow}
     bad = []
     for path in DOCS:
+        if not os.path.exists(path):  # pitch/TALK.md is kept local, not in the public repo
+            continue
         for raw, val, ctx in numbers(open(path, encoding="utf-8").read()):
             if val in known or val in allowed or val < 2:
                 continue

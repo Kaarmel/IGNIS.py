@@ -1,7 +1,7 @@
 # IGNIS — 30-second film: context and script
 
 This file is the brief for the project video. It replaces the talk deck as the main pitch format;
-`pitch/index.html` and `pitch/TALK.md` stay as the backup for a live presentation. Anyone who edits the
+`pitch/index.html` stays as the backup for a live presentation. Anyone who edits the
 film (a person or a tool) should be able to work from this file alone.
 
 **Published:** https://youtu.be/EfFLVnlmn70 (also on the project page, https://kaarmel.github.io/IGNIS.py/).

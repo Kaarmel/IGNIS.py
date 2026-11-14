@@ -21,5 +21,8 @@ target/
 # design checker scratch
 .taste-skill/
 
+# talk script and Q&A cards: for the team only, not published
+pitch/TALK.md
+
 # film: local video build (playwright, mp4 output), not part of the submission repo
 film/
