@@ -1,0 +1,17 @@
+name = "ignis-ask"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+
+[vars]
+# The dashboard's origins. file:// pages send "null".
+ALLOWED_ORIGINS = "https://kaarmel.github.io,http://localhost:8000,null"
+
+# Per-IP cap, generous because a venue shares one NAT address. The real cost
+# ceiling is the credit limit on the OpenRouter key.
+[[ratelimits]]
+name = "ASK_LIMIT"
+namespace_id = "2026"
+
+  [ratelimits.simple]
+  limit = 30
+  period = 60

@@ -1,0 +1,19 @@
+# Dane PSI — duże pliki, trzymane lokalnie (odtwarzalne skryptem)
+data/psi_data/
+*.part
+
+# Środowisko
+.venv/
+venv/
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+.env
+
+# Rust — artefakty budowania, odtwarzalne przez `cargo test`
+target/
+
+# Cloudflare Worker
+.wrangler/
+.dev.vars

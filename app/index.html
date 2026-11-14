@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IGNIS — Fire Safety Intelligence for Human Spaceflight</title>
+<meta name="description" content="What 22 microgravity combustion test tables can and cannot tell us about fire safety in a lunar habitat.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%2308090b'/%3E%3Crect x='6' y='6' width='4' height='4' fill='%23ff6a1f'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+<!-- Ask IGNIS endpoint (worker/). Empty it and the panel says SI is offline in this copy. -->
+<meta name="ignis-ask" content="https://ignis-ask.ignis-ask.workers.dev">
+</head>
+<body>
+
+<nav class="nav">
+  <a class="brand" href="#top"><span class="brand-mark"></span>IGNIS</a>
+  <div class="nav-links">
+    <a href="#takeaways" data-en="Findings" data-pl="Wnioski"></a>
+    <a href="#ask" data-en="Ask SI" data-pl="Zapytaj SI"></a>
+    <a href="#funnel" data-en="Corpus" data-pl="Korpus"></a>
+    <a href="#map" data-en="Coverage" data-pl="Pokrycie"></a>
+    <a href="#flowmap" data-en="O₂ × flow" data-pl="O₂ × przepływ"></a>
+    <a href="#atlas" data-en="Atlas" data-pl="Atlas"></a>
+    <a href="#solver" data-en="Solver" data-pl="Solver"></a>
+    <a href="#pillars" data-en="Pillars" data-pl="Filary"></a>
+    <a href="#telemetry" data-en="Telemetry" data-pl="Telemetria"></a>
+    <a href="#verdict" data-en="Verdict" data-pl="Werdykt"></a>
+    <button class="lang" id="lang-toggle" type="button" aria-label="Language / Język">
+      <span data-lang="en" class="on">EN</span><span data-lang="pl">PL</span>
+    </button>
+  </div>
+</nav>
+
+<header id="top" class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow" data-en="NASA International Space Apps Challenge 2026 · Flame in Freefall"
+       data-pl="NASA International Space Apps Challenge 2026 · Płomień w spadku swobodnym"></p>
+    <h1 class="hero-title"
+        data-en-html="Fire safety from <em>microgravity</em> data"
+        data-pl-html="Bezpieczeństwo pożarowe z danych <em>mikrograwitacji</em>"></h1>
+    <p class="hero-lede"
+       data-en-html="What NASA's microgravity combustion archive tells a habitat designer to do differently — and, at <span class=&quot;hot&quot; id=&quot;hs-ceil&quot;>—</span> O₂ for solid materials, where it stops."
+       data-pl-html="Co archiwum spalania w mikrograwitacji NASA każe projektantowi habitatu zrobić inaczej — i gdzie się kończy: na <span class=&quot;hot&quot; id=&quot;hs-ceil&quot;>—</span> O₂ dla materiałów stałych."></p>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ TAKEAWAYS ============ -->
+<section id="takeaways" class="sec sec-first">
+  <div class="sec-head">
+    <p class="kicker" data-en="Findings first" data-pl="Najpierw wnioski"></p>
+    <h2 data-en="What a habitat designer should do differently" data-pl="Co projektant habitatu powinien zrobić inaczej"></h2>
+  </div>
+  <div class="takeaways" id="takeaway-cards"></div>
+  <details class="hero-ref">
+    <summary data-en="Reference atmospheres and where they come from" data-pl="Atmosfery odniesienia i ich źródła"></summary>
+    <div class="hero-stats">
+      <div><span class="num" id="hs-tests">—</span><span class="lbl" data-en="test points normalized" data-pl="znormalizowanych punktów testowych"></span></div>
+      <div><span class="num" id="hs-files">—</span><span class="lbl" id="hs-size"></span></div>
+      <div><span class="num hot" id="hs-gap">—</span><span class="lbl" id="hs-gap-l"></span></div>
+    </div>
+    <p class="hero-note"
+       data-en-html="Operating point audited here: the challenge's own lunar sentence — 30% O₂ or more at 10.2 psi or less, with the floor taken from its suit figure, &quot;filled with 100% oxygen to only 4.3 psi&quot;. Second marker: NASA's Artemis Surface Habitat reference design — &quot;a nominal atmospheric operating pressure of 10.2&nbsp;psia and 26.5% oxygen concentration and a capability of operating at 8.2&nbsp;psia and 34% oxygen&quot; (Kessler et al., Artemis Deep Space Habitation, IEEE Aerospace 2022, NTRS&nbsp;20220000245), where the solid ceiling is <span class=&quot;hs-gn&quot;></span> and <span class=&quot;hs-gc&quot;></span> points short. Neither is a figure from the corpus: they are the points the corpus is scored against. The same paper states that heritage ISS flammability data &quot;may not be valid or extensible&quot; to these environments."
+       data-pl-html="Audytowany punkt pracy: własne zdanie challenge'u o Księżycu — 30% O₂ lub więcej przy 10,2 psi lub mniej, z dolną granicą wziętą z jego zdania o skafandrze: „wypełnione 100% tlenu do zaledwie 4,3 psi”. Drugi znacznik: referencyjny projekt habitatu powierzchniowego Artemis — „nominalne ciśnienie robocze 10,2&nbsp;psia przy stężeniu tlenu 26,5% oraz zdolność do pracy przy 8,2&nbsp;psia i 34% tlenu” (Kessler i in., Artemis Deep Space Habitation, IEEE Aerospace 2022, NTRS&nbsp;20220000245), gdzie sufit dla materiałów stałych jest krótszy o <span class=&quot;hs-gn&quot;></span> i <span class=&quot;hs-gc&quot;></span> punktu. Żadna z tych liczb nie pochodzi z korpusu: to punkty, względem których korpus jest oceniany. Ten sam artykuł stwierdza, że odziedziczone dane palności z ISS „mogą nie być ważne ani przenośne” na te warunki."></p>
+  </details>
+</section>
+
+<!-- ============ ASK IGNIS ============ -->
+<section id="ask" class="sec">
+  <div class="sec-head">
+    <p class="kicker" data-en="SI — Ask the archive" data-pl="SI — Zapytaj archiwum"></p>
+    <h2 data-en="Ask IGNIS" data-pl="Zapytaj IGNIS"></h2>
+    <p class="sec-lede"
+       data-en-html="A language model (DeepSeek V4.1 Flash) reads the same <span class=&quot;n-tp&quot;></span> test points and verified quotes this page draws, queries the points itself, and cites every claim. Every citation and quotation is checked against the corpus; one that cannot be backed is marked in red, not shown as a source."
+       data-pl-html="Model językowy (DeepSeek V4.1 Flash) czyta te same <span class=&quot;n-tp&quot;></span> punktów testowych i zweryfikowane cytaty, które rysuje ta strona, sam odpytuje punkty i podaje źródło każdego twierdzenia. Każdy odnośnik i cytat jest sprawdzany względem korpusu; taki, którego nie da się potwierdzić, jest oznaczony na czerwono, a nie pokazany jako źródło."></p>
+  </div>
+  <div class="ask-presets" id="ask-presets"></div>
+  <form class="ask-form" id="ask-form">
+    <textarea id="ask-q" rows="2" maxlength="600"
+              data-en-ph="e.g. Which investigations matter most for a pressurized rover at 30% O₂?"
+              data-pl-ph="np. Które badania są najważniejsze dla łazika ciśnieniowego przy 30% O₂?"></textarea>
+    <button class="btn-report" type="submit" id="ask-go" data-en="Ask" data-pl="Zapytaj"></button>
+  </form>
+  <div class="ask-out" id="ask-out" aria-live="polite"></div>
+</section>
+
+<!-- ============ FUNNEL ============ -->
+<section id="funnel" class="sec">
+  <div class="sec-head">
+    <p class="kicker" data-en="01 — Attrition" data-pl="01 — Ubytek"></p>
+    <h2 data-en="From five gigabytes to a hole" data-pl="Z pięciu gigabajtów do dziury"></h2>
+    <p class="sec-lede"
+       data-en="Each step applies one stricter test. Nothing is discarded silently — every drop has a reason."
+       data-pl="Każdy krok stosuje jedno ostrzejsze kryterium. Nic nie jest odrzucane po cichu — każdy ubytek ma nazwaną przyczynę."></p>
+  </div>
+  <div id="funnel-chart" class="funnel"></div>
+  <p class="footnote" id="funnel-note"></p>
+</section>
+
+<!-- ============ MAP ============ -->
+<section id="map" class="sec">
+  <div class="sec-head">
+    <p class="kicker" data-en="02 — Coverage" data-pl="02 — Pokrycie"></p>
+    <h2 data-en="Where the data actually exists" data-pl="Gdzie dane faktycznie istnieją"></h2>
+    <p class="sec-lede"
+       data-en="Oxygen against chamber pressure. The shaded band is the lunar habitat's operating envelope. Hover any point for its record."
+       data-pl="Tlen względem ciśnienia w komorze. Zacienione pole to obwiednia pracy habitatu księżycowego. Najedź na punkt, aby zobaczyć rekord."></p>
+    <p class="sec-note" id="env-note"></p>
+  </div>
+  <div class="map-wrap">
+    <div class="map-legend" id="map-legend"></div>
+    <svg id="map-svg" role="img"
+         data-en-al="Scatter plot of oxygen concentration against chamber pressure for microgravity combustion tests"
+         data-pl-al="Wykres rozrzutu stężenia tlenu względem ciśnienia w komorze dla testów spalania w mikrograwitacji"></svg>
+  </div>
+  <div class="map-readout">
+    <div class="card">
+      <h3 data-en="The wall" data-pl="Ściana"></h3>
+      <p data-en-html="Solid materials — fabrics, films, plastics, the things a habitat interior is made of — occupy a narrow oxygen band that ends at <strong id=&quot;mc-ceiling&quot;>—</strong>. Not one solid test in this corpus exists above it."
+         data-pl-html="Materiały stałe — tkaniny, folie, plastiki, czyli to, z czego zbudowane jest wnętrze habitatu — zajmują wąskie pasmo tlenu kończące się na <strong id=&quot;mc-ceiling&quot;>—</strong>. Żaden test materiału stałego w tym korpusie nie istnieje powyżej."></p>
+    </div>
+    <div class="card">
+      <h3 data-en="The second axis" data-pl="Druga oś"></h3>
+      <p data-en-html="<strong id=&quot;mc-solid&quot;>—</strong> solid-material test points. <strong id=&quot;mc-blind&quot;>—</strong> of them have a chamber pressure recorded somewhere in the corpus — not always in the test table: BASS in its as-run matrix, BASS-II in its summary report, Saffire-I in its sensor workbook. Every one ran at <b id=&quot;mc-prange&quot;>—</b>. The pressure axis was never varied — only the oxygen was, and only downward."
+         data-pl-html="<strong id=&quot;mc-solid&quot;>—</strong> punktów testowych materiałów stałych. <strong id=&quot;mc-blind&quot;>—</strong> z nich ma ciśnienie komory zapisane gdzieś w korpusie — nie zawsze w tabeli testu: BASS w macierzy „as run”, BASS-II w raporcie zbiorczym, Saffire-I w arkuszu czujników. Wszystkie pracowały przy <b id=&quot;mc-prange&quot;>—</b>. Osi ciśnienia nigdy nie zmieniano — zmieniano tylko tlen i tylko w dół."></p>
+      <p data-en-html="<strong id=&quot;mc-nop&quot;>—</strong> have no pressure anywhere in the corpus: 9 Saffire-II points, 2 Saffire-III points and one BASS row."
+         data-pl-html="<strong id=&quot;mc-nop&quot;>—</strong> nie ma ciśnienia nigdzie w korpusie: 9 punktów Saffire-II, 2 punkty Saffire-III i jeden wiersz BASS."></p>
+    </div>
+    <div class="card">
+      <h3 data-en="What is covered" data-pl="Co jest pokryte"></h3>
+      <p data-en-html="<strong id=&quot;flex-near&quot;>—</strong> droplet tests ran within 0.03 bar of the design pressure, but only <strong id=&quot;flex-high&quot;>—</strong> of them also reached 26.5% O₂. Droplets cover the design pressure; nothing covers the design atmosphere for the materials a habitat is built from."
+         data-pl-html="<strong id=&quot;flex-near&quot;>—</strong> testów kropelkowych pracowało w granicach 0,03 bar od ciśnienia projektowego, ale tylko <strong id=&quot;flex-high&quot;>—</strong> z nich osiągnęło też 26,5% O₂. Krople pokrywają ciśnienie projektowe; nic nie pokrywa atmosfery projektowej dla materiałów, z których zbudowany jest habitat."></p>
+      <p data-en-html="What those <strong id=&quot;flex-high2&quot;>—</strong> did: <strong id=&quot;dp-ext&quot;>—</strong> self-extinguished, against <strong id=&quot;dp-air&quot;>—</strong> of <strong id=&quot;dp-air-n&quot;>—</strong> in the same nitrogen-diluted series at cabin air. Both pressure and oxygen differ between the two cohorts, so this is an analogue, not a controlled comparison."
+         data-pl-html="Co zrobiło tych <strong id=&quot;flex-high2&quot;>—</strong>: <strong id=&quot;dp-ext&quot;>—</strong> zgasło samo, wobec <strong id=&quot;dp-air&quot;>—</strong> z <strong id=&quot;dp-air-n&quot;>—</strong> w tej samej serii rozcieńczanej azotem przy powietrzu kabinowym. Obie osie różnią się między kohortami, więc to analogia, a nie porównanie kontrolowane."></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FLOW ============ -->
+<section id="flowmap" class="sec">
+  <div class="sec-head">
+    <p class="kicker" data-en="03 — The second variable" data-pl="03 — Druga zmienna"></p>
+    <h2 data-en="Oxygen is half the story" data-pl="Tlen to połowa historii"></h2>
+    <p class="sec-lede"
+       data-en="The challenge says flammability depends on oxygen and that air flow matters just as much in microgravity. The same test tables carry the flow setting for every test — a column this project never plotted. It is here, with the outcome the operator recorded in it."
+       data-pl="Challenge mówi, że palność zależy od tlenu, a przepływ powietrza liczy się w mikrograwitacji równie mocno. Te same tabele niosą nastawę przepływu dla każdego testu — kolumna, której ten projekt nigdy nie narysował. Jest tutaj, razem z wynikiem, który operator w niej zapisał."></p>
+    <p class="sec-note" id="flow-note"></p>
+    <div class="atlas-ctrl" id="flow-scope"></div>
+  </div>
+  <div class="map-wrap">
+    <div class="map-legend" id="flow-legend"></div>
+    <svg id="flow-svg" role="img"
+         data-en-al="Scatter plot of oxygen concentration against air flow, markers showing whether the flame extinguished or blew off"
+         data-pl-al="Wykres rozrzutu stężenia tlenu względem przepływu powietrza; znaczniki pokazują, czy płomień zgasł, czy został zdmuchnięty"></svg>
+  </div>
+</section>
+
+<!-- ============ ATLAS ============ -->
+<section id="atlas" class="sec">
+  <div class="sec-head">
+    <p class="kicker" data-en="04 — Inventory" data-pl="04 — Inwentarz"></p>
+    <h2 id="atlas-h"></h2>
+    <p class="sec-lede"
+       data-en="Ranked by how directly each one answers a habitat fire-safety question — by a stated rule by default, or by the SI for a mission you describe."
+       data-pl="Uporządkowane według tego, jak bezpośrednio odpowiadają na pytanie o bezpieczeństwo pożarowe habitatu — domyślnie według jawnej reguły albo przez SI dla opisanej misji."></p>
+  </div>
+  <form class="atlas-mission" id="atlas-mission">
+    <label for="mission-q" data-en="Describe the mission" data-pl="Opisz misję"></label>
+    <div class="mission-presets" id="mission-presets"></div>
+    <div class="mission-row">
+      <input id="mission-q" type="text" maxlength="200"
+             data-en-ph="e.g. pressurized rover, lunar base, transit cabin"
+             data-pl-ph="np. łazik ciśnieniowy, baza księżycowa, kabina tranzytowa">
+      <button class="btn-report" type="submit" id="mission-go" data-en="Rank with SI" data-pl="Uszereguj przez SI"></button>
+    </div>
+  </form>
+  <div class="atlas-controls" id="atlas-controls"></div>
+  <div class="atlas" id="atlas-list"></div>
+  <p class="footnote" id="atlas-foot"></p>
+</section>
+
+<!-- ============ SOLVER ============ -->
+<section id="solver" class="sec">
+  <div class="sec-head">
+    <p class="kicker" data-en="05 — Reasoning" data-pl="05 — Rozumowanie"></p>
+    <h2 data-en="Ask the corpus" data-pl="Zapytaj korpus"></h2>
+    <p class="sec-lede"
+       data-en="Describe a habitat atmosphere. IGNIS finds the nearest real experiments, measures how far away they are, and states what the evidence does and does not support. Every number is traceable to a numbered source row."
+       data-pl="Opisz atmosferę habitatu. IGNIS znajduje najbliższe rzeczywiste eksperymenty, mierzy odległość do nich i mówi, co dowody wspierają, a czego nie. Każda liczba jest powiązana z numerowanym wierszem źródłowym."></p>
+  </div>
+  <div class="solver">
+    <div class="solver-input">
+      <label><span data-en="Destination" data-pl="Cel"></span>
+        <select id="sv-dest">
+          <option value="challenge" data-en="Lunar — 30% O₂ or more, 10.2 psi or less (challenge)" data-pl="Księżyc — 30% O₂ lub więcej, 10,2 psi lub mniej (challenge)"></option>
+          <option value="moon" data-en="Artemis nominal — 10.2 psia, 26.5% O₂" data-pl="Nominał Artemis — 10,2 psia, 26,5% O₂"></option>
+          <option value="moon82" data-en="Artemis capability — 8.2 psia, 34% O₂" data-pl="Zdolność Artemis — 8,2 psia, 34% O₂"></option>
+          <option value="iss" data-en="ISS cabin — 14.7 psia, 20.9% O₂" data-pl="Kabina ISS — 14,7 psia, 20,9% O₂"></option>
+          <option value="suit" data-en="Suit — 4.3 psi, 100% O₂" data-pl="Skafander — 4,3 psi, 100% O₂"></option>
+          <option value="unstated" data-en="Pressurized rover or Mars habitat — atmosphere not given" data-pl="Łazik ciśnieniowy lub habitat na Marsie — atmosfera niepodana"></option>
+          <option value="custom" data-en="Custom…" data-pl="Własny…"></option>
+        </select>
+      </label>
+      <div class="solver-row">
+        <label><span data-en="Pressure (bar)" data-pl="Ciśnienie (bar)"></span> <input id="sv-p" type="text" inputmode="decimal" value="0.703"></label>
+        <label><span data-en="Oxygen (%)" data-pl="Tlen (%)"></span> <input id="sv-o2" type="text" inputmode="decimal" value="30"></label>
+      </div>
+      <label><span data-en="Material" data-pl="Materiał"></span>
+        <select id="sv-mat">
+          <option value="solid" data-en="Solid — fabric, film, plastic" data-pl="Stały — tkanina, folia, plastik"></option>
+          <option value="emulator" data-en="Material-flammability emulator (BRE)" data-pl="Emulator palności materiałów (BRE)"></option>
+          <option value="droplet" data-en="Liquid droplet fuel" data-pl="Paliwo kropelkowe (ciecz)"></option>
+          <option value="gas" data-en="Gaseous fuel" data-pl="Paliwo gazowe"></option>
+          <option value="aerosol" data-en="Smoke / aerosol" data-pl="Dym / aerozol"></option>
+        </select>
+      </label>
+    </div>
+    <p class="solver-unstated" id="sv-unstated" hidden
+       data-en="The challenge names rovers and Mars but gives no atmosphere for them, and NASA's Artemis habitation paper (Kessler et al., NTRS 20220000245) states one only for the Surface Habitat. Enter your own pressure and oxygen — this page will not guess them."
+       data-pl="Challenge wymienia łaziki i Marsa, ale nie podaje dla nich atmosfery, a artykuł NASA o habitatach Artemis (Kessler i in., NTRS 20220000245) podaje ją tylko dla habitatu powierzchniowego. Wpisz własne ciśnienie i tlen — ta strona ich nie zgaduje."></p>
+    <div class="solver-out" id="solver-out"></div>
+  </div>
+  <div class="solver-actions">
+    <button id="report-btn" class="btn-report" type="button"
+            data-en="Export this as a one-page report (PDF)"
+            data-pl="Eksportuj jako jednostronicowy raport (PDF)"></button>
+  </div>
+</section>
+
+<!-- ============ PILLARS ============ -->
+<section id="pillars" class="sec">
+  <div class="sec-head">
+    <p class="kicker" data-en="06 — The three pillars" data-pl="06 — Trzy filary"></p>
+    <h2 data-en="Prevention, detection, suppression — and what it means on Earth" data-pl="Zapobieganie, wykrywanie, gaszenie — i co to znaczy na Ziemi"></h2>
+    <p class="sec-lede"
+       data-en="The challenge names the three areas NASA's fire-safety work splits into. Each card carries the one number from this corpus that speaks to it, and where that number stops."
+       data-pl="Challenge wymienia trzy obszary, na które dzieli się praca NASA nad bezpieczeństwem pożarowym. Każda karta niesie jedną liczbę z tego korpusu, która do niego mówi — i mówi, gdzie ta liczba się kończy."></p>
+    <p class="sec-note"
+       data-en="Below the cards, the same corpus as a model-ready export: every field carries its accession, row number and units, and the line under the buttons states the ranges the set supports."
+       data-pl="Pod kartami ten sam korpus jako eksport gotowy do modelowania: każde pole niesie akcesję, numer wiersza i jednostki, a zdanie pod przyciskami podaje zakresy, które zbiór pokrywa."></p>
+  </div>
+  <div class="pillars" id="pillar-cards"></div>
+  <div class="export" id="export-actions"></div>
+</section>
+
+<!-- ============ TELEMETRY ============ -->
+<section id="telemetry" class="sec">
+  <div class="sec-head">
+    <p class="kicker" data-en="07 — Raw signal" data-pl="07 — Surowy sygnał"></p>
+    <h2 data-en="Watch a flame die" data-pl="Zobacz, jak gaśnie płomień"></h2>
+    <p class="sec-lede"
+       data-en="Reconstructed from the raw 125&nbsp;Hz instrument stream, not a summary table. Ion current is a direct measure of flame presence; when it collapses, the flame is gone."
+       data-pl="Odtworzone z surowego strumienia przyrządów 125&nbsp;Hz, a nie z tabeli zbiorczej. Prąd jonowy jest bezpośrednią miarą obecności płomienia; gdy opada, płomień gaśnie."></p>
+    <p class="sec-note" id="tele-count"></p>
+  </div>
+  <div class="tele-controls" id="tele-controls"></div>
+  <div class="tele-wrap">
+    <svg id="tele-svg" role="img"
+         data-en-al="Time series of ion current, chamber pressure and burner temperature across a flame test"
+         data-pl-al="Szeregi czasowe prądu jonowego, ciśnienia w komorze i temperatury palnika w teście płomienia"></svg>
+    <div class="tele-side" id="tele-side"></div>
+  </div>
+</section>
+
+<!-- ============ VERDICT ============ -->
+<section id="verdict" class="sec">
+  <div class="sec-head">
+    <p class="kicker" data-en="08 — Verdict" data-pl="08 — Werdykt"></p>
+    <h2 data-en="Three things worth acting on" data-pl="Trzy rzeczy warte działania"></h2>
+  </div>
+  <div class="verdict" id="verdict-cards"></div>
+  <p class="footnote"
+     data-en-html="Source: NASA Physical Science Informatics, CC0-1.0. Every figure is recomputed from the raw tables by <code>scripts/build_dataset.py</code>; the prose around them is written by hand."
+     data-pl-html="Źródło: NASA Physical Science Informatics, CC0-1.0. Każda liczba jest przeliczana z surowych tabel przez <code>scripts/build_dataset.py</code>; tekst wokół nich jest napisany ręcznie."></p>
+</section>
+
+</main>
+
+<footer class="foot">
+  <span data-en="IGNIS · built on NASA PSI open data (CC0-1.0)" data-pl="IGNIS · zbudowane na otwartych danych NASA PSI (CC0-1.0)"></span>
+  <span id="foot-meta"></span>
+</footer>
+
+<!-- Populated by app.js on every solve; revealed only by the print stylesheet. -->
+<section id="report"></section>
+
+<script src="data/dataset.js"></script>
+<script src="data/telemetry.js"></script>
+<script src="data/insights.js"></script>
+<script src="data/earth.js"></script>
+<script src="data/ask_cache.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

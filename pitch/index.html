@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IGNIS — pitch</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%2308090b'/%3E%3Crect x='6' y='6' width='4' height='4' fill='%23ff6a1f'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#08090b; --panel:#0e1014; --line:#1d222a; --line2:#2a313c;
+  --ink:#e7eaef; --dim:#9aa2ae; --faint:#626a76;
+  --fire:#ff6a1f; --fire-dim:#7a3210; --data:#38bdf8;
+  --danger:#ef4444; --solid:#f59e0b; --gas:#a78bfa;
+  --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#000;color:var(--ink);font-family:var(--sans);overflow:hidden}
+@media screen{
+  /* A 1600px box in a 1280px grid overflows the track, not symmetrically:
+     grid centring leaves it 160px right and 90px low, and overflow:hidden eats
+     that edge. Anchor the deck at the viewport centre and let the transform
+     scale around that point instead. */
+  body{display:block;height:100vh}
+  .deck{position:absolute;left:50%;top:50%;transform-origin:50% 50%}
+}
+.slide{
+  width:1600px;height:900px;position:relative;overflow:hidden;
+  background:var(--bg);padding:76px 92px;display:none;flex-direction:column;
+}
+.slide.on{display:flex}
+.slide::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(1000px 520px at 12% 0%,rgba(255,106,31,.075),transparent 60%);
+}
+.slide > *{position:relative;z-index:1}
+
+/* --- shared type --- */
+.eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--fire);margin:0 0 28px}
+h1{font-size:96px;line-height:.94;letter-spacing:-.038em;margin:0 0 32px;font-weight:700;max-width:1250px}
+h1 em{font-style:normal;color:var(--fire)}
+h2{font-size:58px;line-height:1.03;letter-spacing:-.03em;margin:0 0 20px;font-weight:680;max-width:1200px}
+.lede{font-size:25px;line-height:1.45;color:var(--dim);margin:0;max-width:1040px}
+.lede strong{color:var(--ink);font-weight:600}
+.mono{font-family:var(--mono)}
+/* sans: a mono period occupies a full cell, so "22.7%" reads as "22. 2%" */
+.hot{color:var(--fire);font-family:var(--sans);font-weight:640;font-variant-numeric:tabular-nums}
+.foot{position:absolute;left:92px;right:92px;bottom:32px;display:flex;justify-content:space-between;
+  font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--faint);text-transform:uppercase;z-index:2}
+.pageno{color:var(--line2)}
+
+/* --- slide 1 --- */
+.s1{justify-content:center}
+.stats{display:flex;gap:70px;margin-top:54px}
+.stats div{display:flex;flex-direction:column;gap:6px}
+.stats .n{font-family:var(--mono);font-size:44px;font-weight:600;line-height:1;letter-spacing:-.02em}
+.stats .k{font-size:14px;color:var(--faint);letter-spacing:.03em;max-width:190px;line-height:1.35}
+.s1-find{gap:44px;margin-top:30px}.s1-find .k{max-width:400px;font-size:16px;color:var(--dim)}.s1-find .k b{display:block;color:var(--ink);font-size:19px;margin-bottom:4px}.s1-find .n{font-size:56px;color:var(--fire)}
+
+/* --- slide 2 --- */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:54px;margin-top:38px;align-content:start}
+.path{list-style:none;margin:0;padding:0}
+.path li{padding:16px 0;border-top:1px solid var(--line);display:grid;grid-template-columns:100px 1fr;gap:20px;align-items:baseline}
+.path li:last-child{border-bottom:1px solid var(--line)}
+.path .step{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+.path .what{font-size:18.5px;line-height:1.45;color:var(--dim)}
+.path .what b{color:var(--ink);font-weight:600;display:block;font-size:19.5px;margin-bottom:2px}
+.path li.chosen{border-left:2px solid var(--fire);padding-left:20px;margin-left:-22px}
+.path li.chosen .what b{color:var(--fire)}
+.cands{list-style:none;margin:0;padding:0}
+.cands li{padding:18px 0;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 72px;gap:18px;align-items:baseline}
+.cands li:last-child{border-bottom:1px solid var(--line)}
+.cands .nm{font-size:18px;color:var(--ink);line-height:1.3}
+.cands .nm small{display:block;color:var(--faint);font-size:14.5px;margin-top:5px;line-height:1.45}
+.cands .vd{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;text-align:right}
+.cands .no{color:var(--danger)}
+.cands .yes{color:var(--fire)}
+.kicker-line{font-size:21px;color:var(--ink);margin:32px 0 0;padding-left:22px;border-left:2px solid var(--fire);line-height:1.45}
+.kicker-line b{color:var(--fire);font-family:var(--mono)}
+
+/* --- slide 3 : native funnel --- */
+.funnel{margin-top:30px;display:flex;flex-direction:column}
+.frow{display:grid;grid-template-columns:112px 1fr 400px;gap:26px;align-items:center;padding:19px 0;border-top:1px solid var(--line)}
+.frow:last-child{border-bottom:1px solid var(--line)}
+.fnum{font-family:var(--mono);font-size:27px;font-weight:600;letter-spacing:-.02em;text-align:right;line-height:1}
+.fbar{height:28px;position:relative;background:transparent}
+.fbar i{display:block;height:100%;background:var(--line2)}
+.frow.kept .fbar i{background:linear-gradient(90deg,var(--fire-dim),var(--fire))}
+.frow.zero .fbar i{width:2px!important;background:var(--danger)}
+.flab{font-size:14px;color:var(--faint);line-height:1.4}
+.flab b{display:block;color:var(--ink);font-weight:550;font-size:15.5px;margin-bottom:2px}
+.frow.zero .fnum,.frow.zero .flab b{color:var(--danger)}
+.note{font-family:var(--mono);font-size:14px;color:var(--faint);margin:24px 0 0;line-height:1.65;max-width:1240px}
+.note b{color:var(--dim);font-weight:500}
+
+/* --- slide 4 --- */
+.maprow{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:40px;align-items:start;margin-top:10px}
+/* Slides 4 and 5 carry three longer notes beside the chart; at 16px they run
+   past the 900px frame. Tighter type on these two only, chart unchanged. */
+.dense .notes{font-size:14px;line-height:1.45}
+.dense .notes li{padding:9px 0}
+.dense .notes b{margin-bottom:5px;font-size:10px}
+.dense .notes .big{font-size:18px}
+.dense .mapimg{max-height:560px}
+.mapimg{max-height:612px;max-width:100%;width:auto;display:block;border:1px solid var(--line)}
+.notes{list-style:none;margin:0;padding:0;font-size:16px;line-height:1.5;color:var(--dim)}
+/* Every slide shares the same 76/92 padding and a .foot pinned at bottom:32px,
+   so the content box ends at y=824 and anything past that collides with the
+   footer. Slides 4 and 6 ran to 858 and 879. */
+.notes li{padding:12px 0;border-top:1px solid var(--line)}
+.notes li:last-child{border-bottom:1px solid var(--line)}
+.notes b{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--fire);margin-bottom:7px}
+/* <b> is the label; inline emphasis inside a note must not become one. */
+.notes strong{color:var(--ink);font-weight:640}
+.notes .big{font-family:var(--sans);font-size:21px;color:var(--ink);font-weight:640;font-variant-numeric:tabular-nums}
+
+/* --- slide 5 --- */
+.tworow{display:grid;grid-template-columns:minmax(0,1fr) 390px;gap:44px;align-items:start;margin-top:12px}
+.teleimg{width:100%;border:1px solid var(--line);display:block}
+.bigfact{font-family:var(--mono);font-size:84px;font-weight:700;line-height:.9;letter-spacing:-.04em;color:var(--fire);margin:0 0 10px}
+/* The screenshot is cropped to 4:1 so it ends above the footer; an uncropped
+   expanded row ran 263px past it and was cut off in the PDF. */
+.atlasimg{width:100%;display:block;margin-top:20px;border:1px solid var(--line);max-height:244px;object-fit:cover;object-position:top left}
+.bigfact-k{font-size:15px;color:var(--faint);margin:0 0 26px;line-height:1.5;max-width:330px}
+.readout{font-family:var(--mono);font-size:14px;border-top:1px solid var(--line);padding-top:14px}
+.readout div{display:flex;justify-content:space-between;padding:6px 0;color:var(--dim)}
+.readout b{color:var(--ink);font-weight:500}
+
+/* --- slide 6 --- */
+.s6row{display:grid;grid-template-columns:auto minmax(0,1fr);gap:46px;align-items:center;margin-top:16px}
+/* Height, not width: the panel is 1124x953 at every viewport, so a width-driven
+   image would push the slide 150px past 900. 664px is what the slide has left. */
+.solverimg{height:620px;width:auto;max-width:100%;border:1px solid var(--line);display:block}
+.quote{font-size:21px;line-height:1.48;color:var(--ink);margin:0;letter-spacing:-.012em}
+.quote b{color:var(--fire)}
+
+/* --- slide 7 --- */
+.cherries{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:22px}
+.cherry{background:var(--panel);border:1px solid var(--line);padding:26px 26px 34px;position:relative}
+.cherry::after{content:attr(data-n);position:absolute;right:16px;bottom:4px;font-family:var(--mono);font-size:40px;font-weight:700;color:var(--line2);line-height:1}
+.cherry .tag{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--fire);border:1px solid var(--fire-dim);padding:4px 9px;display:inline-block}
+.cherry h3{font-size:22px;line-height:1.24;margin:16px 0 12px;letter-spacing:-.02em;font-weight:640}
+.cherry p{font-size:15px;line-height:1.55;color:var(--dim);margin:0}
+.cherry p b{color:var(--ink)}
+/* Slide 7 is the only slide with all of cherries + closing + closer, and it
+   ran 68px past the content box — .closer ended at 892 and the absolutely
+   positioned .foot starts at 854, so the footer printed on top of the SI
+   disclosure. These three margins are what buys the clearance. */
+.closing{font-size:28px;line-height:1.34;letter-spacing:-.022em;color:var(--ink);margin:18px 0 0;max-width:1180px}
+.closing b{color:var(--fire)}
+.closer{display:flex;gap:46px;margin-top:16px;padding-top:16px;border-top:1px solid var(--line);align-items:flex-start}
+.closer .si{flex:1;font-size:14px;line-height:1.52;color:var(--dim);max-width:780px}
+.closer .si b{color:var(--ink)}
+.closer .si .lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:7px}
+.closer .repo{font-family:var(--mono);font-size:14px;line-height:1.85;color:var(--dim);text-align:right;white-space:nowrap}
+.closer .repo b{color:var(--data);font-weight:500}
+
+/* --- nav --- */
+.hint{position:fixed;top:16px;right:24px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:#2e3540;z-index:10;text-transform:uppercase}
+@media print{.hint{display:none}}
+
+/* --- print --- */
+@page{size:1600px 900px;margin:0}
+@media print{
+  /* Without this, ⌘P from the browser drops every background and prints a white deck. */
+  html,body{overflow:visible;background:var(--bg);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{display:block;height:auto}
+  .deck{transform:none!important}
+  .slide{display:flex!important;break-after:page;page-break-after:always}
+  .slide:last-child{break-after:auto;page-break-after:auto}
+}
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+<!-- ============ 1 ============ -->
+<section class="slide on s1">
+  <p class="eyebrow">NASA Space Apps Challenge 2026 · Flame in Freefall · Rzeszów</p>
+  <h1 style="font-size:78px">What a habitat designer<br>should do <em>differently</em></h1>
+  <div class="stats s1-find">
+    <div><span class="n">16/18</span><span class="k"><b>Cut the ventilation.</b> BASS nitrogen attempts on a burning solid that left it lit — in 10 of the 16 the flame went out when the air flow was turned off.</span></div>
+    <div><span class="n">0/17</span><span class="k"><b>Don't expect self-extinction.</b> FLEX droplets near the 10.2&nbsp;psi design pressure at 30–34% O₂ that went out on their own — against 14 of 29 at cabin air.</span></div>
+    <div><span class="n">500&nbsp;nm</span><span class="k"><b>Detect finer smoke, later.</b> SAME final report: much of the smoke is below 500&nbsp;nm, and detection takes longer than in normal gravity.</span></div>
+  </div>
+  <p class="lede" style="margin-top:44px">
+    And where it stops: every solid-material test in NASA’s open PSI archive — <strong>264 points, five
+    investigations</strong> — stops at <span class="hot">22.7%</span> O₂, while the challenge puts lunar oxygen at
+    “<strong>30% or greater</strong>”. So all three are analogues — an operator log, droplets, smoke — not an
+    answer for the materials a habitat interior is made of.
+  </p>
+  <p class="note" style="margin-top:26px;font-size:13px">
+    Primary reference: the challenge’s own lunar sentence — 30% O₂ or more at 10.2 psi or less, with the floor
+    from its suit figure (“filled with 100% oxygen to only 4.3 psi”). Second marker: the Artemis Surface Habitat
+    reference design, 10.2 psia at 26.5% O₂ with an 8.2 psia, 34% capability (Kessler et al., NTRS 20220000245),
+    where the ceiling is 3.8 and 11.3 points short. Operator log and droplet cohorts are analogues, not
+    controlled comparisons.
+  </p>
+  <div class="foot"><span>IGNIS · SI-powered fire-safety dashboard</span><span class="pageno">01 / 07</span></div>
+</section>
+
+<!-- ============ 2 ============ -->
+<section class="slide">
+  <p class="eyebrow">The question</p>
+  <h2>The challenge asks three things.<br>Each one has a view.</h2>
+  <div class="cols">
+    <div>
+      <ul class="path">
+        <li><span class="step">Empathize</span><span class="what"><b>Hypothesised user: a habitat fire-safety engineer</b>who must tell a review board whether the interior materials of a lunar module are qualified for its atmosphere. No interview was possible before the event — the persona is stated as a hypothesis, not as research.</span></li>
+        <li><span class="step">Define</span><span class="what"><b>Can 5.4 GB of microgravity combustion data answer that?</b>Not “what is in the data” — whether it can carry the decision.</span></li>
+        <li class="chosen"><span class="step">Decide</span><span class="what"><b>An SI-powered dashboard</b>that summarizes, ranks and interprets — and states, per question, where the evidence stops.</span></li>
+      </ul>
+    </div>
+    <div>
+      <ul class="cands">
+        <li><span class="nm">1 · Which investigations bear on a crew habitat, lunar base or rover?<small>The Atlas — ranked by a stated rule, or by the SI for a mission you describe (rover, lunar base, transit cabin), with one checked reason per row.</small></span><span class="vd yes">answer</span></li>
+        <li><span class="nm">2 · What data exists to support predictive modelling?<small>The coverage map and the funnel — with the model export that states the ranges the set supports and where a model would extrapolate.</small></span><span class="vd yes">answer</span></li>
+        <li><span class="nm">3 · What informs the next generation of fire-safety controls?<small>Three cards: prevention, detection, suppression — one computed number each, and where that number stops.</small></span><span class="vd yes">answer</span></li>
+      </ul>
+      <p class="kicker-line">At the lunar atmosphere the honest answer is not a number.
+      It is <b>a measured gap on both axes</b> — and a dashboard that cannot say that
+      is not being honest with the people who build the habitat.</p>
+    </div>
+  </div>
+  <div class="foot"><span>IGNIS · SI-powered fire-safety dashboard</span><span class="pageno">02 / 07</span></div>
+</section>
+
+<!-- ============ 3 ============ -->
+<section class="slide">
+  <p class="eyebrow">Method</p>
+  <h2>Five gigabytes to a hole</h2>
+  <p class="lede">Each step applies one stricter test. Nothing is dropped silently.</p>
+
+  <div class="funnel">
+    <div class="frow"><span class="fnum">2,870</span><span class="fbar"><i style="width:100%"></i></span>
+      <span class="flab"><b>Rows in the 22 experimental tables</b>across 20 accessions, as published by NASA PSI</span></div>
+    <div class="frow"><span class="fnum">1,936</span><span class="fbar"><i style="width:66.0%"></i></span>
+      <span class="flab"><b>Test points</b>rows that parse into a point — BRE turns 18 test-day rows into 43 points, one per oxygen level</span></div>
+    <div class="frow kept"><span class="fnum">264</span><span class="fbar"><i style="width:9.2%"></i></span>
+      <span class="flab"><b>Solid-material test points</b>fabric, film, plastic — the habitat interior</span></div>
+    <div class="frow"><span class="fnum">261</span><span class="fbar"><i style="width:9.1%"></i></span>
+      <span class="flab"><b>Solid points that record an oxygen level</b>the other 3 carry no oxygen value at all</span></div>
+    <div class="frow zero"><span class="fnum">0</span><span class="fbar"><i style="width:2px"></i></span>
+      <span class="flab"><b>Solid points at the challenge’s lunar level</b>the highest is 22.7%; the challenge says 30% or more</span></div>
+  </div>
+
+  <p class="note" style="margin-top:14px">
+    <b>Every table is mapped by hand</b> — a generic parser silently mis-units this corpus: three pressure
+    units (atm, bar, mmHg), two oxygen conventions (fraction and percent), free-text values like “1 atm”,
+    a typo’d <span class="mono">Samle Thickness</span> header, and a literal <span class="mono">0</span>
+    used as a missing-value sentinel. The arithmetic closes: <b>2,870</b> published rows, <b>959</b> rejected
+    for a named cause, <b>1,911</b> rows that become test points — and <b>1,936</b> points, because BRE’s 18
+    test-day rows each list several oxygen levels and become 43 points. The 959: 861 empty rows at the tail
+    of the CFI-G inverse sheet, 82 in three ACME tables whose columns this build does not map, 8 in the
+    cross-experiment summary sheet, 8 Saffire rows (4 of them pre-test flow-visualisation records).
+  </p>
+  <div class="foot"><span>IGNIS · SI-powered fire-safety dashboard</span><span class="pageno">03 / 07</span></div>
+</section>
+
+<!-- ============ 4 ============ -->
+<section class="slide dense">
+  <p class="eyebrow">Coverage</p>
+  <h2>Where the data actually exists</h2>
+  <div class="maprow">
+    <img class="mapimg" src="img/map-svg.png" alt="Scatter of oxygen against chamber pressure with the challenge envelope shaded from 30% oxygen and 10.2 psi down to the 4.3 psi suit floor; gas and droplet points inside it, solid material and the BRE emulator outside">
+    <ul class="notes">
+      <li><b>The wall</b>Solid materials — the things a habitat interior is made of — end at <span class="big">22.7%</span>. The challenge puts lunar oxygen at 30% or more: a <span class="big">7.3-point</span> band with no solid test in it, at any pressure.</li>
+      <li><b>The emulator</b>Real solid samples stop at 22.7%. Above that the only materials-flammability study in PSI is BRE: <span class="big">194 flames</span> over 18 test days, 21–40% O₂, 25 and 50 mm burners. It is a gas-burner emulation of a solid surface burn, and its table records <strong>no pressure</strong> — it says the pressures “were also varied but are not identified”.</li>
+      <li><b>What is covered</b><span class="big">83</span> points sit in the challenge envelope — 66 gas, 17 droplet, <strong>0 solid</strong>. The 17 droplets are near the design pressure and reach 30–34% O₂; <strong>none of them self-extinguished</strong>, against 14 of 29 in the same nitrogen series at cabin air. An analogue, not a controlled comparison.</li>
+    </ul>
+  </div>
+  <div class="foot"><span>IGNIS · SI-powered fire-safety dashboard</span><span class="pageno">04 / 07</span></div>
+</section>
+
+<!-- ============ 5 ============ -->
+<section class="slide dense">
+  <p class="eyebrow">The second variable</p>
+  <h2>Oxygen is half the story</h2>
+  <div class="maprow">
+    <img class="mapimg" src="img/flow-map.png" alt="Scatter of oxygen concentration against air-display opening setting for solid materials, extinction marked by circles and by downward arrows where the final setting was not recorded, blow-off by squares">
+    <ul class="notes">
+      <li><b>The challenge names it</b>“Flammability is highly dependent on oxygen concentration, and air flow is also important in microgravity.” The test tables carry the flow setting on every row — a column a summary table hides.</li>
+      <li><b>What is in it</b><span class="big">242</span> solid-material test points record both an oxygen level and an air-display setting, mostly BASS-II in its flow duct. The operator’s own cell is parsed for the opening setting, the final setting and the outcome; the raw text stays in the tooltip.</li>
+      <li><b>What it says</b>Of the <strong>18</strong> tests whose log carries an outcome, <strong>15 extinguished and 3 blew off</strong>. But <strong>12 of the 15</strong> extinctions were reached by <em>reducing</em> the flow from the opening setting until the flame went out — the table does not record the value it went out at, so those are arrows, not thresholds. The two outcomes overlap in oxygen (14.8–20.9% against 15.4–17.4%), so flow is not a single switch.</li>
+    </ul>
+  </div>
+  <div class="foot"><span>IGNIS · SI-powered fire-safety dashboard</span><span class="pageno">05 / 07</span></div>
+</section>
+
+<!-- ============ 6 ============ -->
+<section class="slide">
+  <p class="eyebrow">The SI layer</p>
+  <h2>Extracted, verified — and asked live</h2>
+  <div class="tworow">
+    <div>
+      <p class="bigfact">107</p>
+      <p class="bigfact-k">verbatim sentences, each naming its file: 84 from the PSI documents, 23 from NASA’s 2015 Researcher’s Guide to Combustion Science, labelled as outside PSI wherever they appear.</p>
+      <p class="note" style="margin-top:18px">
+        Two layers, one standard. Offline, the extraction fills the Atlas, and
+        <span class="mono">scripts/verify_insights.py</span> re-reads every named file and fails if one word differs.
+        Live, <b>Ask IGNIS</b> puts a language model (DeepSeek V4.1 Flash) on the same 1,936 points: it queries them
+        itself, cites investigations and quote ids, and every citation and quotation is checked against the corpus
+        before the page shows it — one it cannot back prints in red. The same model ranks the Atlas for a described
+        mission, and the worker rejects any ranking with an unknown or repeated id. If the network fails, the page
+        shows real answers saved from the live service, labelled with their date — never passed off as live.
+      </p>
+      <img class="atlasimg" src="img/ask.png" alt="Ask IGNIS answering a live question: the five preset chips, the question, and the first paragraph of the answer with its cited investigations rendered as links">
+    </div>
+    <ul class="notes">
+      <li><b>BASS-II</b>“The main variables tested were the effects of ambient O2 concentration, ventilation flow velocity, and fuel type, thickness, and geometry.”</li>
+      <li><b>FLEX · NASA guide</b>“The research to date has shown that the flammability limit is lower in reduced gravity. The implication is that terrestrial standards for inert gas suppressants in low gravity do not offer the same margin of safety as in normal gravity.”</li>
+      <li><b>BRE</b>“The chamber pressures were also varied but are not identified in this summary table.”</li>
+    </ul>
+  </div>
+  <div class="foot"><span>IGNIS · SI-powered fire-safety dashboard</span><span class="pageno">06 / 07</span></div>
+</section>
+
+<!-- ============ 7 ============ -->
+<section class="slide">
+  <p class="eyebrow">Verdict</p>
+  <h2>Prevention, detection, suppression</h2>
+  <div class="cherries">
+    <div class="cherry" data-n="01">
+      <span class="tag">Prevention</span>
+      <h3>22.7% is where the method stopped, not where safety starts</h3>
+      <p>The highest oxygen any solid-material test reached, across <b>264</b> points — a BASS test. Both BASS
+      campaigns varied oxygen by adding nitrogen — a method that can only go down from cabin air. Above it, only the
+      <b>BRE emulator</b> (194 flames, 21–40% O₂, a gas burner emulating a burning surface, no pressure
+      recorded). The challenge’s lunar level is <b>30%</b>: seven points of untested oxygen for the materials
+      a habitat is built from.</p>
+    </div>
+    <div class="cherry" data-n="02">
+      <span class="tag">Suppression</span>
+      <h3>Stopping the air flow put out flames that nitrogen did not</h3>
+      <p>FLEX droplets, one atmosphere, same oxygen level: at <b>18% O₂ or less</b>, <b>39 of 43</b> went out in
+      nitrogen, <b>24 of 27</b> with CO₂, <b>15 of 19</b> with helium — the inert gas does not visibly change
+      the outcome (at 21% only 3 and 2 such tests exist). The BASS operators' notes on solids agree:
+      <b>18</b> record an attempt to put a burning sample out with nitrogen, <b>16</b> say it stayed lit, and in
+      <b>10</b> of those the flame went out when the air flow was turned off. Small samples, an operator log —
+      a direction, not a rate.</p>
+    </div>
+    <div class="cherry" data-n="03">
+      <span class="tag">Detection</span>
+      <h3>119 smoke and dust points — finer smoke, slower detection</h3>
+      <p>SAME-R, SAME and DAFT record how smoke was made and aged, not a flame. The SAME final report
+      concludes that “a substantial portion of the smoke particles are below 500 nm in diameter” and that
+      “detection times are longer than in normal gravity”. Partial gravity: PSI holds <b>no</b>
+      reduced-gravity combustion test; the challenge names LUCI and FM2 as future work.</p>
+    </div>
+  </div>
+  <p class="closing">The gap is not a data problem. <b>PSI holds no solid-material test below 0.98 bar or
+  above 22.7% O₂</b> — and a test campaign in microgravity at the atmosphere in use is what would fill it.</p>
+  <div class="closer">
+    <div class="si">
+      <span class="lbl">SI disclosure</span>
+      Built with <b>Claude (Anthropic)</b> — code, analysis and narrative. The live panel runs
+      <b>DeepSeek V4.1 Flash</b> via OpenRouter, answering only from the corpus. <b>No SI generated the data.</b>
+      SI extracted the per-investigation summaries, and a script verifies every quote against the source file.
+      Every figure is computed from the NASA PSI tables by <span class="mono">scripts/build_dataset.py</span>
+      and <span class="mono">scripts/build_telemetry.py</span>. Data: NASA PSI, CC0-1.0.
+    </div>
+    <div class="repo">
+      <b>github.com/Kaarmel/IGNIS.py</b><br>
+      open <b>app/index.html</b> — no build; only Ask IGNIS needs the network<br>
+      7,463 files · 5.4 GB · 22 PSI accessions, 22 test tables
+    </div>
+  </div>
+  <div class="foot"><span>IGNIS · SI-powered fire-safety dashboard</span><span class="pageno">07 / 07</span></div>
+</section>
+
+</div>
+
+<div class="hint" id="hint">← → navigate · F fullscreen · P print</div>
+
+<script>
+(function () {
+  const slides = [...document.querySelectorAll('.slide')];
+  const deck = document.getElementById('deck');
+  let i = 0;
+
+  function fit() {
+    const s = Math.min(innerWidth / 1600, innerHeight / 900);
+    deck.style.transform = 'translate(-50%,-50%) scale(' + s + ')';
+    deck.style.width = '1600px';
+    deck.style.height = '900px';
+  }
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle('on', k === i));
+    history.replaceState(null, '', '#' + (i + 1));
+  }
+  addEventListener('resize', fit);
+  addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); show(i + 1); }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); show(i - 1); }
+    if (e.key === 'Home') show(0);
+    if (e.key === 'End') show(slides.length - 1);
+    if (e.key === 'f' || e.key === 'F') {
+      document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+    }
+    if (e.key === 'p' || e.key === 'P') { e.preventDefault(); print(); }
+  });
+  // Left third goes back: a clicker has only one button, and advancing past the
+  // slide you wanted to re-state is the one mistake that costs a live demo.
+  addEventListener('click', e => {
+    if (e.target.closest('a')) return;
+    show(e.clientX < innerWidth / 3 ? i - 1 : i + 1);
+  });
+
+  fit();
+  show((parseInt(location.hash.slice(1), 10) || 1) - 1);
+})();
+</script>
+</body>
+</html>
