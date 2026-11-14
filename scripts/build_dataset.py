@@ -7,6 +7,7 @@ Every table gets an explicit column map below. A generic auto-parser would
 silently mis-unit (three pressure units, two O2 conventions, free-text
 "1 atm", a typo'd "Samle Thickness"). Explicit beats clever here.
 """
+import math
 import csv, json, os, re, sys, zipfile
 import xml.etree.ElementTree as ET
 from collections import Counter, defaultdict
@@ -922,6 +923,57 @@ DOC_FIGURES = {
     "psia": {"artemis_nominal": 10.2, "artemis_capability": 8.2, "suit": 4.3, "sea_level": 14.7},
 }
 
+# ---- the campaign that would close the gap --------------------------------
+# Computed, not designed: the material classes are those tested within 1 pp of
+# the solid ceiling (candle and paraffin are left out as model fuels, not cabin
+# materials); the atmospheres are the three oxygen levels the challenge and
+# Kessler et al. name, at the two pressures Kessler names; the replicate count
+# is the median number of BASS/BASS-II tests per (material, oxygen) condition;
+# the flow range is what BASS/BASS-II used for those classes.
+CAMPAIGN_CLASSES = [("SIBAL fabric", ("sibal", "cotton-fiberglass")), ("PMMA", ("pmma", "sphere", "rod", "film")),
+                    ("Nomex", ("nomex",)), ("Ultem", ("ultem",)), ("Silicone", ("silicone",))]
+def _cls(m):
+    m = (m or "").lower()
+    for name, keys in CAMPAIGN_CLASSES:
+        if any(k in m for k in keys):
+            return name
+    return None
+_sol = [r for r in rows_out if r["ph"] == "solid" and r["o2"] is not None]
+_ceil = max(r["o2"] for r in _sol)
+_near_ceiling = {_cls(r["m"]) for r in _sol if r["o2"] >= _ceil - 0.01} - {None}
+_bass = [r for r in _sol if r["i"] in ("PSI-25", "PSI-26")]
+_reps = {}
+for r in _bass:
+    k = (r["i"], r["m"], round(r["o2"], 3))
+    _reps[k] = _reps.get(k, 0) + 1
+_rv = sorted(_reps.values())
+_flows = [r["f"] for r in _bass if r["f"] is not None and _cls(r["m"]) in _near_ceiling]
+_levels = [round(LUNAR_O2 * 100, 1), round(CH_O2 * 100, 1), round(ALT_O2 * 100, 1)]
+_press = [LUNAR_P, ALT_P]
+_cells = []
+for name, _ in CAMPAIGN_CLASSES:
+    if name not in _near_ceiling:
+        continue
+    pts = [r for r in _sol if _cls(r["m"]) == name and r["p"] is not None]
+    for o in _levels:
+        for pb in _press:
+            best = min(pts, key=lambda r: (abs(r["o2"] * 100 - o), abs(math.log(r["p"] / pb)))) if pts else None
+            _cells.append({"class": name, "o2_pct": o, "p_bar": pb,
+                           "nearest": None if not best else {
+                               "i": best["i"], "row": best["r"], "o2_pct": round(best["o2"] * 100, 1), "p_bar": round(best["p"], 3),
+                               "oxygen_distance_pp": round(best["o2"] * 100 - o, 1),
+                               "pressure_distance_pct": round((best["p"] - pb) / pb * 100)}})
+CAMPAIGN = {
+    "classes": [n for n, _ in CAMPAIGN_CLASSES if n in _near_ceiling],
+    "o2_levels_pct": _levels, "pressures_bar": _press,
+    "replicates": _rv[len(_rv) // 2], "conditions_in_bass": len(_rv),
+    "conditions_with_that_many": sum(1 for v in _rv if v == _rv[len(_rv) // 2]),
+    "flow_cm_s": [min(_flows), max(_flows)] if _flows else None,
+    "cells": _cells,
+    "tests": len(_cells) * _rv[len(_rv) // 2],
+    "step_zero": "publish the SoFIE-GEL points in PSI",
+}
+
 data = {
     "meta": {
         "source": "NASA Physical Science Informatics (PSI)",
@@ -945,6 +997,7 @@ data = {
     "lunar": lunar,
     "outside_psi": OUTSIDE_PSI,
     "doc_figures": DOC_FIGURES,
+    "campaign": CAMPAIGN,
     "challenge": challenge,
     "pillars": PILLAR_FACTS,
     "bre": bre,

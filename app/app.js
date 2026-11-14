@@ -1659,6 +1659,39 @@
     });
   };
 
+  // The campaign that would close the gap, as computed by build_dataset.py:
+  // material classes tested near the ceiling × the oxygen levels the challenge
+  // and Kessler et al. name × Kessler's two pressures, with the replicate count
+  // BASS used most often. Each cell shows its distance from evidence.
+  const renderCampaign = () => {
+    const host = $('#campaign');
+    const C = D.campaign;
+    if (!host || !C) return;
+    const SG = D.outside_psi.sofie_gel;
+    const cols = C.o2_levels_pct.flatMap(o => C.pressures_bar.map(p => [o, p]));
+    const cell = (cls, o, p) => C.cells.find(c => c.class === cls && c.o2_pct === o && c.p_bar === p);
+    const sign = v => (v > 0 ? '+' : '') + fmt(v, Number.isInteger(v) ? 0 : 1);
+    const clsName = n => ({ 'SIBAL fabric': L('SIBAL fabric', 'tkanina SIBAL') }[n] || n);
+    host.innerHTML =
+      `<h3>${L('The campaign that would close the gap', 'Kampania, która zamknęłaby lukę')}</h3>` +
+      `<p>${L(
+        `<b>Step 0:</b> publish the ${SG.name} points in PSI — they span ${fmt(SG.o2_pct[0])}–${fmt(SG.o2_pct[1])}% O₂ and ${fmt(SG.p_atm[0], 2)}–${fmt(SG.p_atm[1], 1)} atm. ` +
+        `<b>Then ${fmt(C.tests)} tests:</b> the ${fmt(C.classes.length)} material classes tested within 1 pp of the ceiling, at ${C.o2_levels_pct.map(o => fmt(o, 1) + '%').join(', ')} O₂ and ${C.pressures_bar.map(p => fmt(p, 3)).join(' and ')} bar, ` +
+        `${fmt(C.replicates)} test per condition — what BASS ran for ${fmt(C.conditions_with_that_many)} of its ${fmt(C.conditions_in_bass)} conditions — in the flow range BASS used (${fmt(C.flow_cm_s[0])}–${fmt(C.flow_cm_s[1])} cm/s). ` +
+        `Each cell gives its distance from the nearest PSI point of that class: oxygen in pp, pressure in %.`,
+        `<b>Krok 0:</b> opublikować w PSI punkty ${SG.name} — obejmują ${fmt(SG.o2_pct[0])}–${fmt(SG.o2_pct[1])}% O₂ i ${fmt(SG.p_atm[0], 2)}–${fmt(SG.p_atm[1], 1)} atm. ` +
+        `<b>Potem ${fmt(C.tests)} testów:</b> ${fmt(C.classes.length)} klas materiałów badanych do 1 pp od sufitu, przy ${C.o2_levels_pct.map(o => fmt(o, 1) + '%').join(', ')} O₂ i ${C.pressures_bar.map(p => fmt(p, 3)).join(' oraz ')} bar, ` +
+        `${fmt(C.replicates)} test na warunek — tyle BASS wykonał dla ${fmt(C.conditions_with_that_many)} ze swoich ${fmt(C.conditions_in_bass)} warunków — w zakresie przepływu z BASS (${fmt(C.flow_cm_s[0])}–${fmt(C.flow_cm_s[1])} cm/s). ` +
+        `Każda komórka podaje odległość od najbliższego punktu PSI tej klasy: tlen w pp, ciśnienie w %.`)}</p>` +
+      `<div class="campaign-scroll"><table><thead><tr><th>${L('material class', 'klasa materiału')}</th>${cols.map(([o, p]) => `<th>${fmt(o, 1)}% · ${fmt(p, 3)} bar</th>`).join('')}</tr></thead><tbody>` +
+      C.classes.map(cls => `<tr><td class="n">${esc(clsName(cls))}</td>${cols.map(([o, p]) => {
+        const c = cell(cls, o, p), n = c && c.nearest;
+        return n ? `<td title="${esc(n.i)} #${n.row}: ${fmt(n.o2_pct, 1)}% · ${fmt(n.p_bar, 3)} bar">${sign(n.oxygen_distance_pp)} pp<br><span class="src">${sign(n.pressure_distance_pct)}%</span></td>`
+                 : `<td class="src">${L('no point with a pressure', 'brak punktu z ciśnieniem')}</td>`;
+      }).join('')}</tr>`).join('') +
+      `</tbody></table></div>`;
+  };
+
   /* ---------------- ask IGNIS (SI) ---------------- */
   // The worker (worker/) holds the key and runs DeepSeek V4.1 Flash through
   // OpenRouter over the same corpus. An answer is plain text with [PSI-xx] and
@@ -1824,7 +1857,7 @@
   };
 
   const render = () => {
-    renderHero(); renderTakeaways(); renderAsk(); renderFunnel(); renderMap(); renderFlowMap(); renderAtlas(); renderTele(); solve(); renderPillars(); renderExport(); renderVerdict();
+    renderHero(); renderTakeaways(); renderAsk(); renderFunnel(); renderMap(); renderFlowMap(); renderAtlas(); renderTele(); solve(); renderPillars(); renderExport(); renderVerdict(); renderCampaign();
   };
 
   langBtn.onclick = () => {

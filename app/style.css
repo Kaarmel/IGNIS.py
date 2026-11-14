@@ -627,3 +627,12 @@ details.more p { margin: 8px 0 0; }
 .tk-qd summary { cursor: pointer; font-family: var(--mono); font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
 .tk-qd .tk-q { margin-top: 4px; }
 .atlas-rule { max-width: none; }
+
+/* campaign matrix under the verdict */
+.campaign { margin-top: 28px; }
+.campaign h3 { margin: 0 0 8px; }
+.campaign p { max-width: 900px; }
+.campaign-scroll { overflow-x: auto; }
+.campaign table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; min-width: 640px; }
+.campaign th, .campaign td { padding: 6px 8px; border-bottom: 1px solid var(--line, #1d222a); text-align: right; font-size: 13px; }
+.campaign th:first-child, .campaign td:first-child { text-align: left; }
