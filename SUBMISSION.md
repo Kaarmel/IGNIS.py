@@ -91,7 +91,8 @@ corpus. (Prose is written by hand; the numbers are not.)
 ## Final Project Link
 
 - **Repository:** https://github.com/Kaarmel/IGNIS.py
-- **Demo:** https://kaarmel.github.io/IGNIS.py/ (opens the dashboard; the deck is at `/pitch/`)
+- **Demo:** https://kaarmel.github.io/IGNIS.py/app/ (the dashboard)
+- **Project page:** https://kaarmel.github.io/IGNIS.py/ (the finding, the deck, the method; data catalog and CSV/JSON downloads at `/data/`)
 - **Application:** `app/index.html` — open it directly. No build step. Only live SI (Ask IGNIS and the Atlas mission ranking) uses the network, through the Cloudflare Worker in `worker/`; without it, those show saved answers labelled with their date, and every other section works from `file://`.
 - **Deck:** [`pitch/IGNIS-pitch.pdf`](pitch/IGNIS-pitch.pdf)
 
