@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IGNIS data · catalog, downloads, field guide</title>
+<meta name="description" content="1,936 combustion test points normalized from NASA Physical Science Informatics: investigation catalog, CSV and JSON downloads, field guide. CC0.">
+<meta name="theme-color" content="#08090b">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%2308090b'/%3E%3Crect x='6' y='6' width='4' height='4' fill='%23ff6a1f'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../site.css">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+
+<nav class="nav" aria-label="Site">
+  <div class="wrap">
+    <a class="brand" href="../"><span class="brand-mark" aria-hidden="true"></span>IGNIS</a>
+    <div class="nav-links">
+      <a href="#downloads">Downloads</a>
+      <a href="#catalog">Catalog</a>
+      <a href="#fields">Field guide</a>
+      <a href="#source">Source</a>
+      <a href="../#deck">Presentation</a>
+    </div>
+    <a class="btn btn-fire" href="../app/">Open the dashboard</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <h1 class="reveal">The data behind IGNIS</h1>
+    <p class="lede reveal" style="--i:1">Every combustion test point the dashboard uses, normalized from NASA's Physical Science Informatics archive. Public domain, like the source.</p>
+  </div>
+  <div class="wrap">
+    <div class="figures" style="margin-top:56px">
+      <div class="reveal"><span class="num" data-k="tp">1,936</span><span class="lbl">test points, one per row of a NASA test table</span></div>
+      <div class="reveal" style="--i:1"><span class="num" data-k="inv">20</span><span class="lbl">investigations with an experimental table</span></div>
+      <div class="reveal" style="--i:2"><span class="num" data-k="both">1,241</span><span class="lbl">rows with both oxygen and pressure recorded</span></div>
+      <div class="reveal" style="--i:3"><span class="num" data-k="files">7,463</span><span class="lbl">source files indexed, <span data-k="gb">5.4</span> GB</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section class="sec" id="downloads">
+  <div class="wrap data-split">
+    <div>
+      <h2 class="reveal">Downloads</h2>
+      <p class="lede reveal">Files are built in your browser from the same dataset the dashboard reads, so they always match it.</p>
+    </div>
+    <ul class="dl reveal" style="margin-top:0">
+      <li><button type="button" data-dl="tp-csv">Test points <small>CSV, <span data-k="tp">1,936</span> rows</small></button></li>
+      <li><button type="button" data-dl="tp-json">Test points <small>JSON</small></button></li>
+      <li><button type="button" data-dl="inv-csv">Investigation catalog <small>CSV, <span data-k="inv">20</span> rows</small></button></li>
+      <li><button type="button" data-dl="all-json">Full dataset with derived figures <small>JSON</small></button></li>
+      <li><a href="index.json" download>Index of every PSI source file <small>JSON, 2.6 MB</small></a></li>
+      <li><a href="external/NASA_Researchers_Guide_Combustion_Science_2015.pdf">NASA Researcher's Guide, Combustion Science <small>PDF</small></a></li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="catalog">
+  <div class="wrap">
+    <h2 class="reveal">Investigation catalog</h2>
+    <p class="lede reveal">One row per PSI investigation in the challenge area. Ranges are taken from the normalized points.</p>
+    <div class="chips reveal" role="group" aria-label="Filter by phase" id="phase-filter">
+      <button type="button" aria-pressed="true" data-ph="">All</button>
+    </div>
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead><tr>
+          <th>Investigation</th><th>Phase</th><th>Fire-safety area</th>
+          <th class="n">Points</th><th class="n">O₂</th><th class="n">Pressure</th><th class="n">Materials</th><th>Outcomes recorded</th>
+        </tr></thead>
+        <tbody id="inv-rows"><tr><td colspan="8" class="dim">Loading the catalog…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="fields">
+  <div class="wrap">
+    <h2 class="reveal">Field guide</h2>
+    <p class="lede reveal">Column names in the CSV, with the short key used in the JSON.</p>
+    <div class="tbl-wrap reveal" style="margin-top:36px">
+      <table>
+        <thead><tr><th>CSV column</th><th>JSON key</th><th>Meaning</th></tr></thead>
+        <tbody id="field-rows"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-last" id="source">
+  <div class="wrap data-split">
+    <div>
+      <h2 class="reveal">Where it comes from</h2>
+    </div>
+    <div class="prose reveal">
+      <p>The source is <a href="https://psi.nasa.gov/physci/repo/">NASA Physical Science Informatics</a>, released as CC0. The 22 accessions in Combustion Science hold <span data-k="files">7,463</span> files; IGNIS reads the experimental test tables and the reports that document pressure where a table leaves it out.</p>
+      <p>The raw files are <span data-k="gb">5.4</span> GB and stay out of the repository. <code>index.json</code> lists each one, and the <a href="https://github.com/Kaarmel/IGNIS.py#rebuild-the-data">rebuild steps</a> regenerate every number on this page from them.</p>
+      <p>Each table is mapped by an explicit column spec: three pressure units, two oxygen conventions, free-text values and a literal <code>0</code> used for missing data. Rows set aside are counted by cause on the <a href="../#method">project page</a>.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <p>Data: NASA Physical Science Informatics (PSI), CC0. Normalized data released under CC0 as well. No NASA logo or endorsement is implied.</p>
+    </div>
+    <div class="right">
+      <p>NASA Space Apps Challenge 2026, Flame in Freefall</p>
+      <p><a href="https://github.com/Kaarmel/IGNIS.py">Source on GitHub</a></p>
+    </div>
+  </div>
+</footer>
+
+<script src="../app/data/dataset.js" defer></script>
+<script src="../site.js" defer></script>
+<script defer>
+addEventListener('DOMContentLoaded', () => {
+  const D = window.DATASET;
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const fmt = n => Number(n).toLocaleString('en-US');
+  if (!D) { document.getElementById('inv-rows').innerHTML = '<tr><td colspan="8">The dataset did not load. Download it from the repository instead.</td></tr>'; return; }
+
+  const both = D.testpoints.filter(t => t.o2 != null && t.p != null).length;
+  document.querySelectorAll('[data-k="both"]').forEach(e => e.textContent = fmt(both));
+
+  // Field guide: one list drives both the CSV columns and the table on the page.
+  const FIELDS = [
+    ['investigation', 'i', 'PSI accession, e.g. PSI-26.', t => t.i],
+    ['acronym', 'a', 'Experiment name as NASA uses it (BASS, FLEX, Saffire-I).', t => t.a],
+    ['phase', 'ph', 'What burns: solid, gas, droplet, aerosol, dust, or emulator (the BRE burner).', t => t.ph],
+    ['table', 't', 'Which of the investigation\'s tables, when it publishes more than one.', t => t.t],
+    ['row', 'r', 'Row number in the source table, counted from 1. For BRE, the test day.', t => t.r],
+    ['o2_frac', 'o2', 'Oxygen as a mole fraction (0.227 = 22.7%). Empty when the table does not record it.', t => t.o2],
+    ['pressure_bar', 'p', 'Chamber pressure in bar, converted from atm, psia, kPa or mmHg.', t => t.p],
+    ['pressure_from_doc', 'pd', '1 when the pressure comes from a report or workbook rather than the test table.', t => t.pd || ''],
+    ['flow', 'f', 'Value of the table\'s flow column. Most tables give cm/s; check the investigation before comparing across tables.', t => t.f],
+    ['material', 'm', 'Sample material as published (solids, aerosols, dust).', t => t.m],
+    ['fuel', 'fu', 'Fuel as published (gas and droplet tests).', t => t.fu],
+    ['outcome', 'o', 'Outcome column as published, e.g. Extinction, Completion.', t => t.o],
+    ['flow_outcome', 'fl', 'For BASS-II: the flow sequence and how the flame ended, parsed from the operator\'s note.', t => t.fl ? t.fl.out : ''],
+    ['observation', 'ob', 'Operator\'s note for the run (BASS).', t => t.ob],
+    ['day', 'day', 'Test date (BRE only).', t => t.day],
+    ['other_columns', 'x', 'Every other column of the source row, unchanged, as JSON.', t => t.x && Object.keys(t.x).length ? JSON.stringify(t.x) : ''],
+  ];
+  document.getElementById('field-rows').innerHTML = FIELDS.map(([c, k, m]) =>
+    `<tr><td class="mono">${c}</td><td class="mono dim">${k}</td><td>${esc(m)}</td></tr>`).join('');
+
+  const AREA = { prevention: 'prevention', suppression: 'suppression', detection: 'detection' };
+  const range = (r, f) => r ? (f(r[0]) === f(r[1]) ? f(r[0]) : `${f(r[0])}-${f(r[1])}`) : '';
+  const o2s = v => +(v * 100).toFixed(1) + '%';
+  const bars = v => v.toFixed(2);
+  const rows = D.investigations.slice().sort((a, b) => b.rows - a.rows);
+
+  const tbody = document.getElementById('inv-rows');
+  const render = ph => {
+    const list = rows.filter(v => !ph || v.phase === ph);
+    tbody.innerHTML = list.map(v => {
+      const phc = /^[a-z]+$/.test(v.phase) ? v.phase : 'na';
+      return `<tr>
+        <td>${esc(v.acronym)} <span class="sub">${esc(v.id)} · ${esc(v.name)}</span></td>
+        <td><span class="ph ph-${phc}">${esc(v.phase)}</span></td>
+        <td>${v.pillars.length ? v.pillars.map(p => esc(AREA[p] || p)).join(', ') : '<span class="dim">none</span>'}</td>
+        <td class="n">${v.rows ? fmt(v.rows) : '<span class="dim">0</span>'}</td>
+        <td class="n">${v.o2 ? range(v.o2, o2s) : '<span class="dim">not recorded</span>'}</td>
+        <td class="n">${v.p ? range(v.p, bars) + ' bar' : '<span class="dim">not in table</span>'}</td>
+        <td class="n">${v.n_materials || '<span class="dim">0</span>'}</td>
+        <td>${v.outcomes.length ? esc(v.outcomes.slice(0, 3).join(', ')) + (v.outcomes.length > 3 ? ` <span class="dim">+${v.outcomes.length - 3}</span>` : '') : '<span class="dim">none</span>'}</td>
+      </tr>`;
+    }).join('') || '<tr><td colspan="8" class="dim">No investigation in this phase.</td></tr>';
+  };
+  const filter = document.getElementById('phase-filter');
+  const phases = [...new Set(rows.map(v => v.phase))].filter(p => /^[a-z]+$/.test(p));
+  phases.forEach(p => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.dataset.ph = p; b.setAttribute('aria-pressed', 'false');
+    b.textContent = `${p} (${rows.filter(v => v.phase === p).length})`;
+    filter.append(b);
+  });
+  filter.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    filter.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    render(b.dataset.ph);
+  });
+  render('');
+
+  // Downloads
+  const csvCell = v => { const s = v == null ? '' : String(v); return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
+  const csv = (head, data) => [head.join(','), ...data.map(r => r.map(csvCell).join(','))].join('\r\n') + '\r\n';
+  const save = (name, text, type) => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([text], { type }));
+    a.download = name; document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  };
+  const MAKE = {
+    'tp-csv': () => save('ignis-testpoints.csv', csv(FIELDS.map(f => f[0]), D.testpoints.map(t => FIELDS.map(f => f[3](t)))), 'text/csv'),
+    'tp-json': () => save('ignis-testpoints.json', JSON.stringify(D.testpoints, null, 1), 'application/json'),
+    'inv-csv': () => save('ignis-investigations.csv', csv(
+      ['investigation', 'acronym', 'name', 'phase', 'fire_safety_areas', 'points', 'raw_rows', 'o2_min', 'o2_max', 'pressure_min_bar', 'pressure_max_bar', 'materials', 'outcomes', 'tables'],
+      D.investigations.map(v => [v.id, v.acronym, v.name, v.phase, v.pillars.join('; '), v.rows, v.raw_rows,
+        v.o2?.[0], v.o2?.[1], v.p?.[0], v.p?.[1], v.n_materials, v.outcomes.join('; '), v.tables.join('; ')])), 'text/csv'),
+    'all-json': () => save('ignis-dataset.json', JSON.stringify(D, null, 1), 'application/json'),
+  };
+  document.querySelectorAll('[data-dl]').forEach(b => b.addEventListener('click', () => MAKE[b.dataset.dl]()));
+});
+</script>
+</body>
+</html>

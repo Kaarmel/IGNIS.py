@@ -1,6 +1,200 @@
 <!doctype html>
+<html lang="en">
+<head>
 <meta charset="utf-8">
-<title>IGNIS</title>
-<meta http-equiv="refresh" content="0; url=app/">
-<link rel="canonical" href="app/">
-<p><a href="app/">IGNIS dashboard</a> · <a href="pitch/">pitch</a></p>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IGNIS · Fire safety from NASA's microgravity data</title>
+<meta name="description" content="NASA's open fire-safety data stops at 22.7% oxygen for solid materials. The Moon base is expected to run at 30% or more. IGNIS maps the gap, opens every test, and suggests what to test next.">
+<meta property="og:title" content="IGNIS · where NASA's open fire data stops">
+<meta property="og:description" content="1,936 test points from NASA PSI, a dashboard, an SI that checks its answers, and a 30-test plan for the Moon-base atmosphere.">
+<meta property="og:image" content="pitch/img/map-svg.png">
+<meta name="theme-color" content="#08090b">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%2308090b'/%3E%3Crect x='6' y='6' width='4' height='4' fill='%23ff6a1f'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="site.css">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+
+<nav class="nav" aria-label="Site">
+  <div class="wrap">
+    <a class="brand" href="./"><span class="brand-mark" aria-hidden="true"></span>IGNIS</a>
+    <div class="nav-links">
+      <a href="#finding">Finding</a>
+      <a href="#inside">Dashboard</a>
+      <a href="#method">Method</a>
+      <a href="#deck">Presentation</a>
+      <a href="data/">Data</a>
+    </div>
+    <a class="btn btn-fire" href="app/">Open the dashboard</a>
+  </div>
+</nav>
+
+<header class="hero" id="finding">
+  <div class="wrap hero-grid">
+    <div>
+      <h1 class="reveal">NASA's open fire data stops at <span class="hot"><span data-k="ceil">22.7</span>% oxygen</span>.</h1>
+      <p class="lede reveal" style="--i:1">The challenge expects the Moon base to run at <span data-k="chO2">30</span>% or more. IGNIS maps that gap and suggests the tests that would close it.</p>
+      <div class="hero-cta reveal" style="--i:2">
+        <a class="btn btn-fire" href="app/">Open the dashboard</a>
+        <a class="btn" href="#deck">View the presentation</a>
+      </div>
+    </div>
+    <figure class="hero-fig reveal" style="--i:3">
+      <img src="pitch/img/map-svg.png" width="1672" height="1170"
+           alt="Coverage map from the IGNIS dashboard: every NASA PSI test point by oxygen and chamber pressure. Solid-material tests stop at 22.7% O2; the challenge zone at 30% and above is empty.">
+      <figcaption>The coverage map in the dashboard. Every PSI test point by oxygen and chamber pressure.</figcaption>
+    </figure>
+  </div>
+  <div class="wrap">
+    <div class="figures">
+      <div class="reveal"><span class="num" data-k="tp">1,936</span><span class="lbl">test points, normalized from NASA PSI tables</span></div>
+      <div class="reveal" style="--i:1"><span class="num" data-k="inv">20</span><span class="lbl">investigations with an experimental test table</span></div>
+      <div class="reveal gap" style="--i:2"><span class="num"><span data-k="gap">7.3</span> pp</span><span class="lbl">oxygen gap between the last solid test and the Moon base</span></div>
+      <div class="reveal gap" style="--i:3"><span class="num"><span data-k="at30">0</span> of <span data-k="solid">264</span></span><span class="lbl">solid-material tests at the challenge's oxygen level</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section class="sec" id="inside">
+  <div class="wrap">
+    <h2 class="reveal">One page from archive to test plan</h2>
+    <p class="lede reveal">Every number in the dashboard opens the NASA file and row it comes from.</p>
+    <div class="bento">
+      <a class="tile t-ask reveal" href="app/#ask">
+        <div class="shot"><img src="pitch/img/ask-beyond.png" width="1672" height="970" loading="lazy"
+             alt="An SI answer about polyurethane foam at 30% O2: it says the archive has no foam, lists the nearest solid tests and quotes a verified NASA report."></div>
+        <div class="txt">
+          <h3>Ask what the data can't answer</h3>
+          <p>The SI queries the corpus, says what is missing, and checks every number and quote against it before you see the answer.</p>
+          <span class="go">Ask the SI →</span>
+        </div>
+      </a>
+      <a class="tile t-solver reveal" style="--i:1" href="app/#solver">
+        <div class="shot"><img src="pitch/img/solver-only.png" width="2280" height="1800" loading="lazy"
+             alt="The atmosphere check: a habitat atmosphere, the nearest real experiments and their distance in oxygen and pressure."></div>
+        <div class="txt">
+          <h3>Check a habitat atmosphere</h3>
+          <p>Pick the Moon base or Artemis. IGNIS finds the nearest real experiments and states what they do and do not support.</p>
+          <span class="go">Run the check →</span>
+        </div>
+      </a>
+      <a class="tile t-atlas reveal" href="app/#atlas">
+        <div class="shot"><img src="pitch/img/atlas.png" width="2248" height="558" loading="lazy"
+             alt="The Atlas: investigations ranked by how directly they answer a habitat fire-safety question."></div>
+        <div class="txt">
+          <h3>Atlas of investigations</h3>
+          <p>Ranked by a stated rule, or by the SI for a mission you describe.</p>
+        </div>
+      </a>
+      <a class="tile t-plan reveal" style="--i:1" href="app/#report">
+        <div class="shot"><img src="pitch/img/campaign.png" width="2280" height="604" loading="lazy"
+             alt="The suggested test plan: material classes by oxygen level and pressure, each cell with its nearest existing test."></div>
+        <div class="txt">
+          <h3><span data-k="tests">30</span> tests that would close the gap</h3>
+          <p>Five material classes, three oxygen levels, two pressures. A suggestion for researchers.</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="method">
+  <div class="wrap">
+    <h2 class="reveal">From <span data-k="gb">5.4</span> GB of NASA files to one table</h2>
+    <p class="lede reveal">Each table is mapped by hand: three pressure units, two oxygen conventions, free-text values. Nothing is dropped without a stated cause.</p>
+    <div class="flow">
+      <div class="step reveal">
+        <span class="num" data-k="published">2,870</span>
+        <h3>rows published</h3>
+        <p>in <span data-k="tables">22</span> experimental tables across <span data-k="files">7,463</span> PSI files.</p>
+      </div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="step reveal" style="--i:1">
+        <span class="num" data-k="rejected">959</span>
+        <h3>rows set aside</h3>
+        <ul id="causes">
+          <li><span>empty rows</span><span>861</span></li>
+          <li><span>unmapped tables</span><span>82</span></li>
+          <li><span>summary sheet</span><span>8</span></li>
+          <li><span>Saffire non-test rows</span><span>8</span></li>
+        </ul>
+      </div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="step step-out reveal" style="--i:2">
+        <span class="num" data-k="tp">1,936</span>
+        <h3>test points</h3>
+        <p><span data-k="kept">1,911</span> rows kept. BRE's <span data-k="bre_rows">18</span> test-day rows each list several oxygen levels and become <span data-k="bre_points">43</span> points.</p>
+      </div>
+    </div>
+    <p class="method-note reveal">The scripts that rebuild every number, the column map for each table and the checks that run on each answer are in the <a href="https://github.com/Kaarmel/IGNIS.py#rebuild-the-data">repository README</a>.</p>
+  </div>
+</section>
+
+<section class="sec" id="deck">
+  <div class="wrap">
+    <h2 class="reveal">The presentation</h2>
+    <p class="lede reveal">Five slides for the judges. Click the slides, then use the arrow keys.</p>
+    <div class="deck-frame reveal">
+      <iframe src="pitch/" title="IGNIS presentation" loading="lazy"></iframe>
+    </div>
+    <div class="deck-actions">
+      <a class="btn" href="pitch/">Full screen</a>
+      <a class="btn" href="pitch/IGNIS-pitch.pdf" download>PDF <small>1 MB</small></a>
+      <a class="btn" href="https://github.com/Kaarmel/IGNIS.py/blob/main/pitch/TALK.md">Talk script and Q&amp;A</a>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="data">
+  <div class="wrap data-split">
+    <div>
+      <h2 class="reveal">The data, in one place</h2>
+      <p class="lede reveal">Normalized test points, the investigation catalog and the index of every PSI file. Public domain, like the source.</p>
+      <ul class="dl reveal">
+        <li><a href="data/">Data catalog and field guide <small>20 investigations</small></a></li>
+        <li><a href="data/#downloads">Test points as CSV or JSON <small><span data-k="tp">1,936</span> rows</small></a></li>
+        <li><a href="https://psi.nasa.gov/physci/repo/">NASA PSI, the source archive <small>CC0</small></a></li>
+      </ul>
+    </div>
+    <div class="tbl-wrap reveal" style="--i:1">
+      <table>
+        <caption class="dim" style="caption-side:bottom;text-align:left;padding:12px 14px;font-size:14px">Solid-material investigations, the ones a habitat wall or suit is made of.</caption>
+        <thead><tr><th>Investigation</th><th class="n">Points</th><th class="n">O₂ range</th><th class="n">Pressure</th></tr></thead>
+        <tbody id="solid-rows">
+          <tr><td>BASS <span class="sub">PSI-26</span></td><td class="n">122</td><td class="n">15.9-22.7%</td><td class="n">0.98-1.02 bar</td></tr>
+          <tr><td>BASS-II <span class="sub">PSI-25</span></td><td class="n">129</td><td class="n">13.6-22.2%</td><td class="n">0.99 bar</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<section class="close">
+  <div class="wrap">
+    <h2 class="reveal">See where the evidence ends, then test there.</h2>
+    <div class="reveal" style="--i:1"><a class="btn btn-fire" href="app/">Open the dashboard</a></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <p>Data: NASA Physical Science Informatics (PSI), CC0. No NASA logo or endorsement is implied.</p>
+      <p>SI: DeepSeek V4.1 Flash via OpenRouter, answers checked against the corpus. Code written with Claude (Anthropic); see the <a href="https://github.com/Kaarmel/IGNIS.py#si-disclosure">SI disclosure</a>.</p>
+    </div>
+    <div class="right">
+      <p>NASA Space Apps Challenge 2026, Flame in Freefall</p>
+      <p>Karol Skroban, Dawid Kogut</p>
+      <p><a href="https://github.com/Kaarmel/IGNIS.py">Source on GitHub</a></p>
+    </div>
+  </div>
+</footer>
+
+<script src="app/data/dataset.js" defer></script>
+<script src="site.js" defer></script>
+</body>
+</html>
