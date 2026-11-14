@@ -13,7 +13,7 @@ import json
 import re
 import sys
 
-DOCS = ["README.md", "SUBMISSION.md", "pitch/TALK.md", "pitch/index.html"]
+DOCS = ["README.md", "SUBMISSION.md", "pitch/TALK.md", "pitch/index.html", "pitch/FILM.md"]
 
 
 def walk(x, out):

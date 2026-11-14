@@ -14,16 +14,11 @@
 
 <nav class="nav">
   <a class="brand" href="#top"><span class="brand-mark"></span>IGNIS</a>
-  <span class="nav-here" id="nav-here" aria-live="polite"></span>
-  <div class="nav-right">
-    <!-- Section menu, built by app.js from one list (NAV) so labels and descriptions stay in step. -->
-    <button class="nav-burger" id="nav-burger" type="button" aria-expanded="false" aria-controls="nav-menu"
-            data-en="Sections" data-pl="Sekcje"></button>
-    <div class="nav-menu" id="nav-menu"></div>
-    <button class="lang" id="lang-toggle" type="button" aria-label="Language / Język">
-      <span data-lang="en" class="on">EN</span><span data-lang="pl">PL</span>
-    </button>
-  </div>
+  <button class="lang" id="lang-toggle" type="button" aria-label="Language / Język">
+    <span data-lang="en" class="on">EN</span><span data-lang="pl">PL</span>
+  </button>
+  <!-- Every section in page order, built by app.js from one list (NAV). -->
+  <div class="nav-menu" id="nav-menu" role="navigation" aria-label="Sections"></div>
 </nav>
 
 <header id="top" class="hero">
@@ -92,8 +87,8 @@
     <div class="ds" id="ds"></div>
   </div>
   <div id="pane-si" role="tabpanel" aria-labelledby="tab-si" hidden>
-  <p class="si-warn" data-en-html="<b>A suggestion, not a decision.</b> The SI summarises and points to evidence; it can be wrong. Click any source tag, quote or row reference to open the data it rests on and check it yourself. Do not use an answer on its own for a decision about crew safety."
-     data-pl-html="<b>Sugestia, nie decyzja.</b> SI streszcza i wskazuje dowody; może się mylić. Kliknij dowolny znacznik źródła, cytat lub odwołanie do wiersza, żeby otworzyć dane, na których się opiera, i sprawdzić je samodzielnie. Nie opieraj na samej odpowiedzi decyzji o bezpieczeństwie załogi."></p>
+  <p class="si-warn" data-en-html="<b>Checked before you see it.</b> Every answer is checked automatically against the corpus: each investigation it cites must exist, each quote must appear word for word in a NASA file, and each number is compared with the corpus summary and the query results — an answer with a number it cannot back goes back to the model for correction, and a citation that still cannot be backed is marked in red. Click any source to open the record behind it."
+     data-pl-html="<b>Sprawdzone, zanim je zobaczysz.</b> Każda odpowiedź jest automatycznie sprawdzana względem korpusu: każde cytowane badanie musi istnieć, każdy cytat musi występować dosłownie w pliku NASA, a każda liczba jest porównywana ze streszczeniem korpusu i wynikami zapytań — odpowiedź z liczbą bez pokrycia wraca do modelu do poprawki, a odnośnik, którego nadal nie da się potwierdzić, jest oznaczony na czerwono. Kliknij dowolne źródło, żeby otworzyć rekord, który za nim stoi."></p>
   <div class="ask-presets" id="ask-presets"></div>
   <form class="ask-form" id="ask-form">
     <textarea id="ask-q" rows="2" maxlength="600"

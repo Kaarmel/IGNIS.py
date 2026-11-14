@@ -75,6 +75,8 @@ corpus. (Prose is written by hand; the numbers are not.)
 
 ## Project Demo
 
+**30-second film:** script, shot list and context in [`pitch/FILM.md`](pitch/FILM.md).
+
 **Five-slide deck, with backup slides after it:** [`pitch/IGNIS-pitch.pdf`](pitch/IGNIS-pitch.pdf) — also viewable as
 [`pitch/index.html`](pitch/index.html) (arrow keys to advance). A screen recording of the live SI answering the
 *Beyond the data* preset is in [`pitch/img/demo.gif`](pitch/img/demo.gif), as a fallback if the network fails.

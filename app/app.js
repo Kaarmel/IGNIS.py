@@ -327,7 +327,8 @@
     // the caption states it.
     const WIN = CH_WIN;
     svg.append(svgEl('rect', {
-      x: xOf(WIN.o2Lo), y: yOf(WIN.pHi), width: xOf(WIN.o2Hi) - xOf(WIN.o2Lo), height: yOf(WIN.pLo) - yOf(WIN.pHi),
+      // Clipped at the plot's floor: below it are the axis labels, not pressure.
+      x: xOf(WIN.o2Lo), y: yOf(WIN.pHi), width: xOf(WIN.o2Hi) - xOf(WIN.o2Lo), height: Math.min(yOf(WIN.pLo), M.t + PH) - yOf(WIN.pHi),
       fill: 'rgba(255,106,31,.09)', stroke: 'rgba(255,106,31,.42)', 'stroke-width': 1, 'stroke-dasharray': '5 4',
     }));
     const inEnv = both.filter(inChallenge);
@@ -420,9 +421,9 @@
     const st1 = svgEl('text', { x: xOf(npLo) - 10, y: stripY + 4, fill: '#f59e0b', 'font-size': 10.5, 'letter-spacing': '.6', 'text-anchor': 'end' });
     st1.textContent = L(`SOLID · ${solidNoP.length}`, `STAŁE · ${solidNoP.length}`);
     svg.append(st1);
-    const st2 = svgEl('text', { x: xOf(LUNAR_O2) + 14, y: stripY + 4, fill: '#8b93a0', 'font-size': 10.5 });
-    st2.textContent = L('no pressure anywhere → cannot be placed on the chart',
-      'brak ciśnienia nigdzie → nie da się nanieść na wykres');
+    const st2 = svgEl('text', { x: xOf(CH_O2) + 14, y: stripY + 4, fill: '#8b93a0', 'font-size': 10.5 });
+    st2.textContent = L('← these tests record no pressure anywhere, so they have no place on the chart',
+      '← te testy nigdzie nie zapisują ciśnienia, więc nie mają miejsca na wykresie');
     svg.append(st2);
     const st3 = svgEl('text', { x: xOf(npLo) - 10, y: stripY - 16, fill: '#8b93a0', 'font-size': 10, 'text-anchor': 'end' });
     st3.textContent = L(`other ${solidP.length} at ${fmt(solidPMin, 2)}–${fmt(solidPMax, 2)} bar ↑`,
@@ -470,11 +471,16 @@
     // legend
     const lg = $('#map-legend');
     lg.innerHTML = '';
+    lg.append(el('p', { class: 'lg-h' }, L('Each dot is one test: oxygen across, chamber pressure up. Colour = material class.', 'Każda kropka to jeden test: tlen w poziomie, ciśnienie w komorze w pionie. Kolor = klasa materiału.')));
     ['solid', 'emulator', 'droplet', 'gas', 'aerosol'].forEach(k => {
-      lg.append(el('span', {}, el('i', { style: `background:${PHASE_COLOR[k]}` }), phaseName(k)));
+      const n = both.filter(r => r.ph === k).length;
+      if (!n) return;   // a class with no point on this chart has no place in its legend
+      lg.append(el('span', {}, el('i', { style: `background:${PHASE_COLOR[k]}` }), phaseName(k), el('b', {}, fmt(n))));
     });
-    lg.append(el('span', {}, el('i', { style: 'background:transparent;border:1px solid #f59e0b' }),
-      L('band below = no pressure anywhere in the corpus', 'pasmo niżej = brak ciśnienia gdziekolwiek w korpusie')));
+    lg.append(el('span', {}, el('i', { style: 'background:transparent;border:1px solid #f59e0b;border-radius:0' }),
+      L('strip under the axis: solid tests with no pressure recorded', 'pasek pod osią: testy stałe bez zapisanego ciśnienia'), el('b', {}, fmt(solidNoP.length))));
+    lg.append(el('span', {}, el('i', { style: 'background:rgba(255,106,31,.18);border:1px dashed #ff6a1f;border-radius:0' }),
+      L('orange box: the challenge atmosphere (30%+ O₂, 10.2 psi or less)', 'pomarańczowe pole: atmosfera z challenge\'u (30%+ O₂, 10,2 psi lub mniej)'), el('b', {}, fmt(both.filter(inChallenge).length))));
   };
 
   /* ---------------- flow map ---------------- */
@@ -530,7 +536,7 @@
     const yt = svgEl('text', { x: 16, y: M2.t + PH2 / 2, fill: '#b3bac5', 'font-size': 12, 'text-anchor': 'middle', 'letter-spacing': '1.5', transform: `rotate(-90 16 ${M2.t + PH2 / 2})` });
     // "Air display" is duct flow speed in cm/s, per the BASS-II ReadMe. A dot is
     // the setting a test opened at; a ring is the last setting its log records.
-    yt.textContent = L('AIR DISPLAY SETTING (cm/s)', 'NASTAWA AIR DISPLAY (cm/s)');
+    yt.textContent = L('AIR FLOW PAST THE SAMPLE (cm/s)', 'PRZEPŁYW POWIETRZA PRZY PRÓBCE (cm/s)');
     host.append(yt);
 
     const g = svgEl('g');
@@ -592,10 +598,13 @@
     const lg = $('#flow-legend');
     if (lg) {
       lg.innerHTML = '';
-      lg.append(el('span', {}, el('i', { style: 'background:#f59e0b;opacity:.6' }), L('no outcome recorded', 'brak zapisanego wyniku')));
-      lg.append(el('span', {}, el('i', { style: 'background:transparent;border:2.8px solid #ef4444;border-radius:50%' }), L('extinguished at the last recorded setting', 'wygaśnięcie przy ostatniej zapisanej nastawie')));
-      lg.append(el('span', {}, el('i', { style: 'background:transparent;color:#ef4444;font-weight:700;font-size:15px;line-height:1;text-align:center;width:auto' }, '↓'), L('extinguished after the flow was reduced — final setting not recorded', 'wygaśnięcie po zmniejszeniu przepływu — nastawa końcowa niezapisana')));
-      lg.append(el('span', {}, el('i', { style: 'background:#38bdf8' }), L('blew off', 'zdmuchnięcie')));
+      const cnt = f => fmt(rows.filter(f).length);
+      lg.append(el('p', { class: 'lg-h' }, L('Each mark is one test: oxygen across, the air-flow setting up. The shape says what the operator\'s log recorded about how the test ended.',
+                                            'Każdy znak to jeden test: tlen w poziomie, nastawa przepływu powietrza w pionie. Kształt mówi, co log operatora zapisał o końcu testu.')));
+      lg.append(el('span', {}, el('i', { style: 'background:#f59e0b;opacity:.6' }), L('only the flow setting is logged — how the test ended is not recorded', 'zapisana tylko nastawa przepływu — jak skończył się test, nie wiadomo'), el('b', {}, cnt(r => !(r.fl && r.fl.out)))));
+      lg.append(el('span', {}, el('i', { style: 'background:transparent;border:2.8px solid #ef4444;border-radius:50%' }), L('the flame went out at this flow (the last setting in the log)', 'płomień zgasł przy tym przepływie (ostatnia nastawa w logu)'), el('b', {}, cnt(r => r.fl && r.fl.out === 'extinction' && !r.fl.ramp))));
+      lg.append(el('span', {}, el('i', { style: 'background:transparent;color:#ef4444;font-weight:700;font-size:15px;line-height:1;text-align:center;width:auto' }, '↓'), L('the operator turned the flow down from here until the flame went out; the flow at that moment is not recorded', 'operator zmniejszał przepływ od tej wartości, aż płomień zgasł; przepływ w tej chwili nie jest zapisany'), el('b', {}, cnt(r => r.fl && r.fl.out === 'extinction' && r.fl.ramp))));
+      lg.append(el('span', {}, el('i', { style: 'background:#38bdf8;border-radius:0' }), L('the flame was blown off by the flow', 'płomień został zdmuchnięty przez przepływ'), el('b', {}, cnt(r => r.fl && r.fl.out === 'blowoff'))));
     }
     const nOut = rows.filter(r => r.fl && r.fl.out).length;
     const ext = rows.filter(r => r.fl && r.fl.out === 'extinction');
@@ -1819,7 +1828,7 @@
   const dateFmt = iso => { try { return new Date(iso + 'T12:00:00Z').toLocaleDateString(LOC(), { year: 'numeric', month: 'long', day: 'numeric' }); } catch (e) { return iso; } };
   const askMeta = (res, c) => {
     const bad = (c.unknown_investigations || []).length + (c.unknown_quotes || []).length + (c.unverified_free_quotes || []).length;
-    return `<p class="ask-sugg">${L('SI suggestion — not a decision. Click any source above to see the data it rests on.', 'Sugestia SI — nie decyzja. Kliknij dowolne źródło powyżej, żeby zobaczyć dane, na których się opiera.')}</p><p class="ask-meta">${esc(res.model || '')} · ${L('data queries', 'zapytania o dane')}: ${fmt(res.queries || 0)} · ` +
+    return `<p class="ask-sugg">${L('Checked against the corpus before display. Click any source above to open the record it rests on.', 'Sprawdzone względem korpusu przed wyświetleniem. Kliknij dowolne źródło powyżej, żeby otworzyć rekord, na którym się opiera.')}</p><p class="ask-meta">${esc(res.model || '')} · ${L('data queries', 'zapytania o dane')}: ${fmt(res.queries || 0)} · ` +
       `${L('investigations cited', 'cytowane badania')}: ${fmt((c.cited_investigations || []).length - (c.unknown_investigations || []).length)} · ` +
       `${L('verified quotes', 'zweryfikowane cytaty')}: ${fmt((c.cited_quotes || []).length - (c.unknown_quotes || []).length + (c.free_quotes || 0) - (c.unverified_free_quotes || []).length)}` +
       (bad ? ` · <span class="ask-bad">${L('unresolved citations', 'nierozpoznane odnośniki')}: ${fmt(bad)}</span>` : '') +
@@ -2137,79 +2146,54 @@
       '<b>Narzędzie badawcze, nie autorytet bezpieczeństwa.</b> IGNIS nie certyfikuje materiałów ani atmosfer. Decyzje o bezpieczeństwie załogi należą do inżynierów pracujących na cytowanych testach i normach NASA.');
   };
 
-  /* ---------------- section menu ---------------- */
-  // One list for the menu: a group, then [section id, title, what it is, tab].
+  /* ---------------- section bar ---------------- */
+  // Every section, in page order, always on screen: [section id, label, what it is, tab].
   const NAV = () => [
-    [L('Start here', 'Zacznij tutaj'), [
-      ['top', L('What IGNIS is for', 'Do czego służy IGNIS'), L('a research aid: where to test next, faster access to the data', 'narzędzie badawcze: gdzie testować dalej, szybszy dostęp do danych')],
-      ['takeaways', L('Findings', 'Wnioski'), L('four suggestions, each with its limit and its source', 'cztery sugestie, każda z ograniczeniem i źródłem')],
-      ['verdict', L('Where to test next', 'Gdzie testować dalej'), L('what the archive does not cover and a proposed test campaign', 'czego archiwum nie pokrywa i proponowana kampania testów')],
-    ]],
-    [L('Search & ask', 'Szukaj i pytaj'), [
-      ['ask', L('Search the data', 'Przeszukaj dane'), L('every test point, filterable, each with its source row — no SI', 'każdy punkt testowy, z filtrami i wierszem źródłowym — bez SI'), 'search'],
-      ['ask', L('Ask the SI', 'Zapytaj SI'), L('a written answer with clickable sources — a suggestion, not a decision', 'odpowiedź opisowa z klikalnymi źródłami — sugestia, nie decyzja'), 'si'],
-      ['solver', L('Check an atmosphere', 'Sprawdź atmosferę'), L('pick a cabin; see the nearest real tests and how far away they are', 'wybierz kabinę; zobacz najbliższe prawdziwe testy i ich odległość')],
-    ]],
-    [L('Explore the archive', 'Przeglądaj archiwum'), [
-      ['funnel', L('From raw tables to points', 'Od tabel do punktów'), L('how the published rows become usable test points', 'jak opublikowane wiersze stają się punktami testowymi')],
-      ['map', L('Coverage map', 'Mapa pokrycia'), L('oxygen against pressure: where tests exist and where none do', 'tlen względem ciśnienia: gdzie są testy, a gdzie ich brak')],
-      ['flowmap', L('Oxygen × air flow', 'Tlen × przepływ'), L('the second axis, with the outcome of each test', 'druga oś, z wynikiem każdego testu')],
-      ['atlas', L('Atlas of investigations', 'Atlas badań'), L('every investigation, what it measured, ranked for a mission', 'każde badanie, co mierzyło, uszeregowane dla misji')],
-      ['pillars', L('Prevention, detection, suppression', 'Zapobieganie, wykrywanie, gaszenie'), L('one number per area, and the model-ready export', 'jedna liczba na obszar i eksport dla modeli')],
-      ['telemetry', L('Flame telemetry', 'Telemetria płomienia'), L('one real test, instrument by instrument', 'jeden prawdziwy test, przyrząd po przyrządzie')],
-    ]],
+    ['top', L('About', 'O narzędziu'), L('what IGNIS is for', 'do czego służy IGNIS')],
+    ['takeaways', L('Findings', 'Wnioski'), L('four suggestions, each with its limit and its source', 'cztery sugestie, każda z ograniczeniem i źródłem')],
+    ['ask', L('Search data', 'Szukaj w danych'), L('every test point, filterable, each with its source row — no SI', 'każdy punkt testowy, z filtrami i wierszem źródłowym — bez SI'), 'search'],
+    ['ask', L('Ask SI', 'Zapytaj SI'), L('a written answer, checked against the corpus, with clickable sources', 'odpowiedź opisowa, sprawdzona względem korpusu, z klikalnymi źródłami'), 'si'],
+    ['funnel', L('Corpus', 'Korpus'), L('how the published rows become usable test points', 'jak opublikowane wiersze stają się punktami testowymi')],
+    ['map', L('Coverage', 'Pokrycie'), L('oxygen against pressure: where tests exist and where none do', 'tlen względem ciśnienia: gdzie są testy, a gdzie ich brak')],
+    ['flowmap', L('O₂ × flow', 'O₂ × przepływ'), L('oxygen against air flow, with how each test ended', 'tlen względem przepływu, z tym, jak skończył się każdy test')],
+    ['atlas', L('Atlas', 'Atlas'), L('every investigation, what it measured, ranked for a mission', 'każde badanie, co mierzyło, uszeregowane dla misji')],
+    ['solver', L('Check an atmosphere', 'Sprawdź atmosferę'), L('pick a cabin; see the nearest real tests and how far away they are', 'wybierz kabinę; zobacz najbliższe prawdziwe testy i ich odległość')],
+    ['pillars', L('Pillars & export', 'Filary i eksport'), L('prevention, detection, suppression, Earth — and the model-ready export', 'zapobieganie, wykrywanie, gaszenie, Ziemia — i eksport dla modeli')],
+    ['telemetry', L('Telemetry', 'Telemetria'), L('one real flame test, instrument by instrument', 'jeden prawdziwy test płomienia, przyrząd po przyrządzie')],
+    ['verdict', L('Test plan', 'Plan testów'), L('what the archive does not cover and the tests that would cover it', 'czego archiwum nie pokrywa i testy, które by to pokryły')],
   ];
-  const NAV_FLAT = () => NAV().flatMap(([g, items]) => items.map(x => [g, ...x]));
   let navHere = 'top';
-  const closeMenu = () => { $('.nav').classList.remove('open'); $('#nav-burger').setAttribute('aria-expanded', 'false'); document.querySelectorAll('.nav-group').forEach(g => g.classList.remove('open')); };
+  const navKey = (id, tab) => id + (tab ? ':' + tab : '');
   const renderNav = () => {
     const host = $('#nav-menu');
     host.innerHTML = '';
-    NAV().forEach(([g, items]) => {
-      const grp = el('div', { class: 'nav-group' });
-      const gb = el('button', { type: 'button', class: 'nav-gbtn', 'aria-expanded': 'false' }, g);
-      gb.onclick = e => {
-        e.stopPropagation();
-        const was = grp.classList.contains('open');
-        document.querySelectorAll('.nav-group').forEach(x => { x.classList.remove('open'); x.firstChild.setAttribute('aria-expanded', 'false'); });
-        if (!was) { grp.classList.add('open'); gb.setAttribute('aria-expanded', 'true'); }
+    NAV().forEach(([id, t, d, tab], k) => {
+      const a = el('a', { href: '#' + id, 'data-nav': navKey(id, tab), title: d }, el('small', {}, String(k + 1).padStart(2, '0')), t);
+      a.onclick = e => {
+        e.preventDefault();
+        if (tab) goTab(tab); else document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        try { history.replaceState(null, '', '#' + id); } catch (er) { /* file:// */ }
       };
-      const drop = el('div', { class: 'nav-drop' });
-      items.forEach(([id, t, d, tab]) => {
-        const a = el('a', { href: '#' + id, 'data-nav': id + (tab ? ':' + tab : '') }, el('b', {}, t), el('span', {}, d));
-        a.onclick = e => {
-          e.preventDefault(); closeMenu();
-          if (tab) goTab(tab); else document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
-          try { history.replaceState(null, '', '#' + id); } catch (er) { /* file:// */ }
-        };
-        drop.append(a);
-      });
-      grp.append(gb, drop);
-      host.append(grp);
+      host.append(a);
     });
     markHere();
   };
   const markHere = () => {
     const key = navHere === 'ask' ? 'ask:' + TAB : navHere;
-    const hit = NAV_FLAT().find(x => x[1] === navHere && (!x[4] || 'ask:' + x[4] === key));
-    $('#nav-here').textContent = hit ? `${hit[0]} › ${hit[2]}` : '';
-    document.querySelectorAll('.nav-drop a').forEach(a => a.classList.toggle('here', a.dataset.nav === key));
-    document.querySelectorAll('.nav-group').forEach(g => g.classList.toggle('here', !!g.querySelector('a.here')));
+    let cur = null;
+    document.querySelectorAll('#nav-menu a').forEach(a => { const on = a.dataset.nav === key; a.classList.toggle('here', on); if (on) cur = a; });
+    // Keep the current section's link in view inside the bar, without moving the page.
+    const bar = $('#nav-menu');
+    if (cur && bar.scrollWidth > bar.clientWidth) {
+      const l = cur.offsetLeft - bar.offsetLeft, r = l + cur.offsetWidth;
+      if (l < bar.scrollLeft || r > bar.scrollLeft + bar.clientWidth) bar.scrollTo({ left: Math.max(0, l - 24), behavior: 'smooth' });
+    }
   };
-  $('#nav-burger').onclick = e => {
-    e.stopPropagation();
-    const open = !$('.nav').classList.contains('open');
-    $('.nav').classList.toggle('open', open);
-    $('#nav-burger').setAttribute('aria-expanded', String(open));
-  };
-  document.addEventListener('click', e => { if (!e.target.closest('.nav')) closeMenu(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
-  // Which section is under the top third of the screen: the menu marks it.
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver(es => {
       es.forEach(en => { if (en.isIntersecting) { navHere = en.target.id; markHere(); } });
     }, { rootMargin: '-30% 0px -65% 0px' });
-    ['top', ...new Set(NAV_FLAT().map(x => x[1]))].forEach(id => { const n = document.getElementById(id); if (n) io.observe(n); });
+    [...new Set(NAV().map(x => x[0]))].forEach(id => { const n = document.getElementById(id); if (n) io.observe(n); });
   }
   ['#tab-search', '#tab-si'].forEach(s => $(s).addEventListener('click', markHere));
 

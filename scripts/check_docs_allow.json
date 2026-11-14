@@ -14,5 +14,7 @@
   "300": "word count of the talk script, about the document itself",
   "2.6": "measured latency of the deployed worker, seconds (not corpus data)",
   "11.0": "measured latency of the deployed worker, seconds (not corpus data)",
-  "26.0": "measured latency of the deployed worker, seconds (not corpus data)"
+  "26.0": "measured latency of the deployed worker, seconds (not corpus data)",
+  "1920": "video frame size in pixels (pitch/FILM.md), not corpus data",
+  "1080": "video frame size in pixels (pitch/FILM.md), not corpus data"
 }
