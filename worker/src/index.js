@@ -11,8 +11,8 @@ const MAX_TURNS = 5; // tool round-trips before we stop and say so
 // Measured on the five presets (2026-11-14, one run per preset): with the
 // model's reasoning mode on and max_tokens 8000 the deployed worker took
 // 3.8-11.8 s (5-34 s in a local run) and two of five made no data query; with
-// reasoning off it took 2.7-7.6 s and four of five queried the points (the
-// Earth question, answered from quotes, did not). The 4000-token cap leaves
+// reasoning off it took 2.7-7.6 s and four of five queried the points; after
+// the last prompt changes, 3.3-6.4 s with all five querying. The 4000-token cap leaves
 // room for the longest preset (Rank, ~1,400 characters).
 export const REQUEST = { max_tokens: 4000, reasoning: { enabled: false } };
 

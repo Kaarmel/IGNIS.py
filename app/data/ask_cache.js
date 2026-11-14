@@ -54,7 +54,36 @@ window.ASK_CACHE = {
   },
   "extract:en": {
    "question": "Which test points could feed a flammability model for a Mars habitat cabin, and what oxygen and pressure ranges do they cover?",
-   "answer": "The archive gives no atmosphere for a Mars habitat, so I rank by what the tests themselves cover.\n\n**Solid-material\n tests (closest class to cabin furnishings):** 128 solid points at 21.0–22.7% O2 and 0.983–1.026 bar, from BASS-II [PSI-25], BASS [PSI-26], Saffire-I [PSI-98] and Saffire-II [PSI-99]. No solid test exceeds 22.7% O2; that ceiling is the single BASS row (SIBAL 2 cm, 1.0081 bar) [PSI-26].\n\n**Gas and droplet tests reaching higher oxygen:** 723 points at 21.0–40.0% O2, 0.434–5.066 bar, spanning Flame Design [PSI-10], CFI-G [PSI-159], FLEX [PSI-69], CFI [PSI-39] and BRE [PSI-20] (gas-burner emulator, oxygen only, no pressure).\n\n**What not to draw on:** the 83 challenge-atmosphere points (O2 ≥ 30%, 0.2965–0.738 bar) [PSI-10][PSI-159][PSI-69] and the 17 lunar design-point droplet rows [PSI-69] sit outside any Mars-cabin assumption the corpus supports, and the archive states no Mars-cabin oxygen or pressure to justify them. Use them as bounding cases only.",
+   "answer": "No PSI investigation defines a Mars habitat cabin atmosphere, so no test set can be called a match for it; the archive does not give that atmosphere, and I state no value for it.\n\nThe closest analogue material in the archive is cotton-fiberglass SIBAL fabric, the fabric burned in BASS and the Saffires [Q:PSI-26.fuel]. 44 solid-phase points carry a SIBAL sample: 27 in PSI-25, 12 in PSI-26, 2 each in PSI-98 and PSI-100, 1 in PSI-99; 42 have oxygen and 41 have pressure. Across them oxygen spans 16.4% to 22.7% and pressure 0.983 to 1.026 bar.\n\nRanked by material class (SIBAL fabric, not PMMA or gas burners), the ceiling case is PSI-26 row 55: 22.7% O2 at 1.0081 bar. No solid point exceeds it, so a habitat model must extrapolate above 22.7% O2 — but the compressed-gas challenge envelope (O2 ≥ 30.0%, 0.2965–0.738 bar) is only liquid droplets (PSI-69, 17) and gases (PSI-10, 18; PSI-159, 48).\n\nA user-supplied habitat oxygen and pressure would define the target; the archive would then supply the nearest lower rows plus those gas and droplet envelope points.",
+   "check": {
+    "unsourced_numbers": [],
+    "fraction_oxygen": [],
+    "free_quotes": 0,
+    "unverified_free_quotes": [],
+    "cited_investigations": [
+     "PSI-25",
+     "PSI-26",
+     "PSI-98",
+     "PSI-100",
+     "PSI-99",
+     "PSI-69",
+     "PSI-10",
+     "PSI-159"
+    ],
+    "cited_quotes": [
+     "PSI-26.fuel"
+    ],
+    "unknown_investigations": [],
+    "unknown_quotes": []
+   },
+   "model": "deepseek/deepseek-v4.1-flash-1017",
+   "queries": 2,
+   "seconds": 2.5,
+   "saved": "2026-11-14"
+  },
+  "extract:pl": {
+   "question": "Które punkty testowe mogą zasilić model palności dla kabiny habitatu na Marsie i jakie zakresy tlenu i ciśnienia pokrywają?",
+   "answer": "**Uwaga wstępna:** archiwum nie podaje atmosfery kabiny habitatu na Marsie ani łazika ciśnieniowego, więc nie zakładam żadnego poziomu O2 ani ciśnienia dla takiej kabiny; porównuję wyłącznie to, co pokrywają same testy.\n\n**Testy odpowiednie dla materiałów stałych (najbliższe realnemu paliwu kabiny):** 151 punktów fazy stałej przy O2 od 20.0% do 22.7% i ciśnieniu 0.983–1.026 bar [PSI-25][PSI-26][PSI-98][PSI-99]. To jedyna grupa z próbkami takimi jak PMMA i SIBAL; górną granicę 22.7% wyznacza jeden test — SIBAL 2 cm przy 1.0081 bar w BASS [PSI-26]. Żaden test stały nie sięga progu 30% [PSI-26].\n- W materiale stałym występuje też wątek tłumienia: azot w 18 próbach, z czego 16 zakończyło się niepowodzeniem [PSI-26].\n\n**Testy gazowe i kroplowe przy O2 ≥ 30%:** 498 punktów (PSI-10: 222, PSI-159: 230, PSI-69: 24, PSI-20: 22), O2 30.0–85.0%, ciśnienie 0.432–3.31 bar. Materiały to gazy (etylen, metan, propan, butan) i krople, nie ciała stałe [PSI-10][PSI-159][PSI-69][PSI-20].\n\n**Ranking według klasy materiału** — bo w kabinie pali się głównie wyposażenie stałe: najwyżej 151 punktów stałych, potem gazy/krople jako wsparcie dla mechanizmów tlenowych, na końcu emulator BRE (tylko tlen, bez ciśnienia w tabeli) [PSI-20].",
    "check": {
     "unsourced_numbers": [],
     "fraction_oxygen": [],
@@ -68,7 +97,6 @@ window.ASK_CACHE = {
      "PSI-10",
      "PSI-159",
      "PSI-69",
-     "PSI-39",
      "PSI-20"
     ],
     "cited_quotes": [],
@@ -77,34 +105,7 @@ window.ASK_CACHE = {
    },
    "model": "deepseek/deepseek-v4.1-flash-1017",
    "queries": 2,
-   "seconds": 2.7,
-   "saved": "2026-11-14"
-  },
-  "extract:pl": {
-   "question": "Które punkty testowe mogą zasilić model palności dla kabiny habitatu na Marsie i jakie zakresy tlenu i ciśnienia pokrywają?",
-   "answer": "Na pytanie o habitat marsjański archiwum PSI nie odpowiada wprost: nie ma w nim żadnej atmosfery (ciśnienia ani poziomu tlenu) przypisanej habitatowi na Marsie – ani ciśnienia, ani stężenia tlenu takiego obiektu nie podaje żadne źródło. Ranking poniżej opieram więc na **osiąganym zakresie tlenu i ciśnienia**, bo to jedyne osie, po których można te punkty porównać.\n\nPunkty z tlenem i ciśnieniem co najmniej 21% O2 i 0.3 bar: 428 punktów (201 gazowych, 119 kropelkowych, 108 stałych), zakres 21.0–85.0% O2 i 0.432–1.02 bar [query_points]. Podział: PSI-10 50, PSI-159 151, PSI-25 27, PSI-26 81, PSI-39 35, PSI-69 84.\n\n- **Ciała stałe (najbliżej materiałów kabiny):** 128 punktów z zapisanym tlenem, 119 z ciśnieniem; 21.0–22.7% O2 i 0.983–1.026 bar [query_points]. Badania: BASS-II [PSI-25], BASS [PSI-26], Saffire-I [PSI-98], Saffire-II [PSI-99]. Pułap 22.7% to jeden test BASS [PSI-26].\n- **Faza gazowa szersza:** [PSI-10] sięga 85.0% (górna granica w tym wyborze), obejmując 30% i wyżej – 83 punkty w kopercie wyzwania, w tym 48 z CFI-G [PSI-159].\n\nWniosek: model palności dla kabiny można oprzeć na danych stałych przy ok. 1 bar i ≤22.7% O2, a ekstrapolację na wyższy tlen – na gazach [PSI-10]/[PSI-159].",
-   "check": {
-    "unsourced_numbers": [],
-    "fraction_oxygen": [],
-    "free_quotes": 0,
-    "unverified_free_quotes": [],
-    "cited_investigations": [
-     "PSI-10",
-     "PSI-159",
-     "PSI-25",
-     "PSI-26",
-     "PSI-39",
-     "PSI-69",
-     "PSI-98",
-     "PSI-99"
-    ],
-    "cited_quotes": [],
-    "unknown_investigations": [],
-    "unknown_quotes": []
-   },
-   "model": "deepseek/deepseek-v4.1-flash-1017",
-   "queries": 2,
-   "seconds": 5.2,
+   "seconds": 4.5,
    "saved": "2026-11-14"
   },
   "interpret:en": {
@@ -241,28 +242,30 @@ window.ASK_CACHE = {
   },
   "gap:pl": {
    "question": "Jaki pojedynczy test najbardziej zmniejszyłby niepewność dla materiałów w kabinie z 30% tlenu?",
-   "answer": "W archiwum nie ma ani jednego punktu testowego na materiale stałym przy tlenie ≥ 30.0% w oknie ciśnienia 0.2965–0.738 bar: zapytanie zwróciło 0 trafień, a wszystkie 83 punkty w kopercie wyzwania pochodzą z fazy gazowej (66) i kropel (17), nie ze stałych próbek [PSI-10][PSI-159][PSI-69]. Luka między pułapem dla ciał stałych a progiem wyzwania to 7.3 p.p. [PSI-26].\n\nDlatego pojedynczym testem o największym zwrocie byłby **test spalania SIBAL 2 cm (tkanina bawełna–włókno szklane) w atmosferze o 30.0% tlenu, przy najniższym ciśnieniu, jakie aparat pozwala utrzymać** — czyli powtórzenie wiersza 55 z BASS, jedynego punktu stałego na tym pułapie (22.7%, 1.0081 bar) [PSI-26], przesuniętego w okno wyzwania. Wybór według zasięgu tlenu i ciśnienia, bo to jedyne osie, po których koperta wyzwania różni się od zbadanych warunków stałych.\n\nDlaczego SIBAL: to materiał, który w teście BASS dał najwyższą zarejestrowaną zawartość tlenu, a w Saffire pali się w dużej skali (0.4 × 0.94 m) [PSI-98][PSI-100]; w BASS-II trzy próbki Nomexu nie zapłonęły [PSI-25], więc pytanie o najgorszy przypadek [PSI-25] pozostaje otwarte właśnie dla tkaniny.\n\nAtmosfery kabiny tranzytowej, bazy marsjańskiej ani łazika ciśnieniowego archiwum nie podaje.",
+   "answer": "**Jeden test: SIBAL 2 cm w 30.0% tlenu** — czyli powtórzenie punktu, który dziś wyznacza sufit tlenowy dla ciał stałych (22.7% przy 1.0081 bar, wiersz 55, BASS [PSI-26]), podniesione do progu wyzwania (O2 >= 30%, 0.2965–0.738 bar).\n\nDlaczego to ten test:\n\n- Wszystkie 264 punkty dla ciał stałych leżą w zakresie 13.6–22.7% O2 i 0.983–1.026 bar; **żaden nie sięga 30.0%** (zapytanie do query_points: 0 trafień powyżej 30.0% O2). Luka wynosi 7.3 pp.\n- Rozkład punktów: PSI-25 129, PSI-26 122, PSI-99 9, PSI-98 2, PSI-100 2 — ale to wciąż jeden wąski przedział tlenu.\n- Tkanina SIBAL (bawełna + włókno szklane) to realny materiał kabinowy [Q:PSI-26.fuel]; jej wiersz 55 jest jedynym, na którym opiera się sufit, więc powtórzenie go przy podwyższonym O2 bezpośrednio sprawdza, czy sufit jest artefaktem zakresu.\n- Microgravity już obniża granice palności [Q:PSI-69.conclusion], a BASS pokazał zwiększoną palność tej geometrii [Q:PSI-26.conclusion] — ekstrapolacja ponad 22.7% jest więc ryzykowna.\n\nAtmosfery kabiny tranzytowej ani bazy na Marsie archiwum nie podaje; test dotyczy wyłącznie obwiedni wyzwania.",
    "check": {
     "unsourced_numbers": [],
     "fraction_oxygen": [],
     "free_quotes": 0,
     "unverified_free_quotes": [],
     "cited_investigations": [
-     "PSI-10",
-     "PSI-159",
-     "PSI-69",
      "PSI-26",
+     "PSI-25",
+     "PSI-99",
      "PSI-98",
-     "PSI-100",
-     "PSI-25"
+     "PSI-100"
     ],
-    "cited_quotes": [],
+    "cited_quotes": [
+     "PSI-26.fuel",
+     "PSI-69.conclusion",
+     "PSI-26.conclusion"
+    ],
     "unknown_investigations": [],
     "unknown_quotes": []
    },
    "model": "deepseek/deepseek-v4.1-flash-1017",
    "queries": 2,
-   "seconds": 4.2,
+   "seconds": 4,
    "saved": "2026-11-14"
   }
  },
@@ -272,91 +275,39 @@ window.ASK_CACHE = {
    "ranking": [
     {
      "id": "PSI-26",
-     "why": "Solid SIBAL and PMMA burned near 1 bar with 121 operator notes; it holds the 22.7% solid ceiling at 1.0081 bar, the only solid-material oxygen ceiling in the archive [PSI-26]."
+     "why": "Solid SIBAL 2 cm at 22.7% oxygen and 1.0081 bar sets the only solid-material oxygen ceiling in the archive, directly bounding what a rover may pressurize [PSI-26]."
     },
     {
      "id": "PSI-25",
-     "why": "BASS-II gives 129 solid rows across PMMA films, slabs and SIBAL with oxygen and 0.994 bar pressure, so it speaks directly to cabin-like materials [PSI-25]."
-    },
-    {
-     "id": "PSI-20",
-     "why": "BRE spans 21.0% to 40.0% oxygen on a gas burner emulating solid fuels but records no pressure, so oxygen reach is strong while pressure is unconstrained [PSI-20]."
-    },
-    {
-     "id": "PSI-159",
-     "why": "CFI-G gas tests reach 85.0% oxygen and 3.31 bar, covering the challenge window from the low side with 48 points inside it [PSI-159]."
-    },
-    {
-     "id": "PSI-10",
-     "why": "Flame Design adds 18 challenge-window gas points and pressures to 3.058 bar, useful for soot limits but not for solid materials [PSI-10]."
-    },
-    {
-     "id": "PSI-69",
-     "why": "FLEX droplet tests supply the remaining 17 challenge-window points, but droplets and inerting limits transfer only indirectly to rover materials [PSI-69]."
-    },
-    {
-     "id": "PSI-99",
-     "why": "Saffire-II burned PMMA, Nomex and silicone in low gravity but records oxygen only at 21.5% to 22.1%, below any enriched cabin, with no pressure [PSI-99]."
+     "why": "BASS-II gives 129 solid test points, 51 material variants and 13.6 to 22.2% oxygen, the widest solid flammability matrix for screening rover interior materials [PSI-25]."
     },
     {
      "id": "PSI-98",
-     "why": "Saffire-I is the only other solid test at 1.026 bar, yet it covers just one fabric and 21.5% oxygen, so design leverage is small [PSI-98]."
-    },
-    {
-     "id": "PSI-101",
-     "why": "SAME-R informs detection rather than ignition, with 109 rows on smoke from spacecraft materials and no oxygen or pressure data [PSI-101]."
-    }
-   ],
-   "check": {
-    "unknown_investigations": [],
-    "unknown_quotes": [],
-    "unverified_free_quotes": [],
-    "fraction_oxygen": [],
-    "unsourced_numbers": []
-   },
-   "model": "deepseek/deepseek-v4.1-flash-1017",
-   "queries": 2,
-   "seconds": 3.7,
-   "saved": "2026-11-14"
-  },
-  "rover:pl": {
-   "mission": "Łazik ciśnieniowy",
-   "ranking": [
-    {
-     "id": "PSI-159",
-     "why": "Jedyne badanie z 48 punktami w kopercie wyzwania, 30.0% tlenu przy 0.495-0.552 bar, ale dotyczy gazów, nie materiałów stałych [PSI-159]."
-    },
-    {
-     "id": "PSI-10",
-     "why": "18 punktów w kopercie wyzwania do 85.0% tlenu i 0.432-0.522 bar, płomienie gazowe, bez materiałów kabiny [PSI-10]."
-    },
-    {
-     "id": "PSI-26",
-     "why": "Stały sufit tlenowy 22.7% na próbce SIBAL przy 1.0081 bar, czyli poniżej progu 30.0%, plus notatki o azocie [PSI-26]."
-    },
-    {
-     "id": "PSI-25",
-     "why": "129 punktów na stałych tworzywach i tkaninie w 0.994 bar i tlenie do 22.2%, żaden nie sięga 30.0% [PSI-25]."
-    },
-    {
-     "id": "PSI-20",
-     "why": "Emulator paliwa gazowego osiąga 40.0% tlenu, ale nie zapisuje ciśnienia, więc nie da się go umieścić w kopercie [PSI-20]."
-    },
-    {
-     "id": "PSI-98",
-     "why": "Duża próbka tkaniny bawełna-szkło przy 21.5% tlenu i 1.026 bar, skala pożaru zbliżona do kabiny [PSI-98]."
+     "why": "Saffire-I burned a large SIBAL fabric sample at 21.5% oxygen and about one bar, the closest solid large-scale fire record to a cabin fire [PSI-98]."
     },
     {
      "id": "PSI-99",
-     "why": "Cztery klasy materiałów stałych i tkanina SIBAL przy 21.5-22.1% tlenu, bez zapisu ciśnienia [PSI-99]."
+     "why": "Saffire-II adds nine solid points across silicone, PMMA, Nomex and SIBAL near 21.5 to 22.1% oxygen, broadening the material class without pressure [PSI-99]."
+    },
+    {
+     "id": "PSI-20",
+     "why": "BRE reaches 21.0 to 40.0% oxygen on a gas burner emulating solids, the only archive data spanning a high-oxygen solid-like boundary [PSI-20]."
     },
     {
      "id": "PSI-69",
-     "why": "17 punktów kropel w kopercie wyzwania, dane o gaszeniu azotem, dwutlenkiem węgla i helem, ale bez ciał stałych [PSI-69]."
+     "why": "FLEX droplet tests at 12.0 to 34.0% oxygen and 0.702 to 3.093 bar supply the suppression-inerting evidence for diluent choice, though not for solids [PSI-69]."
+    },
+    {
+     "id": "PSI-10",
+     "why": "Flame Design covers 19.8 to 85.0% oxygen at 0.432 to 3.058 bar, showing how soot inception and extinction move with strong oxygen enrichment [PSI-10]."
     },
     {
      "id": "PSI-101",
-     "why": "Jedyna baza dla detekcji dymu z materiałów kabinowych, bez danych o tlenie i ciśnieniu [PSI-101]."
+     "why": "SAME-R quantifies smoke from five spacecraft materials with detector performance, which matters for rover detection design once a fire starts [PSI-101]."
+    },
+    {
+     "id": "PSI-102",
+     "why": "SAME adds eight smoke points on lamp wick, Kapton, silicone and Teflon, showing smoke particles below 500 nm and slower transport [PSI-102]."
     }
    ],
    "check": {
@@ -368,7 +319,59 @@ window.ASK_CACHE = {
    },
    "model": "deepseek/deepseek-v4.1-flash-1017",
    "queries": 3,
-   "seconds": 14,
+   "seconds": 5.1,
+   "saved": "2026-11-14"
+  },
+  "rover:pl": {
+   "mission": "Łazik ciśnieniowy",
+   "ranking": [
+    {
+     "id": "PSI-26",
+     "why": "Testy ciał stałych (PMMA, SIBAL, Nomex) przy 15.9-22.7% tlenu i ciśnieniu 0.983-1.022 bar dają pułap 22.7% oraz notatki o zawodnym tłumieniu azotem, najbliższe materiałom łazika [PSI-26]."
+    },
+    {
+     "id": "PSI-25",
+     "why": "129 punktów na ciałach stałych (PMMA, folie, SIBAL) przy tlenie 13.6-22.2% i ciśnieniu 0.994 bar pokazuje najgorszy przypadek palności materiałów w mikrograwitacji [PSI-25]."
+    },
+    {
+     "id": "PSI-69",
+     "why": "17 punktów kroplowych w kopercie wyzwania (30.0-34.0% tlenu, 0.712-0.724 bar), w większości rozerwanie płomienia, wskazuje zachowanie paliwa ciekłego w takim środowisku [PSI-69]."
+    },
+    {
+     "id": "PSI-159",
+     "why": "48 punktów gazowych w kopercie wyzwania (30.0-85.0% tlenu, 0.495-0.552 bar) daje najszerszy zasięg tlenu dla gazów palnych przy niskim ciśnieniu [PSI-159]."
+    },
+    {
+     "id": "PSI-10",
+     "why": "18 punktów gazowych w kopercie wyzwania (32.0-85.0% tlenu, 0.432-0.522 bar) oraz progi granicy sadzenia mówią o palności gazów przy wysokim tlenie [PSI-10]."
+    },
+    {
+     "id": "PSI-99",
+     "why": "Cztery materiały (SIBAL, PMMA, PMMA z Nomex, silikon) przy 21.5-22.1% tlenu pokazują rozprzestrzenianie płomienia po dużych próbkach ciał stałych w mikrograwitacji [PSI-99]."
+    },
+    {
+     "id": "PSI-20",
+     "why": "18 dni i 194 płomienie w tlenie 21.0-40.0% dla emulatora spalania materiałów dają szeroki zasięg tlenu, ale tabela nie zapisuje ciśnienia [PSI-20]."
+    },
+    {
+     "id": "PSI-98",
+     "why": "Duża próbka tkaniny 0.4 na 0.94 m przy 21.5% tlenu i 1.026 bar pokazuje tempo wzrostu wielkoskalowego pożaru w mikrogravitacji [PSI-98]."
+    },
+    {
+     "id": "PSI-101",
+     "why": "109 wierszy o dymie i aerozolach z materiałów typowych dla statku (Kapton, Teflon, silikon) wspiera projektowanie detekcji pożaru w kabinie łazika [PSI-101]"
+    }
+   ],
+   "check": {
+    "unknown_investigations": [],
+    "unknown_quotes": [],
+    "unverified_free_quotes": [],
+    "fraction_oxygen": [],
+    "unsourced_numbers": []
+   },
+   "model": "deepseek/deepseek-v4.1-flash-1017",
+   "queries": 4,
+   "seconds": 6.5,
    "saved": "2026-11-14"
   },
   "base:en": {

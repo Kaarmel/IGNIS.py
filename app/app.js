@@ -1382,8 +1382,8 @@
   if (reportBtn) reportBtn.onclick = () => window.print();
 
   svD.onchange = () => {
-    // Rover and Mars: neither the challenge nor the cited paper gives an
-    // atmosphere, so the option says so and hands over to Custom.
+    // Rover and Mars: the cited paper (Kessler et al.) gives no atmosphere for
+    // them, so the option says so and hands over to Custom.
     const unstated = svD.value === 'unstated';
     $('#sv-unstated').hidden = !unstated;
     if (unstated) { svD.value = 'custom'; svP.focus(); }
