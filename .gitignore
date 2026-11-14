@@ -23,6 +23,7 @@ target/
 
 # talk script and Q&A cards: for the team only, not published
 pitch/TALK.md
+pitch/private/
 
 # film: local video build (playwright, mp4 output), not part of the submission repo
 film/
