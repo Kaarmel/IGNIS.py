@@ -340,12 +340,12 @@
     const zl = svgEl('text', { x: xOf(LUNAR_O2) + 12, y: yOf(LUNAR_P) + 18, fill: '#ff6a1f', 'font-size': 12.5, 'letter-spacing': '1.1' });
     // Two short lines inside the band, not one long one: the caption used to run
     // several times the width of the rectangle it was labelling.
-    const zl1 = svgEl('text', { x: xOf(CH_O2) + 10, y: yOf(CH_P) + 16, fill: '#ff6a1f', 'font-size': 12.5, 'letter-spacing': '1.1' });
+    const zl1 = svgEl('text', { x: xOf(0.66), y: yOf(CH_P) + 24, fill: '#ff6a1f', 'font-size': 12.5, 'letter-spacing': '1.1' });
     zl1.textContent = L('CHALLENGE', 'OBWIEDNIA');
     svg.append(zl1);
     zl.textContent = L('ENVELOPE', 'Z CHALLENGE');
-    zl.setAttribute('x', String(xOf(CH_O2) + 10));
-    zl.setAttribute('y', String(yOf(CH_P) + 30));
+    zl.setAttribute('x', String(xOf(0.66)));
+    zl.setAttribute('y', String(yOf(CH_P) + 38));
     zl.setAttribute('letter-spacing', '1.1');
     svg.append(zl);
     const envNote = $('#env-note');
@@ -354,12 +354,18 @@
         `The challenge puts lunar oxygen at 30% or more, at 10.2 psi or less; the box also stops at the 4.3 psi suit, because the sentence has no lower bound. ` +
         `FLEX sits at 0.702–0.726 bar, so the box is drawn with a ±${fmt(CH_TOL * 100, 0)}% pressure tolerance and says so. ` +
         `No solid-material point is inside it: all ${fmt(solidDocP)} solid points with a documented pressure ran at ` +
-        `${fmt(PDOC.min_bar, 2)}–${fmt(PDOC.max_bar, 2)} bar, and none above ${fmt(solidMaxO2 * 100, 1)}% O2.`,
+        `${fmt(PDOC.min_bar, 2)}–${fmt(PDOC.max_bar, 2)} bar, and none above ${fmt(solidMaxO2 * 100, 1)}% O2. ` +
+        `The dotted curve holds the challenge atmosphere's oxygen partial pressure, ${fmt(CH.ppo2_bar, 2)} bar: ${fmt(CH.solid_at_ppo2)} of the ${fmt(CH.solid_with_both)} solid tests with both values reach it, near 1 bar. ` +
+        `So the amount of oxygen was tested; its share of the gas was not — and NASA certifies spacecraft materials at 30% O₂ and 10.2 psia because oxygen concentration is the primary driver (Hirsch et al., NTRS 20090012334; Harper et al., NTRS 20160001047). ` +
+        `The hollow circles are the ${fmt(D.campaign.tests)} suggested tests (${fmt(D.campaign.classes.length)} material classes at each condition) — a plan, not data.`,
       `<strong>${fmt(inEnv.length)}</strong> zmierzonych punktów wpada w to pole — ${envList}. ` +
         `Challenge podaje tlen księżycowy na 30% lub więcej, przy 10,2 psi lub mniej; pole kończy się też na skafandrze 4,3 psi, bo to zdanie nie ma dolnej granicy. ` +
         `FLEX pracuje przy 0,702–0,726 bar, więc pole jest rysowane z tolerancją ciśnienia ±${fmt(CH_TOL * 100, 0)}% i mówi to wprost. ` +
         `Żaden punkt materiału stałego w nim nie leży: wszystkie ${fmt(solidDocP)} punkty stałe z udokumentowanym ciśnieniem pracowały przy ` +
-        `${fmt(PDOC.min_bar, 2)}–${fmt(PDOC.max_bar, 2)} bar, żaden powyżej ${fmt(solidMaxO2 * 100, 1)}% O2.`);
+        `${fmt(PDOC.min_bar, 2)}–${fmt(PDOC.max_bar, 2)} bar, żaden powyżej ${fmt(solidMaxO2 * 100, 1)}% O2. ` +
+        `Kropkowana krzywa to stałe ciśnienie cząstkowe tlenu atmosfery z challenge'u, ${fmt(CH.ppo2_bar, 2)} bar: osiąga je ${fmt(CH.solid_at_ppo2)} z ${fmt(CH.solid_with_both)} testów stałych z obiema wartościami, przy około 1 bar. ` +
+        `Ilość tlenu była więc testowana; jego udział w gazie — nie. NASA certyfikuje materiały statków przy 30% O₂ i 10,2 psia, bo to stężenie tlenu jest głównym czynnikiem (Hirsch i in., NTRS 20090012334; Harper i in., NTRS 20160001047). ` +
+        `Puste kółka to ${fmt(D.campaign.tests)} sugerowanych testów (${fmt(D.campaign.classes.length)} klas materiałów w każdym warunku) — plan, nie dane.`);
 
     // grid
     [0, 10, 20, 30, 40, 50, 60, 70, 80, 90].forEach(v => {
@@ -384,6 +390,23 @@
     yt.textContent = L('CHAMBER PRESSURE (log)', 'CIŚNIENIE W KOMORZE (log)');
     svg.append(yt);
 
+    // ---- equal oxygen partial pressure: o2 × p = the challenge's ----
+    // Drawn from the two challenge numbers only. It runs through the solid
+    // cluster near 1 bar: the amount of oxygen was tested, its fraction was not.
+    const PP = CH.ppo2_bar;
+    const ppPts = [];
+    for (let k = 0; k <= 80; k++) {
+      const o2 = PP / P_MAX + (Math.min(O2_MAX / 100, PP / P_MIN) - PP / P_MAX) * k / 80;
+      ppPts.push(`${k ? 'L' : 'M'}${xOf(o2).toFixed(1)},${yOf(PP / o2).toFixed(1)}`);
+    }
+    const ppPath = svgEl('path', { d: ppPts.join(' '), fill: 'none', stroke: '#cbd5e1', 'stroke-width': 1.6, 'stroke-dasharray': '1.5 4.5', 'stroke-linecap': 'round', opacity: .85 });
+    svg.append(ppPath);
+    // Labelled where the curve leaves the plot, inside the box's empty floor.
+    const ppO = 0.5;
+    const ppL = svgEl('text', { x: xOf(ppO) + 10, y: yOf(PP / ppO) - 2, fill: '#cbd5e1', 'font-size': 12.5, 'letter-spacing': '.6' });
+    ppL.textContent = L(`O₂ PARTIAL PRESSURE ${fmt(PP, 2)} bar`, `CIŚN. CZĄSTKOWE O₂ ${fmt(PP, 2)} bar`);
+    svg.append(ppL);
+
     // points
     const pts = svgEl('g');
     both.forEach(r => {
@@ -400,6 +423,22 @@
       pts.append(c);
     });
     svg.append(pts);
+
+    // ---- the suggested campaign: hollow, so it never reads as data ----
+    const camp = D.campaign;
+    const conds = [];
+    camp.cells.forEach(c => { if (!conds.some(x => x[0] === c.o2_pct && x[1] === c.p_bar)) conds.push([c.o2_pct, c.p_bar]); });
+    conds.forEach(([o, p]) => {
+      const c = svgEl('circle', { cx: xOf(o / 100), cy: yOf(p), r: 8, fill: 'rgba(8,9,11,.6)', stroke: '#e7eaef', 'stroke-width': 1.8, 'stroke-dasharray': '3 2.2' });
+      c.dataset.tip = L(`suggested test condition — a plan, not data<br>${fmt(o, 1)}% O₂ · ${fmt(p, 3)} bar<br>${fmt(camp.classes.length)} material classes, ${fmt(camp.replicates)} test each`,
+        `sugerowany warunek testu — plan, nie dane<br>${fmt(o, 1)}% O₂ · ${fmt(p, 3)} bar<br>${fmt(camp.classes.length)} klas materiałów, po ${fmt(camp.replicates)} teście`);
+      svg.append(c);
+    });
+    const lowP = Math.min(...conds.map(x => x[1])), hiO = Math.max(...conds.map(x => x[0]));
+    const hiP = Math.max(...conds.map(x => x[1]));
+    const pl = svgEl('text', { x: xOf(hiO / 100) + 14, y: yOf(hiP) - 12, fill: '#e7eaef', 'font-size': 13, 'letter-spacing': '.8', stroke: '#08090b', 'stroke-width': 3, 'paint-order': 'stroke' });
+    pl.textContent = L(`PLAN · ${fmt(camp.tests)} TESTS`, `PLAN · ${fmt(camp.tests)} TESTÓW`);
+    svg.append(pl);
 
     // ---- the solid strip: the points with no pressure anywhere ----
     // 252 solid points plot normally on the 1 bar line, 131 of them from a
@@ -481,6 +520,10 @@
       L('strip under the axis: solid tests with no pressure recorded', 'pasek pod osią: testy stałe bez zapisanego ciśnienia'), el('b', {}, fmt(solidNoP.length))));
     lg.append(el('span', {}, el('i', { style: 'background:rgba(255,106,31,.18);border:1px dashed #ff6a1f;border-radius:0' }),
       L('orange box: the challenge atmosphere (30%+ O₂, 10.2 psi or less)', 'pomarańczowe pole: atmosfera z challenge\'u (30%+ O₂, 10,2 psi lub mniej)'), el('b', {}, fmt(both.filter(inChallenge).length))));
+    lg.append(el('span', {}, el('i', { style: 'background:transparent;border-top:2px dotted #cbd5e1;border-radius:0;height:0;margin-top:7px' }),
+      L(`dotted curve: the challenge's oxygen partial pressure (${fmt(CH.ppo2_bar, 2)} bar) — solid tests that reach it`, `kropkowana krzywa: ciśnienie cząstkowe O₂ z challenge'u (${fmt(CH.ppo2_bar, 2)} bar) — testy stałe, które je osiągają`), el('b', {}, fmt(CH.solid_at_ppo2))));
+    lg.append(el('span', {}, el('i', { style: 'background:transparent;border:1.5px dashed #e7eaef' }),
+      L('hollow circle: a suggested test condition — a plan, not data (tests)', 'puste kółko: sugerowany warunek testu — plan, nie dane (testy)'), el('b', {}, fmt(D.campaign.tests))));
   };
 
   /* ---------------- flow map ---------------- */
@@ -1501,6 +1544,16 @@
   // report for a habitat query.
   [svP, svO].forEach(n => n.oninput = manual);
   svM.onchange = solve;
+  // The first screen's one-click answer: the challenge atmosphere, solid material.
+  const cta = $('#cta-check');
+  if (cta) cta.onclick = e => {
+    e.preventDefault();
+    svD.value = 'challenge'; svM.value = 'solid'; svD.onchange();
+    document.getElementById('solver').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    try { history.replaceState(null, '', '#solver'); } catch (er) { /* file:// */ }
+  };
+  const ctaAsk = $('#cta-ask');
+  if (ctaAsk) ctaAsk.onclick = e => { e.preventDefault(); goTab('si'); };
 
   /* ---------------- pillars ---------------- */
   // At most three sentences on screen; the rest under "show details". A

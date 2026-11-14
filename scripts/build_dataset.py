@@ -686,6 +686,13 @@ challenge["envelope_total"] = len(env_rows)
 # The materials-flammability emulator is the only class that reaches the
 # challenge's oxygen level at all, and it records no pressure.
 challenge["bre_reaches"] = bool(bre["o2_max"] is not None and bre["o2_max"] >= CH_O2)
+# The challenge atmosphere holds about as much oxygen per volume as sea-level
+# air: 30% of 10.2 psi. Many solid tests reached that partial pressure; none
+# reached the fraction. Both counts come from the same rows the map draws.
+challenge["ppo2_bar"] = round(CH_O2 * CH_P, 3)
+_solid_both = [r for r in rows_out if r["ph"] == "solid" and r["o2"] is not None and r["p"] is not None]
+challenge["solid_with_both"] = len(_solid_both)
+challenge["solid_at_ppo2"] = sum(1 for r in _solid_both if r["o2"] * r["p"] >= CH_O2 * CH_P)
 
 # ---- the three pillars, each with a number that comes from a row -----------
 # Prevention: the ceiling and the emulator. Suppression: what a diluent did at

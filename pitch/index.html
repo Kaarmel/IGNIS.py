@@ -183,6 +183,23 @@ h2{font-size:58px;line-height:1.03;letter-spacing:-.03em;margin:0 0 20px;font-we
 .big .closer .si{font-size:17px}
 .big .closer .repo{font-size:20px}
 
+
+/* --- rebuilt main slides 2-5: big type, no screenshots of text --- */
+.askq{font-size:30px;line-height:1.35;color:var(--ink);margin:0 0 26px;padding-left:22px;border-left:3px solid var(--fire);font-style:italic}
+.ans{margin:0;padding:0 0 0 30px;font-size:25px;line-height:1.45;color:var(--dim)}
+.ans li{margin:0 0 16px}
+.ans b{color:var(--ink)}
+.plan{display:grid;grid-template-columns:240px repeat(3,1fr);gap:10px;margin-top:30px}
+.plan span{padding:18px 20px;font-size:26px;line-height:1.2}
+.plan small{display:block;font-size:17px;color:var(--faint);margin-top:6px;font-family:var(--mono)}
+.plan .ph,.plan .pr{font-family:var(--sans);font-weight:640;color:var(--ink)}
+.plan .pc{border:2px dashed #e7eaef;color:var(--ink);font-weight:600;text-align:center;font-size:30px;display:flex;align-items:center;justify-content:center}
+.gets{list-style:none;margin:30px 0 0;padding:0;font-size:28px;line-height:1.4;color:var(--dim);max-width:1350px}
+.gets li{padding:18px 0;border-top:1px solid var(--line)}
+.gets li:last-child{border-bottom:1px solid var(--line)}
+.gets b{color:var(--ink)}
+
+.funnel .frow{padding:14px 0}
 /* --- nav --- */
 .hint{position:fixed;top:16px;right:24px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:#2e3540;z-index:10;text-transform:uppercase}
 @media print{.hint{display:none}}
@@ -208,26 +225,26 @@ h2{font-size:58px;line-height:1.03;letter-spacing:-.03em;margin:0 0 20px;font-we
   <p class="eyebrow">NASA Space Apps Challenge 2026 · Flame in Freefall · Rzeszów</p>
   <p class="hook">The Apollo 1 crew died in a fire in an oxygen-filled spacecraft. The challenge says the Moon Base
   and pressurized rovers will run at <strong>30% oxygen or more</strong> — “making materials much more flammable”.</p>
-  <h1 style="font-size:84px;margin-top:40px">Lunar cabin: <em>30%</em> O₂.<br>Solids burned in PSI: up to <em>22.7%</em>.</h1>
+  <h1 style="font-size:84px;margin-top:40px">Lunar cabin: <em>30%</em> O₂.<br>Solid tests stop at <em>22.7%</em>.</h1>
   <div class="stats bigstats">
-    <div><span class="n">264</span><span class="k">solid-material test points in NASA’s open PSI archive</span></div>
-    <div><span class="n hot">0</span><span class="k">at the challenge’s 30% oxygen</span></div>
-    <div><span class="n">7.3 pp</span><span class="k">of oxygen with no solid test in PSI</span></div>
+    <div><span class="n">264</span><span class="k">solid-material tests in NASA’s open archive (PSI)</span></div>
+    <div><span class="n hot">0</span><span class="k">of them at the challenge’s 30% oxygen</span></div>
+    <div><span class="n">7.3</span><span class="k">percentage points of oxygen with no solid test</span></div>
   </div>
-  <p class="sub">A gap in the open archive: SoFIE-GEL burned PMMA on the ISS up to 34% O₂, but its points are not in PSI.</p>
+  <p class="sub">A gap in the open archive, not in all of science: SoFIE-GEL burned PMMA on the ISS up to 34% O₂, but its points are not in PSI.</p>
   <div class="foot"><span>IGNIS · SI-powered fire-safety dashboard</span><span class="pageno">01 / 05</span></div>
 </section>
 
 <!-- ============ 2 ============ -->
 <section class="slide big">
   <p class="eyebrow">Coverage</p>
-  <h2>Where the data exists</h2>
+  <h2>Same oxygen. Not the same fire.</h2>
   <div class="maprow">
-    <img class="mapimg" src="img/map-svg.png" alt="Scatter of oxygen against chamber pressure with the challenge envelope shaded from 30% oxygen and 10.2 psi down to the 4.3 psi suit floor; gas and droplet points inside it, solid material and the BRE emulator outside">
+    <img class="mapimg" src="img/map-svg.png" alt="Scatter of oxygen against chamber pressure: the challenge box from 30% oxygen and 10.2 psi down, gas and droplet points inside it, solid points stopping at 22.7% near 1 bar, a dotted curve of equal oxygen partial pressure running through the solid points, and six hollow circles for the suggested tests">
     <ul class="bignotes">
-      <li><span class="big">83</span> points in the lunar envelope — 66 gas, 17 droplet, <strong>0 solid</strong>.</li>
-      <li>Solids stop at <span class="big">22.7%</span>, all at 0.98–1.03 bar: nitrogen was added to cabin air, so oxygen could only go down.</li>
-      <li>Above that, only BRE — a gas burner emulating a surface, no pressure recorded.</li>
+      <li><span class="big">0</span> solid tests in the challenge box. The <strong>83</strong> inside are gas flames and droplets.</li>
+      <li><span class="big">86</span> of 252 solid tests reached the challenge’s oxygen <em>partial pressure</em> (0.21 bar, dotted) — near 1 bar. None reached its <strong>30% share</strong>.</li>
+      <li>NASA certifies materials at <strong>30% O₂, 10.2 psia</strong>: the share is the primary driver.</li>
     </ul>
   </div>
   <div class="foot"><span>IGNIS · SI-powered fire-safety dashboard</span><span class="pageno">02 / 05</span></div>
@@ -238,11 +255,18 @@ h2{font-size:58px;line-height:1.03;letter-spacing:-.03em;margin:0 0 20px;font-we
   <p class="eyebrow">The SI layer</p>
   <h2>Ask what the data cannot answer</h2>
   <div class="tworow wide">
-    <img class="askimg" src="img/ask-beyond.png" alt="Ask IGNIS answering how polyurethane foam would burn at 30% oxygen and 10.2 psi: it states the archive has no foam, lists the nearest solid points with their oxygen and pressure distances, and names the test that would close the gap">
+    <div>
+      <p class="askq">“How would polyurethane foam burn at 30% O₂ and 10.2 psi, compared with Nomex?”</p>
+      <ol class="ans">
+        <li><b>Not in the archive.</b> No foam in any PSI test table — it says so.</li>
+        <li><b>Nearest evidence:</b> SIBAL fabric, BASS row 55 — 22.7% O₂ at 1.008 bar. One click opens the NASA row.</li>
+        <li><b>The test that closes it:</b> burn the foam at 30% O₂ and 0.703 bar.</li>
+      </ol>
+    </div>
     <div>
       <p class="bigfact">−7.3&nbsp;pp<br>+43%</p>
-      <p class="bigk"><b>Distance from evidence</b> — the nearest solid point to 30% O₂ at 0.703 bar, on each axis, no weights.</p>
-      <p class="bigk">It does not guess: it says what is missing, how far the nearest measurement is, and which test would close it. Every citation is checked before it is shown.</p>
+      <p class="bigk"><b>Distance from evidence</b> — oxygen and pressure, separately, no weights.</p>
+      <p class="bigk">Every source, quote and number is checked against the corpus before the answer is shown.</p>
     </div>
   </div>
   <div class="foot"><span>IGNIS · SI-powered fire-safety dashboard</span><span class="pageno">03 / 05</span></div>
@@ -250,24 +274,27 @@ h2{font-size:58px;line-height:1.03;letter-spacing:-.03em;margin:0 0 20px;font-we
 
 <!-- ============ 4 ============ -->
 <section class="slide big">
-  <p class="eyebrow">What closes it</p>
+  <p class="eyebrow">Where to test next</p>
   <h2>Step 0: publish SoFIE-GEL in PSI.<br>Then <em class="hot">30</em> tests.</h2>
-  <p class="bigk" style="max-width:1300px">5 material classes tested near the ceiling × 3 oxygen levels × 2 pressures,
-  1 test per condition — what BASS ran for 131 of its 174 conditions. Computed from the corpus, not designed by hand.</p>
-  <img class="campimg" src="img/campaign.png" alt="The campaign matrix: SIBAL fabric, PMMA, Nomex, Ultem and silicone against 26.5, 30 and 34% oxygen at 0.703 and 0.565 bar, each cell giving the oxygen and pressure distance to the nearest PSI point">
+  <p class="bigk" style="max-width:1300px">The 5 solid materials already burned closest to the ceiling, at each of 6 conditions, 1 test each —
+  what BASS ran for 131 of its 174 conditions. The hollow circles on the map.</p>
+  <div class="plan">
+    <span></span><span class="ph">26.5% O₂<small>−3.8 pp from tested</small></span><span class="ph">30% O₂<small>−7.3 pp</small></span><span class="ph">34% O₂<small>−11.3 pp</small></span>
+    <span class="pr">0.703 bar<small>+43% from tested</small></span><span class="pc">5 tests</span><span class="pc">5 tests</span><span class="pc">5 tests</span>
+    <span class="pr">0.565 bar<small>+78%</small></span><span class="pc">5 tests</span><span class="pc">5 tests</span><span class="pc">5 tests</span>
+  </div>
   <div class="foot"><span>IGNIS · SI-powered fire-safety dashboard</span><span class="pageno">04 / 05</span></div>
 </section>
 
 <!-- ============ 5 ============ -->
 <section class="slide big">
-  <p class="eyebrow">What a habitat designer gets</p>
-  <h2>Three signals, and where they stop</h2>
-  <div class="stats bigstats three">
-    <div><span class="n">16/18</span><span class="k">nitrogen attempts on a burning solid that left it lit — test cutting the air flow first</span></div>
-    <div><span class="n">0/17</span><span class="k">droplets near the design pressure at 30–34% O₂ that went out on their own</span></div>
-    <div><span class="n">500 nm</span><span class="k">much of the smoke is finer; detection is slower than in normal gravity</span></div>
-  </div>
-  <p class="sub" style="margin-top:34px">An operator log, droplets, smoke — analogues. The campaign turns them into answers for cabin materials.</p>
+  <p class="eyebrow">What a habitat designer gets today</p>
+  <h2>A limit, a plan, and three signals</h2>
+  <ul class="gets">
+    <li><b>A line not to extrapolate past.</b> Solid materials are tested up to 22.7% O₂, and only near 1 bar.</li>
+    <li><b>The 30 tests that would remove it,</b> each with its distance from the nearest real test.</li>
+    <li><b>Three signals to test first:</b> 16 of 18 nitrogen attempts left a burning solid lit · 0 of 17 droplets near the design pressure went out on their own · much of the smoke is under 500 nm.</li>
+  </ul>
   <div class="closer">
     <div class="si">
       <span class="lbl">SI disclosure</span>
@@ -341,102 +368,6 @@ h2{font-size:58px;line-height:1.03;letter-spacing:-.03em;margin:0 0 20px;font-we
     cross-experiment summary sheet, 8 Saffire rows (4 of them pre-test flow-visualisation records).
   </p>
   <div class="foot"><span>IGNIS · SI-powered fire-safety dashboard</span><span class="pageno">Backup 2</span></div>
-</section>
-
-<!-- ============ 5 ============ -->
-<section class="slide dense">
-  <p class="eyebrow">The second variable</p>
-  <h2>Oxygen is half the story</h2>
-  <div class="maprow">
-    <img class="mapimg" src="img/flow-map.png" alt="Scatter of oxygen concentration against air-display opening setting for solid materials, extinction marked by circles and by downward arrows where the final setting was not recorded, blow-off by squares">
-    <ul class="notes">
-      <li><b>The challenge names it</b>“Flammability is highly dependent on oxygen concentration, and air flow is also important in microgravity.” The test tables carry the flow setting on every row — a column a summary table hides.</li>
-      <li><b>What is in it</b><span class="big">242</span> solid-material test points record both an oxygen level and an air-display setting, mostly BASS-II in its flow duct. The operator’s own cell is parsed for the opening setting, the final setting and the outcome; the raw text stays in the tooltip.</li>
-      <li><b>What it says</b>Of the <strong>18</strong> tests whose log carries an outcome, <strong>15 extinguished and 3 blew off</strong>. But <strong>12 of the 15</strong> extinctions were reached by <em>reducing</em> the flow from the opening setting until the flame went out — the table does not record the value it went out at, so those are arrows, not thresholds. The two outcomes overlap in oxygen (14.8–20.9% against 15.4–17.4%), so flow is not a single switch.</li>
-    </ul>
-  </div>
-  <div class="foot"><span>IGNIS · SI-powered fire-safety dashboard</span><span class="pageno">Backup 3</span></div>
-</section>
-
-<!-- ============ 6 ============ -->
-<section class="slide">
-  <p class="eyebrow">The SI layer</p>
-  <h2>Extracted, verified — and asked live</h2>
-  <div class="tworow">
-    <div>
-      <p class="bigfact">107</p>
-      <p class="bigfact-k">verbatim sentences, each naming its file: 84 from the PSI documents, 23 from NASA’s 2015 Researcher’s Guide to Combustion Science, labelled as outside PSI wherever they appear.</p>
-      <p class="note" style="margin-top:18px">
-        Two layers, one standard. Offline, the extraction fills the Atlas, and
-        <span class="mono">scripts/verify_insights.py</span> re-reads every named file and fails if one word differs.
-        Live, <b>Ask IGNIS</b> puts a language model (DeepSeek V4.1 Flash) on the same 1,936 points: it queries them
-        itself, cites investigations and quote ids, and every citation and quotation is checked against the corpus
-        before the page shows it — one it cannot back prints in red. The same model ranks the Atlas for a described
-        mission, and the worker rejects any ranking with an unknown or repeated id. If the network fails, the page
-        shows real answers saved from the live service, labelled with their date — never passed off as live.
-      </p>
-      <img class="atlasimg" src="img/ask.png" alt="Ask IGNIS answering a live question: the five preset chips, the question, and the first paragraph of the answer with its cited investigations rendered as links">
-    </div>
-    <ul class="notes">
-      <li><b>BASS-II</b>“The main variables tested were the effects of ambient O2 concentration, ventilation flow velocity, and fuel type, thickness, and geometry.”</li>
-      <li><b>FLEX · NASA guide</b>“The research to date has shown that the flammability limit is lower in reduced gravity. The implication is that terrestrial standards for inert gas suppressants in low gravity do not offer the same margin of safety as in normal gravity.”</li>
-      <li><b>BRE</b>“The chamber pressures were also varied but are not identified in this summary table.”</li>
-    </ul>
-  </div>
-  <div class="foot"><span>IGNIS · SI-powered fire-safety dashboard</span><span class="pageno">Backup 4</span></div>
-</section>
-
-<!-- ============ 7 ============ -->
-<section class="slide">
-  <p class="eyebrow">Verdict</p>
-  <h2>Prevention, detection, suppression</h2>
-  <div class="cherries">
-    <div class="cherry" data-n="01">
-      <span class="tag">Prevention</span>
-      <h3>22.7% is where the method stopped, not where safety starts</h3>
-      <p>The highest oxygen any solid-material test reached, across <b>264</b> points — a BASS test. Both BASS
-      campaigns varied oxygen by adding nitrogen — a method that can only go down from cabin air. Above it, only the
-      <b>BRE emulator</b> (194 flames, 21–40% O₂, a gas burner emulating a burning surface, no pressure
-      recorded). The challenge’s lunar level is <b>30%</b>: seven points of oxygen with no solid test in PSI for the materials
-      a habitat is built from.</p>
-    </div>
-    <div class="cherry" data-n="02">
-      <span class="tag">Suppression</span>
-      <h3>Stopping the air flow put out flames that nitrogen did not</h3>
-      <p>FLEX droplets, one atmosphere, same oxygen level: at <b>18% O₂ or less</b>, <b>39 of 43</b> went out in
-      nitrogen, <b>24 of 27</b> with CO₂, <b>15 of 19</b> with helium — the inert gas does not visibly change
-      the outcome (at 21% only 3 and 2 such tests exist). The BASS operators' notes on solids agree:
-      <b>18</b> record an attempt to put a burning sample out with nitrogen, <b>16</b> say it stayed lit, and in
-      <b>10</b> of those the flame went out when the air flow was turned off. Small samples, an operator log —
-      a direction, not a rate.</p>
-    </div>
-    <div class="cherry" data-n="03">
-      <span class="tag">Detection</span>
-      <h3>119 smoke and dust points — finer smoke, slower detection</h3>
-      <p>SAME-R, SAME and DAFT record how smoke was made and aged, not a flame. The SAME final report
-      concludes that “a substantial portion of the smoke particles are below 500 nm in diameter” and that
-      “detection times are longer than in normal gravity”. Partial gravity: PSI holds <b>no</b>
-      reduced-gravity combustion test; the challenge names LUCI and FM2 as future work.</p>
-    </div>
-  </div>
-  <p class="closing">A gap in the open archive. <b>PSI holds no solid-material test below 0.98 bar or
-  above 22.7% O₂</b> — publishing what exists and a campaign at the atmosphere in use would fill it.</p>
-  <div class="closer">
-    <div class="si">
-      <span class="lbl">SI disclosure</span>
-      Built with <b>Claude (Anthropic)</b> — code, analysis and narrative. The live panel runs
-      <b>DeepSeek V4.1 Flash</b> via OpenRouter, answering only from the corpus. <b>No SI generated the data.</b>
-      SI extracted the per-investigation summaries, and a script verifies every quote against the source file.
-      Every figure is computed from the NASA PSI tables by <span class="mono">scripts/build_dataset.py</span>
-      and <span class="mono">scripts/build_telemetry.py</span>. Data: NASA PSI, CC0-1.0.
-    </div>
-    <div class="repo">
-      <b>github.com/Kaarmel/IGNIS.py</b><br>
-      open <b>app/index.html</b> — no build; only Ask IGNIS needs the network<br>
-      7,463 files · 5.4 GB · 22 PSI accessions, 22 test tables
-    </div>
-  </div>
-  <div class="foot"><span>IGNIS · SI-powered fire-safety dashboard</span><span class="pageno">Backup 5</span></div>
 </section>
 
 </div>

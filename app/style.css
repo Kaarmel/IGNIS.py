@@ -938,3 +938,15 @@ html { scroll-padding-top: 104px; }
 .atlas-more { margin: 18px 0 0; }
 .ask-example { color: var(--ink-dim); }
 .a-row[hidden] { display: none; }
+
+/* ---------- first-screen actions ---------- */
+.hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin: 22px 0 4px; }
+.btn-cta, .btn-ghost {
+  display: inline-flex; align-items: center; min-height: 48px; padding: 0 22px; text-decoration: none;
+  font-size: 16px; font-weight: 600; transition: transform .15s, background .15s, color .15s, border-color .15s;
+}
+.btn-cta { background: var(--fire); color: #0b0c0e; border: 1px solid var(--fire); }
+.btn-cta:hover { transform: translateY(-1px); background: #ff8240; }
+.btn-ghost { color: var(--ink); border: 1px solid var(--line-2); }
+.btn-ghost:hover { border-color: var(--ink-faint); transform: translateY(-1px); }
+.btn-cta:active, .btn-ghost:active { transform: translateY(1px); }

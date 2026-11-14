@@ -25,19 +25,18 @@ PSI tables:
   smoke particles are below 500 nm in diameter" and "detection times are longer than in normal gravity".
   The SAME tables record no oxygen or pressure.
 
-**Where it stops — why those are analogues.** NASA's reference design for a lunar surface habitat operates at
-10.2 psia (0.703 bar) with 26.5 % oxygen, and has a capability mode at 8.2 psia and 34 % (Kessler et al.,
-*Artemis Deep Space Habitation*, IEEE Aerospace 2022, NTRS 20220000245); the challenge puts lunar oxygen at
-30 % or more. We mapped the PSI test tables for this challenge area — 7,463 files, 5.4 GB, 2,870 published
+**Where it stops — why those are analogues.** The challenge puts the Moon Base and pressurized rovers at
+30 % oxygen or more, at 10.2 psi (0.703 bar) or less. NASA's reference design for a lunar surface habitat runs
+at 10.2 psia with 26.5 % oxygen, with a capability mode at 8.2 psia and 34 % (Kessler et al., *Artemis Deep
+Space Habitation*, IEEE Aerospace 2022, NTRS 20220000245). We mapped the PSI test tables for this challenge area — 7,463 files, 5.4 GB, 2,870 published
 rows across 22 tables in 20 accessions; 18 tables column-mapped, the three ACME tables CLD Flame, E-FIELD
 and s-Flame (82 rows) and the summary sheet counted but not mapped — into 1,936 test points, then measured
-the gap. It has three parts:
+the gap. It has four parts:
 
-1. **Every solid-material test in the corpus stops at 22.7 % oxygen.** That is 264 points across five
-   investigations — the highest of the 261 that record a level at all. The habitat's nominal level is
-   26.5 %, its capability mode 34 %. **3.8 percentage points of the relevant range have no solid test in PSI
-   at the nominal point, 11.3 at the capability point** — and no solid test exists within 0.03 bar of either
-   design pressure. The highest point is a BASS test (PSI-26, row 55). The ceiling is not a safety limit:
+1. **Every solid-material test in the corpus stops at 22.7 % oxygen — 7.3 percentage points below the
+   challenge's 30 %.** That is 264 points across five investigations — the highest of the 261 that record a
+   level at all. Against the Artemis nominal (26.5 %) the gap is 3.8 points, against its capability mode
+   (34 %) 11.3 — and no solid test exists within 0.03 bar of either design pressure. The highest point is a BASS test (PSI-26, row 55). The ceiling is not a safety limit:
    both BASS campaigns varied oxygen by diluting ISS air with nitrogen inside the Microgravity Science
    Glovebox at one atmosphere, a method that can only go down from ambient.
 2. **The pressure axis is one atmosphere, not the design point.** 252 of the 264 solid points have a
@@ -53,6 +52,12 @@ the gap. It has three parts:
    **none of them self-extinguished**, against **14 of 29** in the same nitrogen-diluted FLEX
    series held at cabin air (21 % O₂ ±0.5). Both axes differ between the cohorts, so this is an
    analogue, not a controlled comparison.
+4. **The amount of oxygen was tested; its share was not.** 30 % of 10.2 psi is an oxygen partial pressure
+   of 0.21 bar, about that of the solid tests' own cabin air: **86** of the 252 solid tests with both values
+   reach it, all near 1 bar, and none reaches the 30 % share. NASA certifies materials at 30 % oxygen and
+   10.2 psia because oxygen concentration is the primary driver (Hirsch et al., NTRS 20090012334), and
+   Harper et al. find flammability depends more on oxygen concentration than on equivalent partial pressure
+   (NTRS 20160001047) — paraphrased from the NTRS abstracts, outside the verified corpus.
 
 **The gap is in the open archive, not in all of science.** Outside PSI, SoFIE-GEL on the ISS burned 4 cm
 PMMA spheres at 13–34 % O₂ and 0.15–1.1 atm (James et al., *Combustion and Flame* 277, 114244, 2025).
@@ -77,7 +82,7 @@ corpus. (Prose is written by hand; the numbers are not.)
 
 **30-second film:** script, shot list and context in [`pitch/FILM.md`](pitch/FILM.md).
 
-**Five-slide deck, with backup slides after it:** [`pitch/IGNIS-pitch.pdf`](pitch/IGNIS-pitch.pdf) — also viewable as
+**Seven-page deck — five slides and two backup slides:** [`pitch/IGNIS-pitch.pdf`](pitch/IGNIS-pitch.pdf) — also viewable as
 [`pitch/index.html`](pitch/index.html) (arrow keys to advance). A screen recording of the live SI answering the
 *Beyond the data* preset is in [`pitch/img/demo.gif`](pitch/img/demo.gif), as a fallback if the network fails.
 
@@ -130,7 +135,8 @@ step. Everything but live SI runs from `file://`, which matters for a demo: if t
 slower than 25 s, the page shows a real answer recorded earlier from the live service, labelled with its
 date and "not live", with a retry button; the rest of the page is unaffected.
 
-Describe an atmosphere and a material class and the solver returns a verdict, the evidence rows behind
+The first screen has one button, *Check the Moon-base atmosphere*, that runs the solver for the challenge
+atmosphere and solid materials. Describe an atmosphere and a material class and the solver returns a verdict, the evidence rows behind
 it, **and the experiment that would close the gap** — the oxygen band PSI holds no test for, the
 pressure at which to run it, and how far the nearest real measurement sits. Every parameter in that
 plan is computed from the corpus, not written by hand, so the plan is a measurement of what is
@@ -202,7 +208,7 @@ Super-intelligent tools were used, as the challenge requires:
   same `checkAnswer`; otherwise the page says so and keeps the rule-based ranking, which stays the default.
   The banner over the list says which ranking is active.
 - **Saved answers, labelled as such.** `app/data/ask_cache.js` holds real answers recorded from the deployed
-  worker by `scripts/capture_ask_cache.mjs` — the five preset questions and three missions, in English and
+  worker by `scripts/capture_ask_cache.mjs` — the six preset questions and three missions, in English and
   Polish, each with its `check`, model name and date. An answer with an unresolved citation, a fraction for
   oxygen or a cut-off ending is not written. The page shows one only when the live call fails or passes
   25 s, under the label "saved answer, recorded <date> — not live"; `node worker/test.mjs` re-checks every
@@ -232,6 +238,12 @@ Super-intelligent tools were used, as the challenge requires:
 - NASA Physical Science Informatics (PSI) — <https://psi.nasa.gov/> (data licence CC0-1.0).
 - NASA International Space Apps Challenge 2026 — <https://www.spaceappschallenge.org/>
 - Challenge: *Flame in Freefall: SI-Powered Fire Safety Insights from Microgravity Combustion Data.*
+- Hirsch, D. B. et al., *Pressure Effects on the Self-Extinguishment Limits of Aerospace Materials*, ICES —
+  <https://ntrs.nasa.gov/citations/20090012334>
+- Harper, S. A. et al., *Oxygen Partial Pressure and Oxygen Concentration Flammability: Can They Be
+  Correlated?*, ASTM symposium — <https://ntrs.nasa.gov/citations/20160001047>
+- James, Li, Ferkul, Olson & Johnston, SoFIE-GEL, *Combustion and Flame* 277, 114244 — `doi:10.1016/j.combustflame.2025.114244`
+- Kessler et al., *Artemis Deep Space Habitation*, IEEE Aerospace — <https://ntrs.nasa.gov/citations/20220000245>
 - PSI accessions used: PSI-10 (ACME Flame Design), PSI-20 (BRE), PSI-21/22/23 (CLD Flame, E-FIELD,
   s-Flame), PSI-25 (BASS-II), PSI-26 (BASS), PSI-39 (CFI), PSI-47 (DAFT), PSI-68 (FLEX-2),
   PSI-69 (FLEX), PSI-98/99/100 (Saffire I/II/III), PSI-101 (SAME-R), PSI-102 (SAME), PSI-106 (SLICE),

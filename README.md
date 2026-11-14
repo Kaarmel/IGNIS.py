@@ -53,6 +53,16 @@ transit habitat either, so the solver offers that entry as
 Every solid-material test in the NASA PSI corpus — 264 points across five investigations — stops at **22.7 %**,
 and every one of them that records a pressure ran at **one atmosphere**. Against the challenge's 30 % that is
 a **7.3 pp** gap; against the Artemis nominal, **3.8 pp**, and **11.3 pp** to the 34 % capability.
+
+**The amount of oxygen was tested; its share was not.** 30 % of 10.2 psi is an oxygen partial pressure of
+0.21 bar — about that of the solid tests' own cabin air. **86** of the 252 solid tests with both values reach
+it (the dotted curve on the coverage map), all near 1 bar. None reaches the 30 % share, and the share is what
+NASA certifies against: its materials are certified at 30 % oxygen and 10.2 psia because oxygen concentration
+is the primary driver (Hirsch et al., *Pressure Effects on the Self-Extinguishment Limits of Aerospace
+Materials*, ICES, NTRS 20090012334), and Harper et al. find flammability depends more on oxygen concentration
+than on equivalent partial pressure (NTRS 20160001047). Both are paraphrased from the NTRS abstracts; they are
+outside the corpus the quote verifier checks, so they are cited, not quoted.
+
 IGNIS maps the columns of 18 of the 22 published test tables (16 accessions yield test points), counts the
 rows of the other four by name — three ACME tables, CLD Flame, E-FIELD and s-Flame (82 rows), whose columns
 this build does not map, and the cross-experiment summary sheet — measures the gap, and states, per
@@ -200,7 +210,7 @@ Super-intelligent (SI) tools were used in this project, as required by the 2026 
   same `checkAnswer`; otherwise the page says so and keeps the rule-based ranking, which stays the default.
   The banner over the list says which ranking is active.
 - **Saved answers, labelled as such.** `app/data/ask_cache.js` holds real answers recorded from the deployed
-  worker by `scripts/capture_ask_cache.mjs` — the five preset questions and three missions, in English and
+  worker by `scripts/capture_ask_cache.mjs` — the six preset questions and three missions, in English and
   Polish, each with its `check`, model name and date. An answer with an unresolved citation, a fraction for
   oxygen or a cut-off ending is not written. The page shows one only when the live call fails or passes
   25 s, under the label "saved answer, recorded <date> — not live"; `node worker/test.mjs` re-checks every

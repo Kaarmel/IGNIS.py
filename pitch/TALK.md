@@ -11,154 +11,165 @@ this script and a number in the app ever disagree, the app is right and this fil
 
 ## The script
 
-Five slides, about 300 spoken words — under three minutes at a calm pace, with room for the live demo.
-Backup slides 1–5 (the question, the funnel, air flow, the SI layer, the full verdict) are for Q&A only.
+Seven pages in the deck: five slides, about 300 spoken words — under three minutes at a calm pace, with
+room for the live demo — and two backup slides (the challenge's three questions, the row funnel) for Q&A.
 
 ### Slide 1 — the hook (0:00–0:35)
 
 > The Apollo 1 crew died in a fire in an oxygen-filled spacecraft. The challenge says the Moon Base and
-> pressurized rovers will run at **30 percent oxygen or more** — making materials much more flammable.
-> We read NASA's open microgravity archive, PSI: **264** solid-material test points. **Zero** at 30 percent.
-> Every one stops at **22.7**. That is **7.3 points** of oxygen with no solid test in the open archive.
-> Not in all of science — SoFIE-GEL burned plastic on the ISS up to 34 percent — but its points are not in PSI.
+> pressurized rovers will run at **30 percent oxygen or more**. We read NASA's open microgravity archive:
+> **264** tests on solid materials — fabrics, films, plastics, what a habitat is built from. **Zero** at
+> 30 percent. They stop at **22.7**. Not in all of science — SoFIE-GEL burned plastic on the ISS up to 34
+> percent — but its points are not in the open archive.
 
-### Slide 2 — where the data exists (0:35–1:05)
+### Slide 2 — same oxygen, not the same fire (0:35–1:05)
 
-> Oxygen across, pressure up. The shaded box is the lunar cabin. **83** points sit inside it: gas flames and
-> droplets. **Zero** solids. The solids all ran at one atmosphere, and their oxygen was lowered by adding
-> nitrogen to cabin air — the method could only go down.
+> Oxygen across, pressure up. The orange box is the challenge atmosphere: **83** tests inside, gas flames
+> and droplets — **zero** solids. You could say: at 10.2 psi, 30 percent is about as much oxygen as in the
+> tests' own cabin air. True — that is the dotted curve, and **86** solid tests reached it. None reached
+> the **30 percent share**. And NASA certifies materials at exactly 30 percent and 10.2 psia, because the
+> share drives flammability.
 
 ### Slide 3 — ask what the data cannot answer (1:05–1:55)
 
-> A judge's question: how would polyurethane foam burn at 30 percent, compared with Nomex?
-> *(Demo: "Beyond the data" — about five seconds. If the network fails, the page shows a saved real answer, labelled.)*
-> The archive has no foam. The SI does not guess. It names the nearest measured solid and its
-> **distance from evidence**: **7.3 points** short on oxygen, **43 percent** high on pressure — two numbers,
-> no weights. Then it names the test that would close it. Every citation is checked before it is shown.
+> How would polyurethane foam burn at 30 percent, compared with Nomex?
+> *(Demo: Search and ask → Ask the SI → "Beyond the data". If the network fails, the page shows a saved
+> real answer, labelled with its date — say so.)*
+> The archive has no foam, and the SI says so. It names the nearest real test — fabric, BASS row 55 —
+> and its **distance from evidence**: **7.3 points** short on oxygen, **43 percent** high on pressure.
+> Then it names the test that would close it. Every source and number is checked before it is shown.
+> *(Click "BASS · PSI-26 · row 55": the NASA file and row open.)*
 
-### Slide 4 — what closes it (1:55–2:30)
+### Slide 4 — where to test next (1:55–2:30)
 
-> Step zero costs nothing: publish SoFIE-GEL in PSI. Then **30** tests — five materials already burned near the
-> ceiling, three oxygen levels, two pressures, one test per condition, which is what BASS did most of the time.
-> Every cell is computed from the corpus.
+> Step zero costs nothing: publish SoFIE-GEL in PSI. Then **30** tests: the five materials already burned
+> closest to the ceiling, at three oxygen levels and two pressures, one test each — what BASS did for 131
+> of its 174 conditions. They are the hollow circles on the map.
 
-### Slide 5 — what a designer gets (2:30–3:00)
+### Slide 5 — what a designer gets today (2:30–3:00)
 
-> Three signals. **16 of 18** nitrogen attempts left a burning solid lit — test cutting the air flow first.
-> **0 of 17** droplets near the design pressure went out on their own. Much of the smoke is under
-> **500 nanometres**, and detection is slower. Analogues, all three. The campaign turns them into answers.
+> A line not to extrapolate past: **22.7 percent**, and only near one atmosphere. The **30** tests that
+> would remove it. And three signals to test first: **16 of 18** nitrogen attempts left a burning solid
+> lit; **0 of 17** droplets near the design pressure went out on their own; much of the smoke is under
+> **500 nanometres**. Every number opens its NASA row. IGNIS — where to test next.
 
 ---
 
-## Q&A — prepared answers
+## Q&A — 10 kart
 
-**1. „Gdzie tu jest SI? To tylko wykresy."**
-Dwa miejsca: panel *Zapytaj IGNIS* i ranking Atlasu „Opisz misję”. Model językowy (DeepSeek V4.1 Flash przez OpenRouter, serwer na
-Cloudflare Workers) dostaje te same 1936 punktów i sam je odpytuje narzędziem `query_points`, więc liczby
-w odpowiedzi pochodzą z danych, a nie z pamięci modelu. Każde badanie, które cytuje, i każde zdanie
-w cudzysłowie jest sprawdzane względem korpusu przed wyświetleniem; nieznane źródło jest na czerwono.
-Pięć gotowych pytań odpowiada czasownikom z challenge'u: uszereguj, wyciągnij dane, zinterpretuj,
-Ziemia i luka. Dla opisanej misji (łazik, baza, kabina tranzytowa) model zwraca kolejność badań z jednym
-zdaniem uzasadnienia; worker odrzuca listę z nieistniejącym lub powtórzonym badaniem albo z cytatem,
-którego nie ma w korpusie, i wtedy strona wraca do rankingu regułowego. Pod spodem druga warstwa: 107 dosłownych cytatów (84 z PSI, 23 z przewodnika NASA 2015),
-które `scripts/verify_insights.py` sprawdza ponownie w plikach źródłowych.
+Ułożone od pytania najbardziej prawdopodobnego i najważniejszego (karta 1) do najmniej (karta 10).
+Każda karta: odpowiedź na ~20 sekund, jedno zdanie na dopytanie i czego nie mówić.
 
-**2. „Dlaczego 30%, a nie 26,5%?"**
-Bo 30% to liczba z samego challenge'u: „will likely be 30% or greater, with a corresponding pressure of
-10.2 psi or less". 26,5% to drugi znacznik — nominał referencyjnego habitatu Artemis z NTRS
-20220000245 — i dalej go pokazujemy, razem z trybem 8,2 psia / 34%. Oba są na mapie i w solverze.
-Różnica jest taka, że 30% to punkt, względem którego challenge każe oceniać korpus, więc to on jest
-domyślnym środowiskiem rankingu. Sufit 22,7% jest ten sam w obu przypadkach: 7,3 punktu do 30%,
-3,8 do 26,5%, 11,3 do 34%.
+### Karta 1 — „Gdzie tu jest SI? To tylko wykresy.”
 
-**3. „A co z BRE? To przecież badanie palności materiałów."**
-Tak — i dlatego ma własną klasę, a nie zostało wciśnięte w gazowe. BRE to 18 dni testowych, 194
-zapalone płomienie, 21–40% tlenu, palniki 25 i 50 mm. To emulacja przypowierzchniowego spalania
-materiału stałego palnikiem gazowym, nie test próbki stałej. I nie da się go położyć na mapie: tabela
-nie ma kolumny ciśnienia, a jej własna notatka mówi, że ciśnienia „were also varied but are not
-identified in this summary table". Dlatego w obwiedni dwuosiowej liczy się jako zero, a w opisie jako
-to, czym jest — jedyne badanie w PSI sięgające powyżej 22,7% dla materiałów palnych.
+**Odpowiedź.** W dwóch miejscach. *Zapytaj SI*: model językowy (DeepSeek V4.1 Flash) sam odpytuje te same
+1 936 punktów testowych, więc liczby w odpowiedzi pochodzą z danych, nie z pamięci modelu. Zanim
+odpowiedź się pokaże, każde źródło, cytat i liczba są sprawdzane względem korpusu; czego nie da się
+potwierdzić, jest na czerwono. Drugie: SI szereguje badania w Atlasie dla opisanej misji. Pokażę na żywo.
+**Jeśli dopytają:** pod spodem jest 107 dosłownych cytatów z raportów NASA, które skrypt sprawdza w plikach źródłowych.
+**Nie mów:** „SI wie”, „SI jest nieomylne”.
 
-**4. „Dlaczego nie ma modelu predykcyjnego?"**
-Challenge prosi o wyciągnięcie danych, które wspierają modelowanie („Extract data that supports predictive
-modeling”), a nie o sam model. A powyżej 22,7% dla materiałów stałych w PSI nie ma ani jednego punktu treningowego — model w tym miejscu
-byłby pewną siebie odpowiedzią nad dziurą, a w bezpieczeństwie pożarowym pewna siebie zła odpowiedź
-zabija ludzi. Zamiast modelu dostarczamy to, czego model potrzebuje: znormalizowany zbiór do pobrania
-w CSV i JSON, z jednostkami, akcesją, numerem wiersza i informacją, skąd wzięło się ciśnienie — plus
-jedno zdanie na ekranie, które mówi, jakie zakresy zbiór pokrywa i gdzie model ekstrapolowałby.
-Solver to wyszukiwanie plus jawna arytmetyka odległości, więc każdy może go sprawdzić wiersz po
-wierszu.
+### Karta 2 — „Co z tego ma NASA? Kto tego użyje jutro?”
 
-**5. „Skąd pewność, że 22,7% to nie artefakt parsera?"**
-Bo sprawdziliśmy to niezależnie. 252 z 264 punktów stałych ma ciśnienie zapisane gdzieś w korpusie —
-BASS w macierzy „as run", BASS-II w raporcie zbiorczym, Saffire-I w arkuszu czujników — a wszystkie
-252 leżą między 0,98 i 1,03 bar. Sufit 22,7% policzony jest z 261 punktów, które poziom tlenu
-faktycznie zapisują; najwyższy z nich to wiersz 55 BASS (PSI-26). Sam raport BASS-II mówi, że rozcieńczał powietrze ISS azotem — czyli sufit jest
-granicą metody, nie granicą bezpieczeństwa. Rachunek się domyka i jest na slajdzie: 2 870 wierszy,
-959 odrzuconych, 1 911 wierszy dających punkty i 1 936 punktów, bo 18 wierszy BRE rozwija się w 43.
+**Odpowiedź.** Inżynier bezpieczeństwa pożarowego habitatu, który musi powiedzieć, czy materiały wnętrza
+są sprawdzone dla atmosfery bazy. Dostaje trzy rzeczy: granicę, poza którą nie wolno ekstrapolować
+(22,7% tlenu, tylko przy około 1 bar), listę 30 testów, które ją przesuną, z odległością każdego od
+najbliższego prawdziwego testu, i jednostronicowy raport do wydruku. Krok zero nic nie kosztuje:
+opublikować w PSI dane SoFIE-GEL.
+**Jeśli dopytają:** użytkownik to hipoteza — nie było rozmowy z inżynierem NASA przed wydarzeniem; mówimy to wprost (slajd zapasowy 1).
+**Nie mów:** „NASA musi”, „to jest bezpieczne / niebezpieczne”.
 
-**6. Czy to działa bez internetu?**
-Wszystko poza SI na żywo — otwiera się z pliku, zero zależności. Gdy serwer SI nie odpowiada albo minie
-25 s, strona pokazuje prawdziwą odpowiedź zapisaną wcześniej z działającego serwera, z etykietą „odpowiedź
-zapisana <data>, nie na żywo”, i przyciskiem ponowienia. Dotyczy to sześciu gotowych pytań i trzech misji.
+### Karta 3 — „Skąd pewność, że 22,7% to nie błąd parsera?”
 
-**7. Czy liczby są wpisane ręcznie?**
-Nie. Każda liczba jest liczona z tabel NASA przez `scripts/build_dataset.py` i
-`scripts/build_telemetry.py`, a cytaty sprawdza `scripts/verify_insights.py`. Liczby w README, zgłoszeniu,
-tym skrypcie i decku sprawdza `scripts/check_docs.py`: każda musi występować w `dataset.js`, a wyjątki
-(lata, zmierzone czasy odpowiedzi) są wypisane z powodem. Wszystko naraz: `sh scripts/check_all.sh`.
+**Odpowiedź.** Każda tabela jest opisana ręcznie, bo zwykły parser myli jednostki (atm, bar, mmHg; tlen
+jako ułamek i jako procent). Rachunek się domyka: 2 870 wierszy, 959 odrzuconych z nazwaną przyczyną,
+1 936 punktów. Najwyższy punkt stały to konkretny wiersz: BASS, PSI-26, wiersz 55 — można go otworzyć na
+stronie. A sam raport BASS-II mówi, że tlen obniżano, dodając azot do powietrza stacji — metoda mogła
+iść tylko w dół. To granica metody, nie parsera.
+**Jeśli dopytają:** 252 z 264 punktów stałych ma ciśnienie zapisane gdzieś w korpusie i wszystkie leżą między 0,98 a 1,03 bar (slajd zapasowy 2).
+**Nie mów:** „to na pewno granica bezpieczeństwa”.
 
-**8. Co z tego ma NASA?**
-Cztery rzeczy: nazwany zakres, którego nie wolno ekstrapolować (powyżej 22,7% O₂ dla materiałów
-stałych, przy 0,98–1,03 bar), zmierzony wynik testów kropelkowych przy atmosferze projektowej
-(0 wygaśnięć na 17, wobec 14 na 29 w tej samej serii rozcieńczanej azotem przy powietrzu kabinowym),
-drugą oś, której nikt nie narysował (przepływ: 498 punktów z obiema osiami), i gotowy zbiór do
-modelowania z jawnie podanym zakresem ważności.
+### Karta 4 — „Przy 10,2 psi i 30% tlenu jest tyle tlenu co w powietrzu. W czym problem?”
 
-**9. Co z tego ma Ziemia?**
-Karta *Na Ziemi*: wykrywanie (SAME mierzy, czym dym w mikrograwitacji różni się od ziemskiego; wśród
-osiągnięć tego obszaru przewodnik NASA wymienia czujnik, który w testach z FAA pokonał lotnicze czujniki dymu w odrzucaniu
-fałszywych alarmów), gaszenie (mgła wodna na ISS, z jasnym zaznaczeniem, że w tych akcesjach
-nie ma testu mgły) i paliwa (modele heptanu i metanolu z FLEX są podstawą modeli diesla i paliwa
-lotniczego). Cytaty z przewodnika NASA przechodzą przez ten sam weryfikator.
+**Odpowiedź.** Zgadza się co do ilości: ciśnienie cząstkowe tlenu to około 0,21 bar — to kropkowana
+krzywa na mapie i 86 z 252 testów stałych ją osiąga. Ale palność zależy bardziej od **udziału** tlenu niż
+od jego ciśnienia cząstkowego: mniej azotu to mniej gazu, który odbiera płomieniowi ciepło. To nie nasza
+teza — NASA z tego powodu certyfikuje wszystkie materiały statków przy 30% O₂ i 10,2 psia (Hirsch i in.,
+NTRS 20090012334), a praca Harper i in. (NTRS 20160001047) stwierdza, że palność bardziej zależy od
+stężenia tlenu niż od równoważnego ciśnienia cząstkowego.
+**Jeśli dopytają:** tego udziału — 30% — nie osiągnął w archiwum żaden test materiału stałego.
+**Nie mów:** konkretnych liczb z tych prac poza 30% i 10,2 psia — nie ma ich w korpusie.
 
-**10. „SoFIE badał wyższy tlen na ISS. Czy luki naprawdę nie ma?"**
-Jest — w otwartym archiwum. SoFIE-GEL spalał na ISS kule PMMA 4 cm przy 13–34% O₂ i 0,15–1,1 atm
-(James i in., *Combustion and Flame* 277, 114244, 2025). Tych punktów nie ma w PSI, więc nikt, kto
-pracuje na otwartych danych, ich nie użyje. Dlatego pierwszy krok kampanii to opublikować je w PSI.
-Na stronie stoi to w werdykcie, z tym samym źródłem.
+### Karta 5 — „Dlaczego nie ma modelu predykcyjnego?”
 
-**11. „Materiały kwalifikuje się na Ziemi w docelowej atmosferze (NASA-STD-6001), więc luki nie ma."**
-Test na Ziemi biegnie w 1 g. Sam korpus mówi, że to nie jest najgorszy przypadek: BASS zobaczył
-podwyższoną palność w mikrograwitacji w geometrii, w której w powietrzu przy 1 g płomień sam gaśnie
-(PSI-26), a cel BASS-II to porównać najgorszy przypadek w statku z „terrestrial upward burning used to
-screen the materials” (PSI-25). Oba cytaty przechodzą weryfikator. Pytanie brzmi więc nie „czy materiał
-przeszedł Test 1”, tylko „czy w mikrograwitacji przy 30% jest gorzej” — i tego PSI nie zawiera.
+**Odpowiedź.** Challenge prosi o dane, które wspierają modelowanie, nie o sam model. Powyżej 22,7% dla
+materiałów stałych w archiwum nie ma ani jednego punktu treningowego — model dałby tam pewną siebie
+odpowiedź nad dziurą. Zamiast tego jest znormalizowany zbiór do pobrania (CSV i JSON, z jednostką,
+akcesją i numerem wiersza przy każdej wartości) i zdanie, w jakim zakresie model by ekstrapolował.
+**Jeśli dopytają:** solver to wyszukiwanie plus jawna arytmetyka odległości — każdy może go sprawdzić.
+**Nie mów:** „model” o czymś, co nim nie jest; mów „zbiór gotowy do modelowania”.
 
-**12. „Wyłączenie wentylacji to wiedza operacyjna NASA od dawna."**
-Zgadza się — i nie sprzedajemy tego jako odkrycia. Pokazujemy, skąd to wiadomo w otwartych danych:
-18 prób gaszenia azotem w notatkach operatorów BASS, 16 nieudanych, w 10 płomień zgasł po odcięciu
-przepływu. To małe próbki w komorze rękawicowej — sygnał do sprawdzenia w skali kabiny, nie przepis.
+### Karta 6 — „SoFIE badał wyższy tlen na ISS. Czy luka naprawdę jest?”
 
-**13. „To tylko SQL w języku naturalnym — na większość pytań odpowie »brak danych«."**
-Na pytanie spoza archiwum (gotowy przycisk *Poza danymi*: pianka poliuretanowa przy 30% O₂) SI nie
-odpowiada „brak danych”. Mówi, czego brakuje, podaje najbliższy zmierzony punkt z odległością od dowodu
-— osobno w tlenie (pp) i w ciśnieniu (%), bez wag — i nazywa test, który by tę lukę zamknął. To samo
-liczy solver. Model nie zgaduje, ale odpowiedź jest użyteczna dla inżyniera.
+**Odpowiedź.** Jest — w otwartym archiwum. SoFIE-GEL spalał na ISS kule PMMA przy 13–34% O₂ i
+0,15–1,1 atm (James i in., *Combustion and Flame* 277). Tych punktów nie ma w PSI, więc nikt, kto pracuje
+na otwartych danych, ich nie użyje. Dlatego krok zero planu to opublikować je w PSI. Mówimy to na
+pierwszym slajdzie.
+**Jeśli dopytają (NASA-STD-6001):** test kwalifikacyjny biegnie w 1 g, a sam korpus pokazuje, że w mikrograwitacji bywa gorzej — BASS widział palność w geometrii, która w 1 g sama gaśnie.
+**Nie mów:** „NASA tego nie zbadała”.
+
+### Karta 7 — „SI cytuje dobrze, a co jeśli źle rozumuje?”
+
+**Odpowiedź.** Weryfikacja łapie to, co da się sprawdzić automatycznie: nieistniejące badanie, cytat,
+którego nie ma w pliku, liczbę bez pokrycia w danych — taka odpowiedź wraca do modelu do poprawki albo
+dostaje czerwone oznaczenie. Wnioskowania automat nie sprawdzi — dlatego SI tylko podpowiada, a każde
+twierdzenie ma klikalne źródło, które człowiek może otworzyć.
+**Jeśli dopytają:** zapisane odpowiedzi zapasowe przechodzą ten sam test przy każdym `check_all.sh`.
+**Nie mów:** „halucynacje są wyeliminowane”.
+
+### Karta 8 — „Jak zrobić te 30 testów, skoro BASS mógł tylko obniżać tlen?”
+
+**Odpowiedź.** W komorze z własną atmosferą, nie w powietrzu stacji. Taka aparatura już istnieje:
+SoFIE-GEL na ISS doszedł do 34% tlenu przy 0,15–1,1 atm. Plan to pięć materiałów już spalonych najbliżej
+sufitu, trzy poziomy tlenu i dwa ciśnienia, po jednym teście — tyle, ile BASS robił dla 131 ze swoich 174
+warunków.
+**Jeśli dopytają o koszt:** nie liczyliśmy go; podajemy, co zmierzyć, nie budżet.
+**Nie mów:** liczb kosztów ani terminów.
+
+### Karta 9 — „Dlaczego 30%, a nie 26,5%?”
+
+**Odpowiedź.** 30% to liczba z samego challenge'u: „30% or greater, with a corresponding pressure of 10.2
+psi or less”. 26,5% to nominał referencyjnego habitatu Artemis (Kessler i in., NTRS 20220000245), a 34% to
+jego tryb awaryjny — oba są w solverze. Sufit jest ten sam: brakuje 7,3 punktu do 30%, 3,8 do 26,5% i
+11,3 do 34%.
+**Nie mów:** „wymóg NASA” o 30% — challenge pisze „likely”.
+
+### Karta 10 — „A jeśli SI albo internet padnie na scenie?”
+
+**Odpowiedź.** Cała strona poza SI działa z pliku, bez serwera i bez zależności. Gdy SI nie odpowie w 25
+sekund, strona sama pokazuje prawdziwą odpowiedź zapisaną wcześniej z działającej usługi, z datą i
+napisem „nie na żywo”, i przycisk ponowienia. Do tego nagranie `pitch/img/demo.gif`.
+**Nie mów:** że zapisana odpowiedź jest na żywo.
+
+### Rezerwa (jedno zdanie każda)
+
+- **Dlaczego DeepSeek?** Szybki i tani; model to jedna linia w workerze, a weryfikacja nie zależy od modelu.
+- **BRE?** Palnik gazowy emulujący płonącą powierzchnię, 21–40% O₂, bez zapisanego ciśnienia — dlatego osobna klasa, nie test materiału stałego.
+- **„Wyłączenie wentylacji to stara wiedza.”** Zgoda — pokazujemy, skąd to widać w otwartych danych: 16 z 18 prób gaszenia azotem nieudanych, w 10 płomień zgasł po odcięciu przepływu. Sygnał, nie procedura.
+- **Co powstało w czasie hackathonu?** Odpowiedz sam(a), zgodnie z prawdą — tego dokument nie wie.
 
 ---
 
 ## Delivery notes
 
 - **Nie czytaj slajdów.** Slajdy mają liczby; ty masz powiedzieć, co one znaczą.
-- Najważniejsze zdanie: *„Not in all of science — but its points are not in PSI."* Zawsze mów „w otwartym
-  archiwum PSI”, nigdy „NASA tego nie zbadała”.
+- Najważniejsze zdania: *„Not in all of science — but its points are not in the open archive.”* oraz na
+  slajdzie 2 *„Same oxygen, not the same fire.”* Zawsze mów „w otwartym archiwum PSI”, nigdy „NASA tego nie zbadała”.
+- Prosty język w pierwszych 30 sekundach: „otwarte archiwum NASA”, „punkty procentowe”, nie „PSI”, „pp”, „akcesja”.
 - Jeśli zegar ucieka, skróć slajd 5 do jednego zdania. Nie skracaj slajdów 1 ani 3.
-- Na pytanie „a co jeśli dane są złe?" — odpowiedź 5 jest gotowa; „SoFIE?" — 10; „STD-6001?" — 11;
-  „to tylko SQL?" — 13. Slajdy zapasowe: strzałka w prawo za slajdem 5.
-- Nie mów „model", jeśli nie chcesz pytania 4. Mów „zbiór gotowy do modelowania".
-- Demo SI: w sekcji *Search and ask* kliknij zakładkę *Ask the SI*, potem *Beyond the data*, nie wpisuj na żywo. Zmierzone 14.11 na wdrożeniu końcowym: zwykle 2.6–11.0 s, raz 26.0 s; na ekranie widać kolejne
-  etapy (zapytania o dane, pisanie, sprawdzanie cytatów) — możesz je czytać na głos; limit 25 s. Jeśli sieć padnie, strona sama pokaże zapisaną odpowiedź z datą — powiedz to głośno.
-  Potem kliknij w odpowiedzi odwołanie „BASS · PSI-26 · row 55” — otworzy się okienko z plikiem i wierszem źródłowym.
-  To odpowiedź na uwagę mentorów: SI tylko sugeruje, a każdą sugestię można sprawdzić w danych.
-  Zapas: nagranie `pitch/img/demo.gif`.
+- Demo SI: w sekcji *Search and ask* kliknij zakładkę *Ask the SI*, potem *Beyond the data*, nie wpisuj na
+  żywo. Zmierzone 14.11 na wdrożeniu końcowym: zwykle 2.6–11.0 s, raz 26.0 s; na ekranie widać kolejne
+  etapy — możesz je czytać na głos; limit 25 s. Jeśli sieć padnie, strona sama pokaże zapisaną odpowiedź
+  z datą — powiedz to głośno. Potem kliknij w odpowiedzi „BASS · PSI-26 · row 55”.
+- Na stronie przycisk *Check the Moon-base atmosphere* na pierwszym ekranie daje werdykt jednym kliknięciem — dobry zapas, gdy SI jest wolne.
+- Nie mów „model”, jeśli nie chcesz karty 5. Mów „zbiór gotowy do modelowania”.
