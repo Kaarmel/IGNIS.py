@@ -20,3 +20,6 @@ target/
 
 # design checker scratch
 .taste-skill/
+
+# film: local video build (playwright, mp4 output), not part of the submission repo
+film/
