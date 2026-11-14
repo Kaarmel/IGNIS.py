@@ -2141,9 +2141,6 @@
       if (k === 1) a.onclick = e => { e.preventDefault(); goTab('search'); };
       host.append(a);
     });
-    $('#purpose-warn').innerHTML = L(
-      '<b>A research aid, not a safety authority.</b> IGNIS does not certify materials or atmospheres. Decisions about crew safety belong to engineers working from the cited tests and NASA\'s standards.',
-      '<b>Narzędzie badawcze, nie autorytet bezpieczeństwa.</b> IGNIS nie certyfikuje materiałów ani atmosfer. Decyzje o bezpieczeństwie załogi należą do inżynierów pracujących na cytowanych testach i normach NASA.');
   };
 
   /* ---------------- section bar ---------------- */
