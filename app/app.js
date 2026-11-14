@@ -2188,7 +2188,7 @@
   };
 
   /* ---------------- tabs: search / SI ---------------- */
-  let TAB = 'search';
+  let TAB = 'si';
   const goTab = (t, scroll = true) => {
     TAB = t;
     $('#tab-search').setAttribute('aria-selected', String(t === 'search'));
@@ -2228,21 +2228,21 @@
     ['top', L('About', 'O narzędziu'), L('what IGNIS is for', 'do czego służy IGNIS')],
     ['takeaways', L('Findings', 'Wnioski'), L('four suggestions, each with its limit and its source', 'cztery sugestie, każda z ograniczeniem i źródłem')],
     ['map', L('Coverage', 'Pokrycie'), L('oxygen against pressure: where tests exist and where none do', 'tlen względem ciśnienia: gdzie są testy, a gdzie ich brak')],
-    ['ask', L('Search data', 'Szukaj w danych'), L('every test point, filterable, each with its source row — no SI', 'każdy punkt testowy, z filtrami i wierszem źródłowym — bez SI'), 'search'],
     ['ask', L('Ask SI', 'Zapytaj SI'), L('a written answer, checked against the corpus, with clickable sources', 'odpowiedź opisowa, sprawdzona względem korpusu, z klikalnymi źródłami'), 'si'],
+    ['ask', L('Search data', 'Szukaj w danych'), L('every test point, filterable, each with its source row — no SI', 'każdy punkt testowy, z filtrami i wierszem źródłowym — bez SI'), 'search'],
     ['atlas', L('Atlas', 'Atlas'), L('every investigation, what it measured, ranked for a mission', 'każde badanie, co mierzyło, uszeregowane dla misji')],
     ['solver', L('Check an atmosphere', 'Sprawdź atmosferę'), L('pick a cabin; see the nearest real tests and how far away they are', 'wybierz kabinę; zobacz najbliższe prawdziwe testy i ich odległość')],
     ['verdict', L('Test plan', 'Plan testów'), L('what the archive does not cover and the tests that would cover it', 'czego archiwum nie pokrywa i testy, które by to pokryły')],
     ['details', L('Details', 'Szczegóły'), L('for the curious: where the numbers come from', 'dla dociekliwych: skąd biorą się liczby'), null, 'sep'],
-    ['flowmap', L('O₂ × flow', 'O₂ × przepływ'), L('oxygen against air flow, with how each test ended', 'tlen względem przepływu, z tym, jak skończył się każdy test')],
-    ['funnel', L('Corpus', 'Korpus'), L('how the published rows become usable test points', 'jak opublikowane wiersze stają się punktami testowymi')],
-    ['pillars', L('Pillars & export', 'Filary i eksport'), L('prevention, detection, suppression, Earth — and the model-ready export', 'zapobieganie, wykrywanie, gaszenie, Ziemia — i eksport dla modeli')],
-    ['telemetry', L('Telemetry', 'Telemetria'), L('one real flame test, instrument by instrument', 'jeden prawdziwy test płomienia, przyrząd po przyrządzie')],
+    ['flowmap', L('O₂ × flow', 'O₂ × przepływ'), L('oxygen against air flow, with how each test ended', 'tlen względem przepływu, z tym, jak skończył się każdy test'), null, 'sub'],
+    ['funnel', L('Corpus', 'Korpus'), L('how the published rows become usable test points', 'jak opublikowane wiersze stają się punktami testowymi'), null, 'sub'],
+    ['pillars', L('Pillars & export', 'Filary i eksport'), L('prevention, detection, suppression, Earth — and the model-ready export', 'zapobieganie, wykrywanie, gaszenie, Ziemia — i eksport dla modeli'), null, 'sub'],
+    ['telemetry', L('Telemetry', 'Telemetria'), L('one real flame test, instrument by instrument', 'jeden prawdziwy test płomienia, przyrząd po przyrządzie'), null, 'sub'],
   ];
   // The main path, in reading order: each section ends with a link to the next one.
   const NEXT = () => [
     ['takeaways', 'map', L('Coverage: where the tests are', 'Pokrycie: gdzie są testy')],
-    ['map', 'ask', L('Search the data or ask the SI', 'Szukaj w danych albo zapytaj SI')],
+    ['map', 'ask', L('Ask the SI or search the data', 'Zapytaj SI albo szukaj w danych')],
     ['ask', 'atlas', L('Atlas: every investigation', 'Atlas: każde badanie')],
     ['atlas', 'solver', L('Check your own atmosphere', 'Sprawdź własną atmosferę')],
     ['solver', 'verdict', L('Test plan: what to test next', 'Plan testów: co testować dalej')],
@@ -2269,6 +2269,7 @@
     host.innerHTML = '';
     let k = 0;
     NAV().forEach(([id, t, d, tab, sep]) => {
+      if (sep === 'sub') return; // detail sections: one "Details" link keeps the bar on one line
       const a = sep
         ? el('a', { href: '#' + id, 'data-nav': id, title: d, class: 'nav-sep' }, t)
         : el('a', { href: '#' + id, 'data-nav': navKey(id, tab), title: d }, el('small', {}, String(++k).padStart(2, '0')), t);
@@ -2282,7 +2283,8 @@
     markHere();
   };
   const markHere = () => {
-    const key = navHere === 'ask' ? 'ask:' + TAB : navHere;
+    const sub = NAV().some(x => x[0] === navHere && x[4] === 'sub');
+    const key = navHere === 'ask' ? 'ask:' + TAB : sub ? 'details' : navHere;
     let cur = null;
     document.querySelectorAll('#nav-menu a').forEach(a => { const on = a.dataset.nav === key; a.classList.toggle('here', on); if (on) cur = a; });
     // Keep the current section's link in view inside the bar, without moving the page.

@@ -161,6 +161,13 @@ h2{font-size:58px;line-height:1.03;letter-spacing:-.03em;margin:0 0 20px;font-we
 .big .hook strong{color:var(--ink)}
 .bigstats{gap:80px;margin-top:40px}
 .bigstats .n{font-size:72px;color:var(--ink)}
+.title1{display:flex;justify-content:space-between;align-items:flex-start;gap:40px;margin:0 0 30px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.team{margin:0;display:grid;gap:6px}
+.team b{font-family:var(--mono);font-size:34px;letter-spacing:.04em;color:var(--ink)}
+.team span{font-size:20px;color:var(--dim)}
+.chal{margin:0;text-align:right;font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--fire);line-height:1.7;max-width:820px}
+.chal b{display:block;font-family:var(--sans);font-size:19px;letter-spacing:0;text-transform:none;color:var(--ink);font-weight:600;line-height:1.35}
+.big .bigfact small{font-size:22px;letter-spacing:0;font-weight:500;color:var(--dim);margin-left:12px}
 .bigstats .n.hot{color:var(--fire)}
 .bigstats .k{font-size:24px;color:var(--dim);max-width:360px;line-height:1.35}
 .bigstats.three .n{color:var(--fire)}
@@ -169,6 +176,7 @@ h2{font-size:58px;line-height:1.03;letter-spacing:-.03em;margin:0 0 20px;font-we
 .bignotes li{padding:20px 0;border-top:1px solid var(--line)}
 .bignotes li:last-child{border-bottom:1px solid var(--line)}
 .bignotes strong{color:var(--ink)}
+.bignotes .hotx{color:var(--fire)}
 .bignotes .big{font-size:34px;color:var(--fire);font-weight:680}
 .big .maprow{grid-template-columns:minmax(0,1fr) 520px}
 .big .mapimg{max-height:640px}
@@ -222,17 +230,20 @@ h2{font-size:58px;line-height:1.03;letter-spacing:-.03em;margin:0 0 20px;font-we
 
 <!-- ============ 1 ============ -->
 <section class="slide on s1 big">
-  <p class="eyebrow">NASA Space Apps Challenge 2026 · Flame in Freefall · Rzeszów</p>
+  <div class="title1">
+    <p class="team"><b>IGNIS.py</b><span>Karol Skroban · Dawid Kogut</span></p>
+    <p class="chal">NASA Space Apps Challenge 2026 · Rzeszów<br><b>Flame in Freefall: SI-Powered Fire Safety Insights from Microgravity Combustion Data</b></p>
+  </div>
   <p class="hook">The Apollo 1 crew died in a fire in an oxygen-filled spacecraft. The challenge says the Moon Base
   and pressurized rovers will run at <strong>30% oxygen or more</strong> — “making materials much more flammable”.</p>
-  <h1 style="font-size:84px;margin-top:40px">Lunar cabin: <em>30%</em> O₂.<br>Solid tests stop at <em>22.7%</em>.</h1>
+  <h1 style="font-size:76px;margin-top:30px">Lunar cabin: <em>30%</em> O₂.<br>Solid tests stop at <em>22.7%</em>.</h1>
   <div class="stats bigstats">
     <div><span class="n">264</span><span class="k">solid-material tests in NASA’s open archive (PSI)</span></div>
     <div><span class="n hot">0</span><span class="k">of them at the challenge’s 30% oxygen</span></div>
     <div><span class="n">7.3</span><span class="k">percentage points of oxygen with no solid test</span></div>
   </div>
   <p class="sub">A gap in the open archive, not in all of science: SoFIE-GEL burned PMMA on the ISS up to 34% O₂, but its points are not in PSI.</p>
-  <div class="foot"><span>IGNIS · SI-powered fire-safety dashboard</span><span class="pageno">01 / 05</span></div>
+  <div class="foot"><span>IGNIS.py · Karol Skroban, Dawid Kogut</span><span class="pageno">01 / 05</span></div>
 </section>
 
 <!-- ============ 2 ============ -->
@@ -243,11 +254,10 @@ h2{font-size:58px;line-height:1.03;letter-spacing:-.03em;margin:0 0 20px;font-we
     <img class="mapimg" src="img/map-svg.png" alt="Scatter of oxygen against chamber pressure: the challenge box from 30% oxygen and 10.2 psi down, gas and droplet points inside it, solid points stopping at 22.7% near 1 bar, a dotted curve of equal oxygen partial pressure running through the solid points, and six hollow circles for the suggested tests">
     <ul class="bignotes">
       <li><span class="big">0</span> solid tests in the challenge box. The <strong>83</strong> inside are gas flames and droplets.</li>
-      <li><span class="big">86</span> of 252 solid tests reached the challenge’s oxygen <em>partial pressure</em> (0.21 bar, dotted) — near 1 bar. None reached its <strong>30% share</strong>.</li>
-      <li>NASA certifies materials at <strong>30% O₂, 10.2 psia</strong>: the share is the primary driver.</li>
+      <li>The dotted curve is the same amount of oxygen (0.21 bar): <strong class="hotx">86</strong> solid tests reached it — none reached the <strong>30% share</strong>, and the share is what NASA certifies materials at.</li>
     </ul>
   </div>
-  <div class="foot"><span>IGNIS · SI-powered fire-safety dashboard</span><span class="pageno">02 / 05</span></div>
+  <div class="foot"><span>IGNIS.py · Karol Skroban, Dawid Kogut</span><span class="pageno">02 / 05</span></div>
 </section>
 
 <!-- ============ 3 ============ -->
@@ -264,12 +274,12 @@ h2{font-size:58px;line-height:1.03;letter-spacing:-.03em;margin:0 0 20px;font-we
       </ol>
     </div>
     <div>
-      <p class="bigfact">−7.3&nbsp;pp<br>+43%</p>
+      <p class="bigfact">−7.3<small>points of O₂</small><br>+43%<small>pressure</small></p>
       <p class="bigk"><b>Distance from evidence</b> — oxygen and pressure, separately, no weights.</p>
       <p class="bigk">Every source, quote and number is checked against the corpus before the answer is shown.</p>
     </div>
   </div>
-  <div class="foot"><span>IGNIS · SI-powered fire-safety dashboard</span><span class="pageno">03 / 05</span></div>
+  <div class="foot"><span>IGNIS.py · Karol Skroban, Dawid Kogut</span><span class="pageno">03 / 05</span></div>
 </section>
 
 <!-- ============ 4 ============ -->
@@ -279,11 +289,11 @@ h2{font-size:58px;line-height:1.03;letter-spacing:-.03em;margin:0 0 20px;font-we
   <p class="bigk" style="max-width:1300px">The 5 solid materials already burned closest to the ceiling, at each of 6 conditions, 1 test each —
   what BASS ran for 131 of its 174 conditions. The hollow circles on the map.</p>
   <div class="plan">
-    <span></span><span class="ph">26.5% O₂<small>−3.8 pp from tested</small></span><span class="ph">30% O₂<small>−7.3 pp</small></span><span class="ph">34% O₂<small>−11.3 pp</small></span>
+    <span></span><span class="ph">26.5% O₂<small>−3.8 points from tested</small></span><span class="ph">30% O₂<small>−7.3 points</small></span><span class="ph">34% O₂<small>−11.3 points</small></span>
     <span class="pr">0.703 bar<small>+43% from tested</small></span><span class="pc">5 tests</span><span class="pc">5 tests</span><span class="pc">5 tests</span>
     <span class="pr">0.565 bar<small>+78%</small></span><span class="pc">5 tests</span><span class="pc">5 tests</span><span class="pc">5 tests</span>
   </div>
-  <div class="foot"><span>IGNIS · SI-powered fire-safety dashboard</span><span class="pageno">04 / 05</span></div>
+  <div class="foot"><span>IGNIS.py · Karol Skroban, Dawid Kogut</span><span class="pageno">04 / 05</span></div>
 </section>
 
 <!-- ============ 5 ============ -->
@@ -308,7 +318,7 @@ h2{font-size:58px;line-height:1.03;letter-spacing:-.03em;margin:0 0 20px;font-we
       check everything: <b>sh scripts/check_all.sh</b>
     </div>
   </div>
-  <div class="foot"><span>IGNIS · SI-powered fire-safety dashboard</span><span class="pageno">05 / 05</span></div>
+  <div class="foot"><span>IGNIS.py · Karol Skroban, Dawid Kogut</span><span class="pageno">05 / 05</span></div>
 </section>
 
 <!-- ============ backup ============ -->
@@ -335,7 +345,7 @@ h2{font-size:58px;line-height:1.03;letter-spacing:-.03em;margin:0 0 20px;font-we
       is not being honest with the people who build the habitat.</p>
     </div>
   </div>
-  <div class="foot"><span>IGNIS · SI-powered fire-safety dashboard</span><span class="pageno">Backup 1</span></div>
+  <div class="foot"><span>IGNIS.py · Karol Skroban, Dawid Kogut</span><span class="pageno">Backup 1</span></div>
 </section>
 
 <!-- ============ 3 ============ -->
@@ -367,7 +377,7 @@ h2{font-size:58px;line-height:1.03;letter-spacing:-.03em;margin:0 0 20px;font-we
     of the CFI-G inverse sheet, 82 in three ACME tables whose columns this build does not map, 8 in the
     cross-experiment summary sheet, 8 Saffire rows (4 of them pre-test flow-visualisation records).
   </p>
-  <div class="foot"><span>IGNIS · SI-powered fire-safety dashboard</span><span class="pageno">Backup 2</span></div>
+  <div class="foot"><span>IGNIS.py · Karol Skroban, Dawid Kogut</span><span class="pageno">Backup 2</span></div>
 </section>
 
 </div>

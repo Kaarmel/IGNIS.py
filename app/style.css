@@ -897,7 +897,8 @@ html { scroll-padding-top: 104px; }
 .nav-menu a { font-family: var(--sans); font-size: 14px; letter-spacing: 0; text-transform: none; padding: 8px 10px 10px; }
 .nav-menu a small { font-family: var(--mono); }
 .map-legend .lg-h { font-family: var(--sans); }
-@media (min-width: 641px) { .nav-menu { flex-wrap: wrap; overflow: visible; } }
+/* One line at every width: the detail sections share one "Details" link; a narrow screen scrolls the bar sideways. */
+.nav-menu { flex-wrap: nowrap; overflow-x: auto; }
 .nav-menu { margin-left: -10px; }
 .nav-menu a:first-child { padding-left: 10px; }
 @media (max-width: 640px) { .nav-menu { margin-left: 0; } .nav-menu a:first-child { padding-left: 0; } }

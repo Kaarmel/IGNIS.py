@@ -109,26 +109,26 @@
 <!-- ============ ASK IGNIS ============ -->
 <section id="ask" class="sec">
   <div class="sec-head">
-    <p class="kicker" data-en="Search or ask the archive" data-pl="Przeszukaj archiwum lub zapytaj"></p>
-    <h2 data-en="Search and ask IGNIS" data-pl="Szukaj i pytaj IGNIS"></h2>
+    <p class="kicker" data-en="Ask or search the archive" data-pl="Zapytaj lub przeszukaj archiwum"></p>
+    <h2 data-en="Ask IGNIS or search the data" data-pl="Zapytaj IGNIS albo przeszukaj dane"></h2>
     <p class="sec-lede"
-       data-en-html="Two ways into the same records. <b>Search the data</b> filters every test point yourself — no model involved. <b>Ask the SI</b> gives a written answer: a language model (DeepSeek V4.1 Flash) queries the <span class=&quot;n-tp&quot;></span> test points and verified quotes and cites every claim. Every source in either view opens the file and row it comes from; a citation the corpus cannot back is marked in red."
-       data-pl-html="Dwie drogi do tych samych rekordów. <b>Przeszukaj dane</b> filtruje każdy punkt testowy samodzielnie — bez modelu. <b>Zapytaj SI</b> daje odpowiedź opisową: model językowy (DeepSeek V4.1 Flash) odpytuje <span class=&quot;n-tp&quot;></span> punktów testowych i zweryfikowane cytaty i podaje źródło każdego twierdzenia. Każde źródło w obu widokach otwiera plik i wiersz, z którego pochodzi; odnośnik, którego korpus nie potwierdza, jest oznaczony na czerwono."></p>
+       data-en-html="Two ways into the same records. <b>Ask the SI</b> gives a written answer: a language model (DeepSeek V4.1 Flash) queries the <span class=&quot;n-tp&quot;></span> test points and verified quotes and cites every claim. <b>Search the data</b> filters every test point yourself — no model involved. Every source in either view opens the file and row it comes from; a citation the corpus cannot back is marked in red."
+       data-pl-html="Dwie drogi do tych samych rekordów. <b>Zapytaj SI</b> daje odpowiedź opisową: model językowy (DeepSeek V4.1 Flash) odpytuje <span class=&quot;n-tp&quot;></span> punktów testowych i zweryfikowane cytaty i podaje źródło każdego twierdzenia. <b>Przeszukaj dane</b> filtruje każdy punkt testowy samodzielnie — bez modelu. Każde źródło w obu widokach otwiera plik i wiersz, z którego pochodzi; odnośnik, którego korpus nie potwierdza, jest oznaczony na czerwono."></p>
   </div>
   <div class="tabs" role="tablist" id="ask-tabs">
-    <button type="button" role="tab" id="tab-search" aria-controls="pane-search" aria-selected="true">
-      <b data-en="Search the data" data-pl="Przeszukaj dane"></b>
-      <small data-en="every test point, filterable — no SI" data-pl="każdy punkt testowy, z filtrami — bez SI"></small>
-    </button>
-    <button type="button" role="tab" id="tab-si" aria-controls="pane-si" aria-selected="false">
+    <button type="button" role="tab" id="tab-si" aria-controls="pane-si" aria-selected="true">
       <b data-en="Ask the SI" data-pl="Zapytaj SI"></b>
       <small data-en="a written answer with clickable sources" data-pl="odpowiedź opisowa z klikalnymi źródłami"></small>
     </button>
+    <button type="button" role="tab" id="tab-search" aria-controls="pane-search" aria-selected="false">
+      <b data-en="Search the data" data-pl="Przeszukaj dane"></b>
+      <small data-en="every test point, filterable — no SI" data-pl="każdy punkt testowy, z filtrami — bez SI"></small>
+    </button>
   </div>
-  <div id="pane-search" role="tabpanel" aria-labelledby="tab-search">
+  <div id="pane-search" role="tabpanel" aria-labelledby="tab-search" hidden>
     <div class="ds" id="ds"></div>
   </div>
-  <div id="pane-si" role="tabpanel" aria-labelledby="tab-si" hidden>
+  <div id="pane-si" role="tabpanel" aria-labelledby="tab-si">
   <p class="si-warn" data-en-html="<b>Checked before you see it.</b> Every answer is checked automatically against the corpus: each investigation it cites must exist, each quote must appear word for word in a NASA file, and each number is compared with the corpus summary and the query results — an answer with a number it cannot back goes back to the model for correction, and a citation that still cannot be backed is marked in red. Click any source to open the record behind it."
      data-pl-html="<b>Sprawdzone, zanim je zobaczysz.</b> Każda odpowiedź jest automatycznie sprawdzana względem korpusu: każde cytowane badanie musi istnieć, każdy cytat musi występować dosłownie w pliku NASA, a każda liczba jest porównywana ze streszczeniem korpusu i wynikami zapytań — odpowiedź z liczbą bez pokrycia wraca do modelu do poprawki, a odnośnik, którego nadal nie da się potwierdzić, jest oznaczony na czerwono. Kliknij dowolne źródło, żeby otworzyć rekord, który za nim stoi."></p>
   <div class="ask-presets" id="ask-presets"></div>
