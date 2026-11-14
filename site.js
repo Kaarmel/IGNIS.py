@@ -46,6 +46,19 @@
     }
   }
 
+  // Film: a poster until clicked, so YouTube loads nothing (and sets no cookies) before the viewer asks.
+  document.querySelectorAll('a[data-yt]').forEach(a => a.addEventListener('click', e => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+    e.preventDefault();
+    const f = document.createElement('iframe');
+    f.src = `https://www.youtube-nocookie.com/embed/${a.dataset.yt}?autoplay=1&rel=0&modestbranding=1`;
+    f.title = 'IGNIS, 30-second film';
+    f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+    f.allowFullscreen = true;
+    a.replaceChildren(f);
+    a.removeAttribute('href');
+  }));
+
   const els = document.querySelectorAll('.reveal');
   if (!('IntersectionObserver' in window)) { els.forEach(e => e.classList.add('in')); return; }
   const io = new IntersectionObserver(entries => entries.forEach(e => {

@@ -80,7 +80,9 @@ corpus. (Prose is written by hand; the numbers are not.)
 
 ## Project Demo
 
-**30-second film:** script, shot list and context in [`pitch/FILM.md`](pitch/FILM.md).
+**30-second film:** https://youtu.be/EfFLVnlmn70 · script, shot list and context in [`pitch/FILM.md`](pitch/FILM.md).
+The film's voice-over and music bed are AI-generated (ElevenLabs text-to-speech and sound generation); the
+picture is a scripted screen recording of the live application and a chart drawn from `dataset.js`.
 
 **Seven-page deck — five slides and two backup slides:** [`pitch/IGNIS-pitch.pdf`](pitch/IGNIS-pitch.pdf) — also viewable as
 [`pitch/index.html`](pitch/index.html) (arrow keys to advance). A screen recording of the live SI answering the
@@ -226,7 +228,8 @@ Super-intelligent tools were used, as the challenge requires:
 - **No SI generated the data.** Every figure is computed by the build scripts from the NASA PSI tables;
   the prose around them is written by hand.
 - **No generated images, audio or video** are used in the application or the deck. (`pitch/img/demo.gif` is a
-  screen recording of the application, not generated media.)
+  screen recording of the application, not generated media.) The 30-second film is the one exception: its
+  voice-over and music are AI-generated (ElevenLabs), as stated here, on the project page and in the video description.
 - **What IGNIS delivers instead is a model-ready dataset.** The app exports the normalized corpus as
   CSV and JSON in the browser, with units, accession and row number on every field and a flag for
   where each pressure value came from, plus one sentence stating the classes and O₂/pressure ranges

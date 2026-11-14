@@ -16,5 +16,10 @@
   "11.0": "measured latency of the deployed worker, seconds (not corpus data)",
   "26.0": "measured latency of the deployed worker, seconds (not corpus data)",
   "1920": "video frame size in pixels (pitch/FILM.md), not corpus data",
-  "1080": "video frame size in pixels (pitch/FILM.md), not corpus data"
+  "1080": "video frame size in pixels (pitch/FILM.md), not corpus data",
+  "2.5": "pitch/FILM.md: film timing (shot boundaries, words per second)",
+  "5.2": "pitch/FILM.md: film timing (shot boundaries, words per second)",
+  "13.5": "pitch/FILM.md: film timing (shot boundaries, words per second)",
+  "16.5": "pitch/FILM.md: film timing (shot boundaries, words per second)",
+  "27.2": "pitch/FILM.md: film timing (shot boundaries, words per second)"
 }
