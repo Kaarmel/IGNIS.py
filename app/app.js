@@ -337,10 +337,10 @@
     const envList = Object.entries(envBy).map(([k, v]) => `${v} ${phaseShort(k)}`).join(' · ') || L('no points', 'brak punktów');
     // Caption goes inside the band's empty area; the point count goes in the
     // section lede so no label sits on top of the dots.
-    const zl = svgEl('text', { x: xOf(LUNAR_O2) + 12, y: yOf(LUNAR_P) + 18, fill: '#ff6a1f', 'font-size': 10.5, 'letter-spacing': '1.1' });
+    const zl = svgEl('text', { x: xOf(LUNAR_O2) + 12, y: yOf(LUNAR_P) + 18, fill: '#ff6a1f', 'font-size': 12.5, 'letter-spacing': '1.1' });
     // Two short lines inside the band, not one long one: the caption used to run
     // several times the width of the rectangle it was labelling.
-    const zl1 = svgEl('text', { x: xOf(CH_O2) + 10, y: yOf(CH_P) + 16, fill: '#ff6a1f', 'font-size': 10.5, 'letter-spacing': '1.1' });
+    const zl1 = svgEl('text', { x: xOf(CH_O2) + 10, y: yOf(CH_P) + 16, fill: '#ff6a1f', 'font-size': 12.5, 'letter-spacing': '1.1' });
     zl1.textContent = L('CHALLENGE', 'OBWIEDNIA');
     svg.append(zl1);
     zl.textContent = L('ENVELOPE', 'Z CHALLENGE');
@@ -365,22 +365,22 @@
     [0, 10, 20, 30, 40, 50, 60, 70, 80, 90].forEach(v => {
       const x = xOf(v / 100);   // xOf takes a fraction, not a percentage
       svg.append(svgEl('line', { x1: x, y1: M.t, x2: x, y2: M.t + PH, stroke: '#1d222a', 'stroke-width': 1 }));
-      const t = svgEl('text', { x, y: M.t + PH + 24, fill: '#8b93a0', 'font-size': 11, 'text-anchor': 'middle' });
+      const t = svgEl('text', { x, y: M.t + PH + 24, fill: '#8b93a0', 'font-size': 13, 'text-anchor': 'middle' });
       t.textContent = v + '%';
       svg.append(t);
     });
     [0.5, 0.7, 1, 1.5, 2, 3, 5].forEach(v => {
       const y = yOf(v);
       svg.append(svgEl('line', { x1: M.l, y1: y, x2: M.l + PW, y2: y, stroke: '#1d222a', 'stroke-width': 1 }));
-      const t = svgEl('text', { x: M.l - 12, y: y + 4, fill: '#8b93a0', 'font-size': 11, 'text-anchor': 'end' });
+      const t = svgEl('text', { x: M.l - 12, y: y + 4, fill: '#8b93a0', 'font-size': 13, 'text-anchor': 'end' });
       t.textContent = fmt(v, 1) + ' bar';
       svg.append(t);
     });
     // axis titles
-    const xt = svgEl('text', { x: M.l + PW / 2, y: M.t + PH + 54, fill: '#b3bac5', 'font-size': 12, 'text-anchor': 'middle', 'letter-spacing': '1.5' });
+    const xt = svgEl('text', { x: M.l + PW / 2, y: M.t + PH + 54, fill: '#b3bac5', 'font-size': 14, 'text-anchor': 'middle', 'letter-spacing': '1.5' });
     xt.textContent = L('OXYGEN CONCENTRATION', 'STĘŻENIE TLENU');
     svg.append(xt);
-    const yt = svgEl('text', { x: 16, y: M.t + PH / 2, fill: '#b3bac5', 'font-size': 12, 'text-anchor': 'middle', 'letter-spacing': '1.5', transform: `rotate(-90 16 ${M.t + PH / 2})` });
+    const yt = svgEl('text', { x: 16, y: M.t + PH / 2, fill: '#b3bac5', 'font-size': 14, 'text-anchor': 'middle', 'letter-spacing': '1.5', transform: `rotate(-90 16 ${M.t + PH / 2})` });
     yt.textContent = L('CHAMBER PRESSURE (log)', 'CIŚNIENIE W KOMORZE (log)');
     svg.append(yt);
 
@@ -418,14 +418,14 @@
       `${solidNoP.length} testów materiałów stałych<br>O2 ${fmt(npLo * 100, 1)}–${fmt(npHi * 100, 1)}%<br>ciśnienie: nigdzie nie zapisane`);
     svg.append(band);
 
-    const st1 = svgEl('text', { x: xOf(npLo) - 10, y: stripY + 4, fill: '#f59e0b', 'font-size': 10.5, 'letter-spacing': '.6', 'text-anchor': 'end' });
+    const st1 = svgEl('text', { x: xOf(npLo) - 10, y: stripY + 4, fill: '#f59e0b', 'font-size': 12.5, 'letter-spacing': '.6', 'text-anchor': 'end' });
     st1.textContent = L(`SOLID · ${solidNoP.length}`, `STAŁE · ${solidNoP.length}`);
     svg.append(st1);
-    const st2 = svgEl('text', { x: xOf(CH_O2) + 14, y: stripY + 4, fill: '#8b93a0', 'font-size': 10.5 });
+    const st2 = svgEl('text', { x: xOf(CH_O2) + 14, y: stripY + 4, fill: '#8b93a0', 'font-size': 12.5 });
     st2.textContent = L('← these tests record no pressure anywhere, so they have no place on the chart',
       '← te testy nigdzie nie zapisują ciśnienia, więc nie mają miejsca na wykresie');
     svg.append(st2);
-    const st3 = svgEl('text', { x: xOf(npLo) - 10, y: stripY - 16, fill: '#8b93a0', 'font-size': 10, 'text-anchor': 'end' });
+    const st3 = svgEl('text', { x: xOf(npLo) - 10, y: stripY - 16, fill: '#8b93a0', 'font-size': 12, 'text-anchor': 'end' });
     st3.textContent = L(`other ${solidP.length} at ${fmt(solidPMin, 2)}–${fmt(solidPMax, 2)} bar ↑`,
       `pozostałe ${solidP.length} przy ${fmt(solidPMin, 2)}–${fmt(solidPMax, 2)} bar ↑`);
     svg.append(st3);
@@ -435,7 +435,7 @@
       x1: xOf(solidMaxO2), y1: M.t, x2: xOf(solidMaxO2), y2: stripY + 10,
       stroke: '#f59e0b', 'stroke-width': 1.5, 'stroke-dasharray': '6 4', opacity: .8,
     }));
-    const wt = svgEl('text', { x: xOf(solidMaxO2) - 8, y: M.t + 12, fill: '#f59e0b', 'font-size': 11, 'letter-spacing': '.8', 'text-anchor': 'end' });
+    const wt = svgEl('text', { x: xOf(solidMaxO2) - 8, y: M.t + 12, fill: '#f59e0b', 'font-size': 13, 'letter-spacing': '.8', 'text-anchor': 'end' });
     wt.textContent = L(`SOLIDS STOP ${fmt(solidMaxO2 * 100, 1)}%`, `STAŁE KOŃCZĄ SIĘ ${fmt(solidMaxO2 * 100, 1)}%`);
     svg.append(wt);
 
@@ -444,7 +444,7 @@
       x1: xOf(CH_O2), y1: M.t, x2: xOf(CH_O2), y2: stripY + 10,
       stroke: '#ff6a1f', 'stroke-width': 1.5,
     }));
-    const rt = svgEl('text', { x: xOf(CH_O2) + 8, y: M.t + 12, fill: '#ff6a1f', 'font-size': 11, 'letter-spacing': '.8' });
+    const rt = svgEl('text', { x: xOf(CH_O2) + 8, y: M.t + 12, fill: '#ff6a1f', 'font-size': 13, 'letter-spacing': '.8' });
     // 30% is the challenge's "likely" level, not a requirement. Calling it one
     // turns a stated expectation into a threshold the data failed to meet.
     rt.textContent = L(`CHALLENGE ${fmt(CH_O2 * 100, 0)}%+`, `CHALLENGE ${fmt(CH_O2 * 100, 0)}%+`);
@@ -461,10 +461,10 @@
     // paint-order knocks the dashed ceiling line out from behind the label
     // instead of letting it strike through the number.
     const knockout = { stroke: '#08090b', 'stroke-width': 3, 'paint-order': 'stroke' };
-    const gt = svgEl('text', { x: gx, y: gy + 17, fill: '#ef4444', 'font-size': 12, 'text-anchor': 'middle', 'letter-spacing': '.6', 'font-weight': 600, ...knockout });
+    const gt = svgEl('text', { x: gx, y: gy + 17, fill: '#ef4444', 'font-size': 14, 'text-anchor': 'middle', 'letter-spacing': '.6', 'font-weight': 600, ...knockout });
     gt.textContent = `${fmt((CH_O2 - solidMaxO2) * 100, 1)} pp`;
     svg.append(gt);
-    const gt2 = svgEl('text', { x: gx, y: gy + 30, fill: '#ef4444', 'font-size': 10, 'text-anchor': 'middle', 'letter-spacing': '.4', ...knockout });
+    const gt2 = svgEl('text', { x: gx, y: gy + 30, fill: '#ef4444', 'font-size': 12, 'text-anchor': 'middle', 'letter-spacing': '.4', ...knockout });
     gt2.textContent = L('not in PSI', 'brak w PSI');
     svg.append(gt2);
 
@@ -492,7 +492,7 @@
   const renderFlowMap = () => {
     const host = $('#flow-svg');
     if (!host) return;
-    const W2 = 1000, H2 = 520, M2 = { l: 78, r: 34, t: 26, b: 78 };
+    const W2 = 1000, H2 = 520, M2 = { l: 100, r: 34, t: 26, b: 78 };
     const PW2 = W2 - M2.l - M2.r, PH2 = H2 - M2.t - M2.b;
     host.setAttribute('viewBox', `0 0 ${W2} ${H2}`);
     host.innerHTML = '';
@@ -520,20 +520,20 @@
     const step = (X1 - X0) <= 20 ? 2 : 10;
     for (let v = X0; v <= X1; v += step) {
       host.append(svgEl('line', { x1: X(v / 100), y1: M2.t, x2: X(v / 100), y2: M2.t + PH2, stroke: '#1d222a' }));
-      const t = svgEl('text', { x: X(v / 100), y: M2.t + PH2 + 20, fill: '#8b93a0', 'font-size': 11, 'text-anchor': 'middle' });
+      const t = svgEl('text', { x: X(v / 100), y: M2.t + PH2 + 20, fill: '#8b93a0', 'font-size': 13, 'text-anchor': 'middle' });
       t.textContent = v + '%';
       host.append(t);
     }
     [0, 2, 5, 10, 20, 50].filter(v => v <= fMax).forEach(v => {
       host.append(svgEl('line', { x1: M2.l, y1: Y(v), x2: M2.l + PW2, y2: Y(v), stroke: '#1d222a' }));
-      const t = svgEl('text', { x: M2.l - 10, y: Y(v) + 4, fill: '#8b93a0', 'font-size': 11, 'text-anchor': 'end' });
+      const t = svgEl('text', { x: M2.l - 10, y: Y(v) + 4, fill: '#8b93a0', 'font-size': 13, 'text-anchor': 'end' });
       t.textContent = fmt(v) + ' cm/s';
       host.append(t);
     });
-    const xt = svgEl('text', { x: M2.l + PW2 / 2, y: M2.t + PH2 + 46, fill: '#b3bac5', 'font-size': 12, 'text-anchor': 'middle', 'letter-spacing': '1.5' });
+    const xt = svgEl('text', { x: M2.l + PW2 / 2, y: M2.t + PH2 + 46, fill: '#b3bac5', 'font-size': 14, 'text-anchor': 'middle', 'letter-spacing': '1.5' });
     xt.textContent = L('OXYGEN CONCENTRATION', 'STĘŻENIE TLENU');
     host.append(xt);
-    const yt = svgEl('text', { x: 16, y: M2.t + PH2 / 2, fill: '#b3bac5', 'font-size': 12, 'text-anchor': 'middle', 'letter-spacing': '1.5', transform: `rotate(-90 16 ${M2.t + PH2 / 2})` });
+    const yt = svgEl('text', { x: 16, y: M2.t + PH2 / 2, fill: '#b3bac5', 'font-size': 14, 'text-anchor': 'middle', 'letter-spacing': '1.5', transform: `rotate(-90 16 ${M2.t + PH2 / 2})` });
     // "Air display" is duct flow speed in cm/s, per the BASS-II ReadMe. A dot is
     // the setting a test opened at; a ring is the last setting its log records.
     yt.textContent = L('AIR FLOW PAST THE SAMPLE (cm/s)', 'PRZEPŁYW POWIETRZA PRZY PRÓBCE (cm/s)');
@@ -638,6 +638,8 @@
   const CLASS_RANK = { solid: 0, emulator: 1, droplet: 2, gas: 3, aerosol: 4, dust: 5, 'n/a': 6 };
   let atlasEnv = 'challenge';   // challenge | lunar | iss | all
   let atlasActive = 'all';
+  let atlasAll = false;      // the Atlas opens with its first rows only
+  const ATLAS_FIRST = 6;
   // Solid material is the challenge's own first class and 247 of 501 points is
   // a chart that reads from the back of a room; 'all' is one click away.
   let flowScope = 'solid';
@@ -849,7 +851,8 @@
         el('div', {}, L('Material class', 'Klasa')),
         el('div', {}, L('O₂ / pressure tested', 'Zakres O₂ / ciśnienia')),
         el('div', { title: L('test points inside the environment chosen above · at or above its oxygen · all', 'punkty w środowisku wybranym wyżej · z tlenem co najmniej takim · wszystkie') }, L('Points: in env. · ≥ O₂ · all', 'Punkty: w środ. · ≥ O₂ · razem'))));
-      orderedRows().filter(x => filters.find(f => f.k === atlasActive).f(x.i)).forEach(x => {
+      const shown = orderedRows().filter(x => filters.find(f => f.k === atlasActive).f(x.i));
+      shown.forEach((x, n) => {
         const i = x.i;
         const row = el('div', { class: 'a-row' + (x.unranked ? ' a-unranked' : ''), id: 'atlas-' + i.id });
         row.append(el('div', { class: 'a-acr', html: (x.siPos ? `${x.siPos}. ` : '') + `<a class="a-src" href="#atlas-${i.id}" data-src-kind="inv" data-src-id="${i.id}" title="${L('Open the source record', 'Otwórz rekord źródłowy')}">${esc(i.acronym)}</a>` }));
@@ -866,8 +869,16 @@
         if (x.unranked) row.append(el('div', { class: 'a-why none' }, L('not ranked by the SI — rule order', 'nieuszeregowane przez SI — kolejność reguły')));
         const si = siBlock(i.id);
         if (si) row.append(si);
+        if (!atlasAll && n >= ATLAS_FIRST) row.hidden = true;
         atlas.append(row);
       });
+      // A short list first: the page stays short; one click shows the rest.
+      if (!atlasAll && shown.length > ATLAS_FIRST) {
+        const more = el('button', { class: 'chip atlas-more', type: 'button' },
+          L(`Show the full list (${fmt(shown.length)})`, `Pokaż całą listę (${fmt(shown.length)})`));
+        more.onclick = () => { atlasAll = true; drawRows(); };
+        atlas.append(more);
+      }
     };
     drawRows();
   };
@@ -966,14 +977,20 @@
     const a = e.target.closest('a[href^="#atlas-PSI"]');
     if (!a) return;
     const id = a.getAttribute('href').slice(1);
-    if (!document.getElementById(id) && atlasActive !== 'all') {
+    const n = document.getElementById(id);
+    if ((!n && atlasActive !== 'all') || (n && n.hidden)) {
       e.preventDefault();
-      atlasActive = 'all';
-      renderAtlas();
-      const t = document.getElementById(id);
-      if (t) { t.scrollIntoView({ behavior: 'smooth', block: 'start' }); history.replaceState(null, '', '#' + id); }
+      showAtlasRow(id);
+      try { history.replaceState(null, '', '#' + id); } catch (er) { /* file:// */ }
     }
   });
+
+  // Show an Atlas row even when a filter or the short list hides it, then scroll to it.
+  function showAtlasRow(id) {
+    let n = document.getElementById(id);
+    if (!n || n.hidden) { atlasActive = 'all'; atlasAll = true; renderAtlas(); n = document.getElementById(id); }
+    if (n) n.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 
   /* ---------------- telemetry ---------------- */
   const series = (T && T.series) ? T.series.slice().sort((a, b) => a.p - b.p || a.o2 - b.o2) : [];
@@ -1035,7 +1052,7 @@
       // the 40 series.
       [y1, hP, L('PTA1 — raw instrument channel; the corpus does not say what it measures', 'PTA1 — surowy kanał przyrządu; korpus nie mówi, co mierzy')]].forEach(([y, h, lab]) => {
         tsvg.append(svgEl('rect', { x: TM.l, y, width: pw, height: h, fill: '#0e1014', stroke: '#1d222a' }));
-        const t = svgEl('text', { x: TM.l, y: y - 9, fill: '#8b93a0', 'font-size': 10.5, 'letter-spacing': '1.2' });
+        const t = svgEl('text', { x: TM.l, y: y - 9, fill: '#8b93a0', 'font-size': 12.5, 'letter-spacing': '1.2' });
         t.textContent = lab;
         tsvg.append(t);
       });
@@ -1047,7 +1064,7 @@
         [y0, y1].forEach((y, i) => {
           tsvg.append(svgEl('line', { x1: x, y1: y, x2: x, y2: y + (i ? hP : hIon), stroke: color, 'stroke-width': 1.4, 'stroke-dasharray': '4 3' }));
         });
-        const t = svgEl('text', { x: x + 6, y: y0 + dy, fill: color, 'font-size': 10.5, 'letter-spacing': '.6' });
+        const t = svgEl('text', { x: x + 6, y: y0 + dy, fill: color, 'font-size': 12.5, 'letter-spacing': '.6' });
         t.textContent = label;
         tsvg.append(t);
       };
@@ -1070,7 +1087,7 @@
       // x axis
       [0, .25, .5, .75, 1].forEach(f => {
         const tt = tMax * f, x = X(tt);
-        const t = svgEl('text', { x, y: y1 + hP + 20, fill: '#8b93a0', 'font-size': 10.5, 'text-anchor': 'middle' });
+        const t = svgEl('text', { x, y: y1 + hP + 20, fill: '#8b93a0', 'font-size': 12.5, 'text-anchor': 'middle' });
         t.textContent = tt.toFixed(0) + 's';
         tsvg.append(t);
       });
@@ -1836,9 +1853,18 @@
   };
   const renderAskOut = () => {
     const out = $('#ask-out');
-    if (!askLast) { out.innerHTML = ASK_URL ? '' : `<p class="ask-note">${L(
-      'Live SI is not connected in this copy (no endpoint configured). The preset buttons show answers saved from the live service.',
-      'W tej kopii SI na żywo nie jest podłączona (brak skonfigurowanego adresu). Gotowe pytania pokazują odpowiedzi zapisane z usługi na żywo.')}</p>`; return; }
+    if (!askLast) {
+      // Before any question: one real saved answer, so the panel is never empty.
+      const ex = savedAnswer('beyond');
+      const note = ASK_URL ? '' : `<p class="ask-note">${L(
+        'Live SI is not connected in this copy (no endpoint configured). The preset buttons show answers saved from the live service.',
+        'W tej kopii SI na żywo nie jest podłączona (brak skonfigurowanego adresu). Gotowe pytania pokazują odpowiedzi zapisane z usługi na żywo.')}</p>`;
+      out.innerHTML = note + (ex ? `<p class="ask-saved ask-example">${L(
+        `Example answer, saved ${dateFmt(ex.saved)}. Pick a question above to ask the SI live.`,
+        `Przykładowa odpowiedź, zapisana ${dateFmt(ex.saved)}. Wybierz pytanie powyżej, żeby zapytać SI na żywo.`)}</p>` +
+        `<p class="ask-asked">${esc(ex.question)}</p><div class="ask-a">${askHtml(ex.answer)}</div>` + askMeta(ex, ex.check || {}) : '');
+      return;
+    }
     const { q, res } = askLast;
     if (res === 'pending') {
       // A step list: finished steps get a tick, the current one pulses.
@@ -1953,7 +1979,7 @@
       if (qs.length) h += `<p class="src-sub">${L('Verified quotes from its documents', 'Zweryfikowane cytaty z jego dokumentów')}</p>` +
         qs.map(k => `<button type="button" class="src-qline" ${srcAttr('quote', id, { field: k })}><b>${esc(L(...SRC_FIELD[k]))}</b> “${esc(s[k].q.length > 140 ? s[k].q.slice(0, 140) + '…' : s[k].q)}”</button>`).join('');
       if (i.rows) btns.push([L('Show its test points in the search', 'Pokaż jego punkty w wyszukiwarce'), () => { dsSet({ q: '', inv: id }); goTab('search'); }]);
-      btns.push([L('Open its Atlas card', 'Otwórz jego kartę w Atlasie'), () => { const n = document.getElementById('atlas-' + id); if (n) n.scrollIntoView({ behavior: 'smooth', block: 'start' }); }]);
+      btns.push([L('Open its Atlas card', 'Otwórz jego kartę w Atlasie'), () => showAtlasRow('atlas-' + id)]);
     } else if (kind === 'quote') {
       const cell = id === 'EARTH' ? (window.EARTH || {})[extra.field] : SI[id] && SI[id][extra.field];
       if (!cell || !cell.q) return;
@@ -2009,7 +2035,7 @@
   // Plain filtering over every test point: no model, no network. Each result
   // row opens its source record.
   const HAY = ROWS.map(r => [r.i, r.a, r.m, r.fu, r.o, r.ob, INV[r.i] && INV[r.i].name, r.ph].filter(Boolean).join(' ').toLowerCase());
-  const DS0 = { q: '', inv: '', ph: '', o2lo: '', o2hi: '', phi: '', both: false, sort: 'o2', n: 40 };
+  const DS0 = { q: '', inv: '', ph: '', o2lo: '', o2hi: '', phi: '', both: false, sort: 'o2', n: 15 };
   let DS = { ...DS0 };
   const numIn = v => { const x = parseFloat(String(v).replace(',', '.')); return isFinite(x) ? x : null; };
   const dsMatch = () => {
@@ -2148,24 +2174,51 @@
   const NAV = () => [
     ['top', L('About', 'O narzędziu'), L('what IGNIS is for', 'do czego służy IGNIS')],
     ['takeaways', L('Findings', 'Wnioski'), L('four suggestions, each with its limit and its source', 'cztery sugestie, każda z ograniczeniem i źródłem')],
+    ['map', L('Coverage', 'Pokrycie'), L('oxygen against pressure: where tests exist and where none do', 'tlen względem ciśnienia: gdzie są testy, a gdzie ich brak')],
     ['ask', L('Search data', 'Szukaj w danych'), L('every test point, filterable, each with its source row — no SI', 'każdy punkt testowy, z filtrami i wierszem źródłowym — bez SI'), 'search'],
     ['ask', L('Ask SI', 'Zapytaj SI'), L('a written answer, checked against the corpus, with clickable sources', 'odpowiedź opisowa, sprawdzona względem korpusu, z klikalnymi źródłami'), 'si'],
-    ['funnel', L('Corpus', 'Korpus'), L('how the published rows become usable test points', 'jak opublikowane wiersze stają się punktami testowymi')],
-    ['map', L('Coverage', 'Pokrycie'), L('oxygen against pressure: where tests exist and where none do', 'tlen względem ciśnienia: gdzie są testy, a gdzie ich brak')],
-    ['flowmap', L('O₂ × flow', 'O₂ × przepływ'), L('oxygen against air flow, with how each test ended', 'tlen względem przepływu, z tym, jak skończył się każdy test')],
     ['atlas', L('Atlas', 'Atlas'), L('every investigation, what it measured, ranked for a mission', 'każde badanie, co mierzyło, uszeregowane dla misji')],
     ['solver', L('Check an atmosphere', 'Sprawdź atmosferę'), L('pick a cabin; see the nearest real tests and how far away they are', 'wybierz kabinę; zobacz najbliższe prawdziwe testy i ich odległość')],
+    ['verdict', L('Test plan', 'Plan testów'), L('what the archive does not cover and the tests that would cover it', 'czego archiwum nie pokrywa i testy, które by to pokryły')],
+    ['details', L('Details', 'Szczegóły'), L('for the curious: where the numbers come from', 'dla dociekliwych: skąd biorą się liczby'), null, 'sep'],
+    ['flowmap', L('O₂ × flow', 'O₂ × przepływ'), L('oxygen against air flow, with how each test ended', 'tlen względem przepływu, z tym, jak skończył się każdy test')],
+    ['funnel', L('Corpus', 'Korpus'), L('how the published rows become usable test points', 'jak opublikowane wiersze stają się punktami testowymi')],
     ['pillars', L('Pillars & export', 'Filary i eksport'), L('prevention, detection, suppression, Earth — and the model-ready export', 'zapobieganie, wykrywanie, gaszenie, Ziemia — i eksport dla modeli')],
     ['telemetry', L('Telemetry', 'Telemetria'), L('one real flame test, instrument by instrument', 'jeden prawdziwy test płomienia, przyrząd po przyrządzie')],
-    ['verdict', L('Test plan', 'Plan testów'), L('what the archive does not cover and the tests that would cover it', 'czego archiwum nie pokrywa i testy, które by to pokryły')],
   ];
+  // The main path, in reading order: each section ends with a link to the next one.
+  const NEXT = () => [
+    ['takeaways', 'map', L('Coverage: where the tests are', 'Pokrycie: gdzie są testy')],
+    ['map', 'ask', L('Search the data or ask the SI', 'Szukaj w danych albo zapytaj SI')],
+    ['ask', 'atlas', L('Atlas: every investigation', 'Atlas: każde badanie')],
+    ['atlas', 'solver', L('Check your own atmosphere', 'Sprawdź własną atmosferę')],
+    ['solver', 'verdict', L('Test plan: what to test next', 'Plan testów: co testować dalej')],
+    ['verdict', 'details', L('Details: where the numbers come from', 'Szczegóły: skąd biorą się liczby')],
+  ];
+  const renderNext = () => {
+    NEXT().forEach(([from, to, t]) => {
+      const sec = document.getElementById(from);
+      if (!sec) return;
+      sec.querySelectorAll(':scope > .next-step').forEach(n => n.remove());
+      const a = el('a', { class: 'next-step', href: '#' + to }, el('small', {}, L('Next', 'Dalej')), el('span', {}, t + ' →'));
+      a.onclick = e => {
+        e.preventDefault();
+        document.getElementById(to).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        try { history.replaceState(null, '', '#' + to); } catch (er) { /* file:// */ }
+      };
+      sec.append(a);
+    });
+  };
   let navHere = 'top';
   const navKey = (id, tab) => id + (tab ? ':' + tab : '');
   const renderNav = () => {
     const host = $('#nav-menu');
     host.innerHTML = '';
-    NAV().forEach(([id, t, d, tab], k) => {
-      const a = el('a', { href: '#' + id, 'data-nav': navKey(id, tab), title: d }, el('small', {}, String(k + 1).padStart(2, '0')), t);
+    let k = 0;
+    NAV().forEach(([id, t, d, tab, sep]) => {
+      const a = sep
+        ? el('a', { href: '#' + id, 'data-nav': id, title: d, class: 'nav-sep' }, t)
+        : el('a', { href: '#' + id, 'data-nav': navKey(id, tab), title: d }, el('small', {}, String(++k).padStart(2, '0')), t);
       a.onclick = e => {
         e.preventDefault();
         if (tab) goTab(tab); else document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -2215,7 +2268,7 @@
   };
 
   const render = () => {
-    renderPurpose(); renderNav(); renderSearch(); goTab(TAB, false);
+    renderPurpose(); renderNav(); renderNext(); renderSearch(); goTab(TAB, false);
     renderHero(); renderTakeaways(); renderAsk(); renderFunnel(); renderMap(); renderFlowMap(); renderAtlas(); renderTele(); solve(); renderPillars(); renderExport(); renderVerdict(); renderCampaign();
   };
 
