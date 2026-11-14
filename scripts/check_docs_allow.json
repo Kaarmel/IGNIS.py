@@ -11,5 +11,8 @@
   "34": "measured local latency upper bound, seconds; also Artemis capability O2 %",
   "4000": "max_tokens setting of the worker",
   "8000": "previous max_tokens setting of the worker",
-  "300": "word count of the talk script, about the document itself"
+  "300": "word count of the talk script, about the document itself",
+  "2.6": "measured latency of the deployed worker, seconds (not corpus data)",
+  "11.0": "measured latency of the deployed worker, seconds (not corpus data)",
+  "26.0": "measured latency of the deployed worker, seconds (not corpus data)"
 }
