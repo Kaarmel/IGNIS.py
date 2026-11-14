@@ -11,55 +11,42 @@ this script and a number in the app ever disagree, the app is right and this fil
 
 ## The script
 
-About 440 spoken words — just under three minutes at a calm pace. Slide 5 is the one to cut if the clock runs.
+Five slides, about 300 spoken words — under three minutes at a calm pace, with room for the live demo.
+Backup slides 1–5 (the question, the funnel, air flow, the SI layer, the full verdict) are for Q&A only.
 
-### Slide 1 — findings first (0:00–0:35)
+### Slide 1 — the hook (0:00–0:35)
 
-> Three things NASA's microgravity fire data tells a habitat designer to do differently.
-> **Cut the ventilation.** The BASS operators tried to put burning samples out with nitrogen **18** times;
-> **16** stayed lit — and in **10** of those the flame went out when the air flow was turned off.
-> **Don't expect a fire to die on its own.** Near the 10.2 psi design pressure, at 30 to 34 percent oxygen,
-> **0 of 17** FLEX droplets self-extinguished — against **14 of 29** at cabin air.
-> **Detect finer smoke, later.** The SAME report: much of the smoke is below **500 nanometres**, and
-> detection takes longer than on the ground.
-> And where it stops: every solid-material test in the archive stops at **22.7 percent** oxygen. The
-> challenge says lunar oxygen will be **30 percent or greater**. So all three are analogues, not answers.
+> The Apollo 1 crew died in a fire in an oxygen-filled spacecraft. The challenge says the Moon Base and
+> pressurized rovers will run at **30 percent oxygen or more** — making materials much more flammable.
+> We read NASA's open microgravity archive, PSI: **264** solid-material test points. **Zero** at 30 percent.
+> Every one stops at **22.7**. That is **7.3 points** of oxygen with no solid test in the open archive.
+> Not in all of science — SoFIE-GEL burned plastic on the ISS up to 34 percent — but its points are not in PSI.
 
-### Slide 2 — three questions, three views (0:35–0:55)
+### Slide 2 — where the data exists (0:35–1:05)
 
-> Which investigations matter for a rover, a lunar base, a transit cabin? The Atlas — ranked by a stated
-> rule, or by the SI for the mission you describe, with a checked reason on every row.
-> What supports modelling? The coverage map and an export that says where a model would extrapolate.
+> Oxygen across, pressure up. The shaded box is the lunar cabin. **83** points sit inside it: gas flames and
+> droplets. **Zero** solids. The solids all ran at one atmosphere, and their oxygen was lowered by adding
+> nitrogen to cabin air — the method could only go down.
 
-### Slide 3 — the funnel (0:55–1:15)
+### Slide 3 — ask what the data cannot answer (1:05–1:55)
 
-> **2,870 published rows** in **22 tables**. Specified by hand — three pressure units, two oxygen conventions —
-> they become **1,936** test points. **264** are solid materials. **Zero** are at 30 percent.
+> A judge's question: how would polyurethane foam burn at 30 percent, compared with Nomex?
+> *(Demo: "Beyond the data" — about five seconds. If the network fails, the page shows a saved real answer, labelled.)*
+> The archive has no foam. The SI does not guess. It names the nearest measured solid and its
+> **distance from evidence**: **7.3 points** short on oxygen, **43 percent** high on pressure — two numbers,
+> no weights. Then it names the test that would close it. Every citation is checked before it is shown.
 
-### Slide 4 — the map (1:15–1:40)
+### Slide 4 — what closes it (1:55–2:30)
 
-> Oxygen across, pressure up. The band is the challenge's envelope. **83** points sit inside it — 66 gas,
-> 17 droplet, **none solid**. Above 22.7 percent the only materials study is the BRE emulator — **194
-> flames**, a gas burner, and no pressure recorded.
+> Step zero costs nothing: publish SoFIE-GEL in PSI. Then **30** tests — five materials already burned near the
+> ceiling, three oxygen levels, two pressures, one test per condition, which is what BASS did most of the time.
+> Every cell is computed from the corpus.
 
-### Slide 5 — the second variable (1:40–1:55)
+### Slide 5 — what a designer gets (2:30–3:00)
 
-> The challenge says air flow matters too. **242** solid points record both oxygen and flow. Of **18**
-> with an outcome, **15** extinguished — but **12** of those by turning the flow down. That is finding one again.
-
-### Slide 6 — the SI layer (1:55–2:35)
-
-> **107** sentences lifted verbatim from NASA documents; a script fails if one word differs. And **Ask
-> IGNIS**: a language model that queries the same points itself — every citation is checked before it shows.
-> *(Demo: click "Gap" — about four seconds. Then "Pressurized rover" above the Atlas.)*
-> Offline, the page shows a real saved answer, with its date — never passed off as live.
-
-### Slide 7 — what would close it (2:35–3:00)
-
-> Suppression across diluents agrees with finding one: at 18 percent or less, **39 of 43** droplets went
-> out in nitrogen, **24 of 27** with CO₂, **15 of 19** with helium — the gas does not change the outcome.
-> **No solid-material test in this archive is above 22.7 percent or below 0.98 bar.** A microgravity
-> campaign at the atmosphere in use would fill it. We measured the gap so somebody can.
+> Three signals. **16 of 18** nitrogen attempts left a burning solid lit — test cutting the air flow first.
+> **0 of 17** droplets near the design pressure went out on their own. Much of the smoke is under
+> **500 nanometres**, and detection is slower. Analogues, all three. The campaign turns them into answers.
 
 ---
 
@@ -164,10 +151,12 @@ liczy solver. Model nie zgaduje, ale odpowiedź jest użyteczna dla inżyniera.
 ## Delivery notes
 
 - **Nie czytaj slajdów.** Slajdy mają liczby; ty masz powiedzieć, co one znaczą.
-- Najpierw wnioski, potem luka. Najważniejsze zdanie: *„So all three are analogues, not answers."* —
-  powiedz je wolno, po pauzie.
-- Jeśli zegar ucieka, pomiń slajd 5. Nie skracaj slajdów 1 ani 7.
-- Na pytanie „a co jeśli dane są złe?" — odpowiedź 5 jest gotowa.
+- Najważniejsze zdanie: *„Not in all of science — but its points are not in PSI."* Zawsze mów „w otwartym
+  archiwum PSI”, nigdy „NASA tego nie zbadała”.
+- Jeśli zegar ucieka, skróć slajd 5 do jednego zdania. Nie skracaj slajdów 1 ani 3.
+- Na pytanie „a co jeśli dane są złe?" — odpowiedź 5 jest gotowa; „SoFIE?" — 10; „STD-6001?" — 11;
+  „to tylko SQL?" — 13. Slajdy zapasowe: strzałka w prawo za slajdem 5.
 - Nie mów „model", jeśli nie chcesz pytania 4. Mów „zbiór gotowy do modelowania".
-- Demo SI: kliknij gotowe pytanie, nie wpisuj na żywo. Zmierzone 14.11: 3–8 s; licznik sekund jest na
+- Demo SI: kliknij *Beyond the data*, nie wpisuj na żywo. Zmierzone 14.11: 3.3–6.4 s; licznik sekund jest na
   ekranie, limit 25 s. Jeśli sieć padnie, strona sama pokaże zapisaną odpowiedź z datą — powiedz to głośno.
+  Zapas: nagranie `pitch/img/demo.gif`.

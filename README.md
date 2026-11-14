@@ -9,6 +9,14 @@ views: which investigations bear on fire safety in a crewed cabin, a lunar base 
 (the Atlas); what data exists to support predictive modelling (the coverage map and the O₂ × flow map);
 and what would inform the next generation of fire-safety controls (the three-pillar card).
 
+| the challenge asks | where IGNIS answers it |
+|---|---|
+| an SI-powered web tool that summarises, ranks and interprets investigations | Ask IGNIS (live, cited, quote-checked) and the Atlas mission ranking |
+| investigations relevant to crewed cabins, lunar bases and pressurised rovers | Atlas and the destination solver |
+| data that supports predictive modelling | coverage map, O₂ × flow map and the model-ready export under the pillar cards (each field with accession, row and units); source: `app/data/dataset.js` |
+| what informs next-generation fire-safety controls | the four cards at the top and the three-pillar card |
+| what is missing | verdict, test campaign matrix and the printable evidence gap report |
+
 ## What a habitat designer should do differently
 
 The page opens with these four cards, each with one number, one conclusion, one limit and a link to the

@@ -75,8 +75,9 @@ corpus. (Prose is written by hand; the numbers are not.)
 
 ## Project Demo
 
-**Seven-slide deck:** [`pitch/IGNIS-pitch.pdf`](pitch/IGNIS-pitch.pdf) — also viewable as
-[`pitch/index.html`](pitch/index.html) (arrow keys to advance).
+**Five-slide deck, with backup slides after it:** [`pitch/IGNIS-pitch.pdf`](pitch/IGNIS-pitch.pdf) — also viewable as
+[`pitch/index.html`](pitch/index.html) (arrow keys to advance). A screen recording of the live SI answering the
+*Beyond the data* preset is in [`pitch/img/demo.gif`](pitch/img/demo.gif), as a fallback if the network fails.
 
 ---
 
@@ -213,7 +214,8 @@ Super-intelligent tools were used, as the challenge requires:
   quote passes if either faithful reading contains it.
 - **No SI generated the data.** Every figure is computed by the build scripts from the NASA PSI tables;
   the prose around them is written by hand.
-- **No generated images, audio or video** are used in the application or the deck.
+- **No generated images, audio or video** are used in the application or the deck. (`pitch/img/demo.gif` is a
+  screen recording of the application, not generated media.)
 - **What IGNIS delivers instead is a model-ready dataset.** The app exports the normalized corpus as
   CSV and JSON in the browser, with units, accession and row number on every field and a flag for
   where each pressure value came from, plus one sentence stating the classes and O₂/pressure ranges
