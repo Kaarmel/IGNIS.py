@@ -802,18 +802,18 @@
       envBox.append(b);
     });
     ctrl.append(envBox);
-    const rule = el('p', { class: 'atlas-rule', html: L(
+    const rule = el('details', { class: 'more atlas-rule-d' }, el('summary', {}, L('How the list is ordered', 'Jak ułożona jest lista')), el('p', { class: 'atlas-rule', html: L(
       'Order: solid material → material-flammability emulator → droplets → gases, the challenge’s own order. '
       + 'Within a class, more test points inside the environment first, then more at or above its oxygen level, then more tests in total.',
       'Kolejność: materiał stały → emulator palności materiałów → krople → gazy, czyli kolejność z challenge. '
-      + 'W obrębie klasy: najpierw więcej punktów w środowisku, potem więcej na poziomie jego tlenu lub wyżej, potem więcej testów ogółem.') });
-    ctrl.append(rule);
+      + 'W obrębie klasy: najpierw więcej punktów w środowisku, potem więcej na poziomie jego tlenu lub wyżej, potem więcej testów ogółem.') }));
 
     filters.forEach(f => {
       const b = el('button', { class: 'chip chip-f' + (f.k === atlasActive ? ' on' : '') }, f.label);
       b.onclick = () => { atlasActive = f.k; ctrl.querySelectorAll('.chip-f').forEach(c => c.classList.remove('on')); b.classList.add('on'); drawRows(); };
       ctrl.append(b);
     });
+    ctrl.append(rule);
 
     const span = (a, b, unit, wide, narrow, thr) => {
       // narrow ranges need a decimal, otherwise "22–22%" reads as no range at all
@@ -1795,10 +1795,9 @@
     const vc = $('#verdict-cards');
     vc.innerHTML = '';
     cards.forEach(c => {
-      const [vis, more] = clamp3(c.p);
       vc.append(el('div', { class: 'v-card', 'data-rank': c.rank, html:
-        `<span class="tag">${c.tag}</span><h3 style="margin-top:14px">${c.h}</h3><p>${vis}</p>` +
-        (more ? `<details class="more"><summary>${L('show details', 'pokaż szczegóły')}</summary><p>${more}</p></details>` : '') }));
+        `<span class="tag">${c.tag}</span><h3 style="margin-top:14px">${c.h}</h3>` +
+        `<details class="more"><summary>${L('Why', 'Dlaczego')}</summary><p>${c.p.replace(/\s+/g, ' ').trim()}</p></details>` }));
     });
   };
 
@@ -1818,6 +1817,10 @@
     host.innerHTML =
       `<h3>${L('The campaign that would close the gap', 'Kampania, która zamknęłaby lukę')}</h3>` +
       `<p>${L(
+        `<b>Step 0:</b> publish the ${SG.name} points in PSI. <b>Then ${fmt(C.tests)} tests:</b> ${fmt(C.classes.length)} materials × ${fmt(C.o2_levels_pct.length)} oxygen levels × ${fmt(C.pressures_bar.length)} pressures, ${fmt(C.replicates)} test each.`,
+        `<b>Krok 0:</b> opublikować w PSI punkty ${SG.name}. <b>Potem ${fmt(C.tests)} testów:</b> ${fmt(C.classes.length)} materiałów × ${fmt(C.o2_levels_pct.length)} poziomy tlenu × ${fmt(C.pressures_bar.length)} ciśnienia, po ${fmt(C.replicates)} teście.`)}</p>` +
+      `<details class="more"><summary>${L(`Show all ${fmt(C.tests)} tests, with each one's distance from evidence`, `Pokaż wszystkie ${fmt(C.tests)} testów z odległością każdego od dowodu`)}</summary>` +
+      `<p>${L(
         `<b>Step 0:</b> publish the ${SG.name} points in PSI — they span ${fmt(SG.o2_pct[0])}–${fmt(SG.o2_pct[1])}% O₂ and ${fmt(SG.p_atm[0], 2)}–${fmt(SG.p_atm[1], 1)} atm. ` +
         `<b>Then ${fmt(C.tests)} tests:</b> the ${fmt(C.classes.length)} material classes tested within 1 pp of the ceiling, at ${C.o2_levels_pct.map(o => fmt(o, 1) + '%').join(', ')} O₂ and ${C.pressures_bar.map(p => fmt(p, 3)).join(' and ')} bar, ` +
         `${fmt(C.replicates)} test per condition — what BASS ran for ${fmt(C.conditions_with_that_many)} of its ${fmt(C.conditions_in_bass)} conditions — in the flow range BASS used (${fmt(C.flow_cm_s[0])}–${fmt(C.flow_cm_s[1])} cm/s). ` +
@@ -1826,7 +1829,6 @@
         `<b>Potem ${fmt(C.tests)} testów:</b> ${fmt(C.classes.length)} klas materiałów badanych do 1 pp od sufitu, przy ${C.o2_levels_pct.map(o => fmt(o, 1) + '%').join(', ')} O₂ i ${C.pressures_bar.map(p => fmt(p, 3)).join(' oraz ')} bar, ` +
         `${fmt(C.replicates)} test na warunek — tyle BASS wykonał dla ${fmt(C.conditions_with_that_many)} ze swoich ${fmt(C.conditions_in_bass)} warunków — w zakresie przepływu z BASS (${fmt(C.flow_cm_s[0])}–${fmt(C.flow_cm_s[1])} cm/s). ` +
         `Każda komórka podaje odległość od najbliższego punktu PSI tej klasy: tlen w pp, ciśnienie w %.`)}</p>` +
-      `<details class="more"><summary>${L(`Show all ${fmt(C.tests)} tests, with each one's distance from evidence`, `Pokaż wszystkie ${fmt(C.tests)} testów z odległością każdego od dowodu`)}</summary>` +
       `<div class="campaign-scroll"><table><thead><tr><th>${L('material class', 'klasa materiału')}</th>${cols.map(([o, p]) => `<th>${fmt(o, 1)}% · ${fmt(p, 3)} bar</th>`).join('')}</tr></thead><tbody>` +
       C.classes.map(cls => `<tr><td class="n">${esc(clsName(cls))}</td>${cols.map(([o, p]) => {
         const c = cell(cls, o, p), n = c && c.nearest;

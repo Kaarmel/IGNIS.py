@@ -971,3 +971,18 @@ details.more.fold > .map-readout { margin-top: 14px; }
 .ask-cite:hover, .ask-row:hover { background: var(--panel-2); }
 .ask-qx { font-style: normal; }
 .ask-legend .ask-row, .ask-legend .ask-cite { min-height: 0; display: inline; }
+/* folded intros */
+details.purpose > summary { cursor: pointer; list-style: none; display: inline-block; margin: 0; }
+details.purpose > summary::-webkit-details-marker { display: none; }
+details.purpose > summary::before { content: "▸ "; }
+details.purpose[open] > summary::before { content: "▾ "; }
+details.purpose[open] > .purpose-grid { margin-top: 12px; }
+details.lede-fold { margin-top: 6px; }
+details.lede-fold > .sec-lede { margin-top: 8px; }
+.atlas-rule-d { margin: 6px 0 10px; flex-basis: 100%; }
+.atlas-rule-d .atlas-rule { margin: 6px 0 0; }
+/* quieter SI notice: one plain line, no box */
+.si-warn { background: none; border-left: 0; padding: 0; margin: 0 0 14px; font-size: 13.5px; color: var(--ink-faint); }
+/* quieter per-row toggle in the Atlas */
+.a-si-d > summary { color: var(--ink-faint); }
+.a-si-d > summary:hover, .a-si-d[open] > summary { color: var(--data); }

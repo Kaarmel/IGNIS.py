@@ -35,10 +35,10 @@
       <a class="btn-cta" id="cta-check" href="#solver" data-en="Check the Moon-base atmosphere →" data-pl="Sprawdź atmosferę bazy księżycowej →"></a>
       <a class="btn-ghost" id="cta-ask" href="#ask" data-en="Ask the SI" data-pl="Zapytaj SI"></a>
     </div>
-    <div class="purpose" id="purpose">
-      <p class="purpose-k" data-en="What IGNIS is for" data-pl="Do czego służy IGNIS"></p>
+    <details class="purpose" id="purpose">
+      <summary class="purpose-k" data-en="What IGNIS is for" data-pl="Do czego służy IGNIS"></summary>
       <div class="purpose-grid" id="purpose-cards"></div>
-    </div>
+    </details>
   </div>
 </header>
 
@@ -49,9 +49,10 @@
   <div class="sec-head">
     <p class="kicker" data-en="Findings first" data-pl="Najpierw wnioski"></p>
     <h2 data-en="What a habitat designer should do differently" data-pl="Co projektant habitatu powinien zrobić inaczej"></h2>
+    <details class="more lede-fold"><summary data-en="How to read the cards" data-pl="Jak czytać karty"></summary>
     <p class="sec-lede"
        data-en="Four suggestions read from the data. Each card gives one number, what it suggests, where that number stops being valid, and a link to the investigation it comes from — click it to see the source."
-       data-pl="Cztery sugestie odczytane z danych. Każda karta podaje jedną liczbę, co z niej wynika, gdzie ta liczba przestaje obowiązywać, i odnośnik do badania, z którego pochodzi — kliknij, żeby zobaczyć źródło."></p>
+       data-pl="Cztery sugestie odczytane z danych. Każda karta podaje jedną liczbę, co z niej wynika, gdzie ta liczba przestaje obowiązywać, i odnośnik do badania, z którego pochodzi — kliknij, żeby zobaczyć źródło."></p></details>
   </div>
   <div class="takeaways" id="takeaway-cards"></div>
   <details class="hero-ref">
@@ -114,9 +115,10 @@
   <div class="sec-head">
     <p class="kicker" data-en="Ask or search the archive" data-pl="Zapytaj lub przeszukaj archiwum"></p>
     <h2 data-en="Ask IGNIS or search the data" data-pl="Zapytaj IGNIS albo przeszukaj dane"></h2>
+    <details class="more lede-fold"><summary data-en="How it works: SI answer or plain search" data-pl="Jak to działa: odpowiedź SI albo zwykłe wyszukiwanie"></summary>
     <p class="sec-lede"
        data-en-html="Two ways into the same records. <b>Ask the SI</b> gives a written answer: a language model (DeepSeek V4.1 Flash) queries the <span class=&quot;n-tp&quot;></span> test points and verified quotes and cites every claim. <b>Search the data</b> filters every test point yourself — no model involved. Every source in either view opens the file and row it comes from; a citation the corpus cannot back is marked in red."
-       data-pl-html="Dwie drogi do tych samych rekordów. <b>Zapytaj SI</b> daje odpowiedź opisową: model językowy (DeepSeek V4.1 Flash) odpytuje <span class=&quot;n-tp&quot;></span> punktów testowych i zweryfikowane cytaty i podaje źródło każdego twierdzenia. <b>Przeszukaj dane</b> filtruje każdy punkt testowy samodzielnie — bez modelu. Każde źródło w obu widokach otwiera plik i wiersz, z którego pochodzi; odnośnik, którego korpus nie potwierdza, jest oznaczony na czerwono."></p>
+       data-pl-html="Dwie drogi do tych samych rekordów. <b>Zapytaj SI</b> daje odpowiedź opisową: model językowy (DeepSeek V4.1 Flash) odpytuje <span class=&quot;n-tp&quot;></span> punktów testowych i zweryfikowane cytaty i podaje źródło każdego twierdzenia. <b>Przeszukaj dane</b> filtruje każdy punkt testowy samodzielnie — bez modelu. Każde źródło w obu widokach otwiera plik i wiersz, z którego pochodzi; odnośnik, którego korpus nie potwierdza, jest oznaczony na czerwono."></p></details>
   </div>
   <div class="tabs" role="tablist" id="ask-tabs">
     <button type="button" role="tab" id="tab-si" aria-controls="pane-si" aria-selected="true">
