@@ -964,3 +964,11 @@ details.more.fold > .map-readout { margin-top: 14px; }
 .details-toggle { background: transparent; font-family: inherit; cursor: pointer; }
 .ask-clamp { max-height: 300px; overflow: hidden; -webkit-mask-image: linear-gradient(#000 65%, transparent); mask-image: linear-gradient(#000 65%, transparent); }
 .ask-full { margin: 8px 0 12px; }
+/* What in an SI answer can be clicked */
+.ask-legend { margin: 0 0 14px; padding: 10px 14px; border: 1px dashed var(--line-2); background: var(--panel); font-size: 13.5px; color: var(--ink-dim); }
+.ask-legend p { margin: 0 0 6px; color: var(--ink); font-weight: 600; }
+.ask-legend ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.ask-legend li { line-height: 1.5; }
+.ask-cite::after, .ask-row::after { content: " ↗"; font-size: .85em; opacity: .8; }
+.ask-cite:hover, .ask-row:hover { background: var(--panel-2); }
+.ask-qx { font-style: normal; }

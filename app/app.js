@@ -1915,7 +1915,7 @@
       (bad ? ` · <span class="ask-bad">${L('unresolved citations', 'nierozpoznane odnośniki')}: ${fmt(bad)}</span>` : '') +
       (res.truncated ? ` · <span class="ask-bad">${L('answer cut off', 'odpowiedź ucięta')}</span>` : '') + '</p>';
   };
-  const renderAskOut = () => {
+  const renderAskOut0 = () => {
     const out = $('#ask-out');
     if (!askLast) {
       // Before any question: one real saved answer, so the panel is never empty.
@@ -1960,6 +1960,34 @@
     }
     out.innerHTML = `<p class="ask-asked">${esc(q)}</p><div class="ask-a ask-in">${askHtml(res.answer)}</div>` + askMeta(res, res.check || {});
   };
+  // Above every answer: what in it can be clicked and what each kind opens,
+  // with the first real link of each kind from this answer as the example.
+  const askLegend = () => {
+    const out = $('#ask-out'), ans = out && out.querySelector('.ask-a');
+    if (!ans) return;
+    const kinds = [
+      ['.ask-cite', L('the investigation: what it measured, its oxygen and pressure range, its files', 'badanie: co mierzyło, zakres tlenu i ciśnienia, pliki')],
+      ['.ask-row', L('the NASA data row: file, row number and every value', 'wiersz danych NASA: plik, numer wiersza i wszystkie wartości')],
+      ['.ask-q', L('the NASA document the quote comes from', 'dokument NASA, z którego pochodzi cytat')],
+    ];
+    const items = kinds.map(([sel, t]) => {
+      const first = ans.querySelector(sel);
+      if (!first) return null;
+      const ex = first.cloneNode(true);
+      if (sel === '.ask-q') { ex.textContent = L('“quote” · open source', '„cytat” · otwórz źródło'); ex.className = 'ask-cite ask-qx src-link'; }
+      const li = el('li', {});
+      li.append(ex, document.createTextNode(' → ' + t));
+      return li;
+    }).filter(Boolean);
+    if (!items.length) return;
+    const box = el('div', { class: 'ask-legend' },
+      el('p', {}, L('Click any highlighted tag in the answer — it opens the source behind it:', 'Kliknij dowolny podświetlony znacznik w odpowiedzi — otworzy źródło, na którym się opiera:')));
+    const ul = el('ul', {});
+    items.forEach(li => ul.append(li));
+    box.append(ul);
+    ans.before(box);
+  };
+  const renderAskOut = () => { renderAskOut0(); askLegend(); };
   const askSend = async (q, key = presetKeyOf(q)) => {
     if (!q.trim()) return;
     askLast = { q, key, res: 'pending', steps: [] };
