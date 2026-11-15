@@ -59,6 +59,15 @@
     a.removeAttribute('href');
   }));
 
+  // "Watch the film" in the hero plays it in its frame, the same as clicking the poster.
+  document.querySelectorAll('a[data-play-film]').forEach(b => b.addEventListener('click', e => {
+    const film = document.querySelector('a.film[data-yt]');
+    if (!film || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    e.preventDefault();
+    if (!film.querySelector("iframe")) film.click();
+    film.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }));
+
   const els = document.querySelectorAll('.reveal');
   if (!('IntersectionObserver' in window)) { els.forEach(e => e.classList.add('in')); return; }
   const io = new IntersectionObserver(entries => entries.forEach(e => {

@@ -64,6 +64,23 @@ section { scroll-margin-top: 72px; }
 .btn-fire:hover { background: #f88a4f; border-color: #f88a4f; }
 .btn small { font-family: var(--mono); font-weight: 400; font-size: 13px; color: var(--ink-faint); }
 .btn-fire small { color: #3a1606; }
+.btn .arr { font-size: 1.1em; transition: transform .2s var(--ease); }
+.btn:hover .arr { transform: translateX(3px); }
+@media (max-width: 380px) { .nav .btn .arr { display: none; } }
+.btn-play::before { content: ''; border-left: 11px solid var(--fire); border-top: 7px solid transparent; border-bottom: 7px solid transparent; }
+.gh-link {
+  display: flex; align-items: center; gap: 16px; margin-top: 20px; padding: 16px 20px; max-width: 540px;
+  border: 1px solid var(--line-2); background: var(--panel); color: var(--ink); text-decoration: none;
+  transition: border-color .2s, transform .2s var(--ease);
+}
+.gh-link:hover { border-color: var(--ink-faint); transform: translateY(-1px); }
+.gh-mark { width: 36px; height: 36px; flex: 0 0 36px; fill: currentColor; }
+.gh-t { min-width: 0; }
+.gh-t b { display: block; font: 650 clamp(16px, 1.7vw, 21px)/1.25 var(--mono); letter-spacing: -.01em; overflow-wrap: anywhere; }
+.gh-t small { display: block; margin-top: 4px; font-size: 14px; color: var(--ink-faint); }
+.gh-arrow { margin-left: auto; padding-left: 8px; font-size: 24px; color: var(--fire); transition: transform .2s var(--ease); }
+.gh-link:hover .gh-arrow { transform: translateX(3px); }
+@media (max-width: 720px) { .gh-link { padding: 14px 14px; gap: 12px; } .gh-mark { width: 28px; height: 28px; flex-basis: 28px; } .gh-t b { font-size: clamp(12.5px, 3.6vw, 15px); overflow-wrap: normal; } .gh-t small { font-size: 13px; } .gh-arrow { font-size: 20px; padding-left: 4px; } }
 
 /* ---------- type ---------- */
 h1, h2, h3 { margin: 0; letter-spacing: -.02em; text-wrap: balance; }
