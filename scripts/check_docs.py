@@ -1,7 +1,7 @@
 """Every number in the documents and the deck must be one the build computed.
 
 python3 scripts/check_docs.py  — exits 1 and lists each number in README.md,
-SUBMISSION.md, pitch/TALK.md or pitch/index.html that appears nowhere in
+SUBMISSION.md, pitch/TALK.md, pitch/index.html, pitch/FILM.md or docs/TEST-PLAN-MATH.md that appears nowhere in
 app/data/dataset.js (in any of the forms the page prints it: as stored, as a
 percentage, rounded to 0-3 decimals). Numbers that are not data — years,
 units in a unit conversion, slide timings, version strings — are listed in
@@ -14,7 +14,7 @@ import os
 import re
 import sys
 
-DOCS = ["README.md", "SUBMISSION.md", "pitch/TALK.md", "pitch/index.html", "pitch/FILM.md"]
+DOCS = ["README.md", "SUBMISSION.md", "pitch/TALK.md", "pitch/index.html", "pitch/FILM.md", "docs/TEST-PLAN-MATH.md"]
 
 
 def walk(x, out):

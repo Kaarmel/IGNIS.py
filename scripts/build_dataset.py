@@ -11,6 +11,7 @@ import math
 import csv, json, os, re, sys, zipfile
 import xml.etree.ElementTree as ET
 from collections import Counter, defaultdict
+from fractions import Fraction
 
 SRC = "data/psi_data"
 OUT = "app/data/dataset.js"
@@ -989,6 +990,80 @@ CAMPAIGN = {
     "cells": _cells,
     "tests": len(_cells) * _rv[len(_rv) // 2],
     "step_zero": "publish the SoFIE-GEL points in PSI",
+}
+
+# ---- why these 30 tests: the arithmetic behind each factor -----------------
+# Stored so docs/TEST-PLAN-MATH.md quotes computed numbers only, and
+# scripts/verify_test_plan.py recomputes every one from the test points.
+def _rank(rows):
+    """Exact rank (fractions, no rounding) of a small design matrix."""
+    m = [[Fraction(x) for x in row] for row in rows]
+    r = 0
+    for c in range(len(m[0]) if m else 0):
+        piv = next((i for i in range(r, len(m)) if m[i][c] != 0), None)
+        if piv is None:
+            continue
+        m[r], m[piv] = m[piv], m[r]
+        for i in range(len(m)):
+            if i != r and m[i][c] != 0:
+                f = m[i][c] / m[r][c]
+                m[i] = [a - f * b for a, b in zip(m[i], m[r])]
+        r += 1
+    return r
+
+# Response surface per material: a bend in oxygen, a pressure effect, and a
+# pressure effect that changes with oxygen. Six terms, so six cells is the least
+# that fixes all of them.
+_terms = lambda o, p: [1, o, o * o, p, o * p, o * o * p]
+_pp = lambda o_pct, p: o_pct / 100 * p
+_ceil_pct = round(_ceil * 100, 1)
+_near_rows = [r for r in _sol if r["o2"] >= _ceil - 0.01]
+_cls_near = {}
+for r in _near_rows:
+    c = _cls(r["m"])
+    if c:
+        d = _cls_near.setdefault(c, {"tests": 0, "max_o2_pct": 0, "investigations": set()})
+        d["tests"] += 1
+        d["max_o2_pct"] = max(d["max_o2_pct"], round(r["o2"] * 100, 1))
+        d["investigations"].add(r["i"])
+_unclassed = Counter((r["m"] or "").strip() or "(no material name)" for r in _near_rows if not _cls(r["m"]))
+_cell_pp = []
+for o in _levels:
+    for pb in _press:
+        v = _pp(o, pb)
+        _cell_pp.append({"o2_pct": o, "p_bar": pb, "ppo2_bar": round(v, 3),
+                         "solid_tests_same_ppo2": sum(1 for r in _solid_both if abs(r["o2"] * r["p"] - v) <= CH_TOL * v)})
+_pairs = sorted(((abs(_pp(a["o2_pct"], a["p_bar"]) - _pp(b["o2_pct"], b["p_bar"])) / max(_pp(a["o2_pct"], a["p_bar"]), _pp(b["o2_pct"], b["p_bar"])), a, b)
+                 for a in _cell_pp for b in _cell_pp if a["o2_pct"] < b["o2_pct"] and a["p_bar"] != b["p_bar"]), key=lambda t: t[0])
+_full = [_terms(o, pb) for o in _levels for pb in _press]
+_two = [_terms(o, pb) for o in (_levels[0], _levels[-1]) for pb in _press]
+_kessler = [_terms(_levels[0], _press[0]), _terms(_levels[-1], _press[-1])]
+_ncls = len(CAMPAIGN["classes"])
+_pooled = [_terms(o, pb) + [1 if k == j else 0 for k in range(1, _ncls)]
+           for j in range(_ncls) for o in _levels for pb in _press]
+_sil = [r for r in rows_out if r["ph"] == "solid" and _cls(r["m"]) == "Silicone"]
+CAMPAIGN["why"] = {
+    "near_ceiling_from_pct": round(_ceil_pct - 1, 1),
+    "near_ceiling_tests": len(_near_rows),
+    "near_ceiling_by_class": {k: {"tests": v["tests"], "max_o2_pct": v["max_o2_pct"], "investigations": sorted(v["investigations"])}
+                              for k, v in sorted(_cls_near.items(), key=lambda kv: -kv[1]["tests"])},
+    "near_ceiling_left_out": dict(_unclassed.most_common()),
+    "silicone": {"tests": len(_sil), "with_pressure": sum(1 for r in _sil if r["p"] is not None)},
+    "o2_steps_pp": [round(b - a, 1) for a, b in zip([_ceil_pct] + _levels, _levels)],
+    "max_o2_distance_after_pp": round(max(round(b - a, 1) for a, b in zip([_ceil_pct] + _levels, _levels)) / 2, 1),
+    "cells_ppo2": _cell_pp,
+    "air_ppo2_bar": round(0.21 * 1.01325, 3),
+    "matched_pair": {"a": {"o2_pct": _pairs[0][1]["o2_pct"], "p_bar": _pairs[0][1]["p_bar"], "ppo2_bar": _pairs[0][1]["ppo2_bar"]},
+                     "b": {"o2_pct": _pairs[0][2]["o2_pct"], "p_bar": _pairs[0][2]["p_bar"], "ppo2_bar": _pairs[0][2]["ppo2_bar"]},
+                     "ppo2_difference_pct": round(_pairs[0][0] * 100, 1),
+                     "o2_difference_pp": round(_pairs[0][2]["o2_pct"] - _pairs[0][1]["o2_pct"], 1)},
+    "model_terms": len(_full[0]),
+    "rank_full_design": _rank(_full),
+    "rank_two_o2_levels": _rank(_two),
+    "rank_two_artemis_points": _rank(_kessler),
+    "pooled_terms": len(_pooled[0]),
+    "rank_pooled": _rank(_pooled),
+    "pooled_residual_df": len(_pooled) - _rank(_pooled),
 }
 
 data = {

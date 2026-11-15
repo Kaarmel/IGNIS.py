@@ -4,9 +4,10 @@
 #  2. every quote is re-found in its source file
 #  3. every number in the docs and the deck is one the build computed
 #  4. the SI tool agrees with the dashboard, and every saved answer passes the live check
+#  5. the 30-test plan and docs/TEST-PLAN-MATH.md re-derived from the test points
 set -e
 cd "$(dirname "$0")/.."
-echo "== 1/4 rebuild data and compare"
+echo "== 1/5 rebuild data and compare"
 if [ -d data/psi_data ]; then
   python3 -I scripts/build_dataset.py > /dev/null
   python3 -I scripts/build_telemetry.py > /dev/null
@@ -16,7 +17,10 @@ if [ -d data/psi_data ]; then
 else
   echo "skipped: data/psi_data (the 5.4 GB NASA download) is not on this machine — see README"
 fi
-echo "== 2/4 quotes";  python3 -I scripts/verify_insights.py
-echo "== 3/4 numbers"; python3 -I scripts/check_docs.py
-echo "== 4/4 SI";      node worker/test.mjs
+echo "== 2/5 quotes";  python3 -I scripts/verify_insights.py
+echo "== 3/5 numbers"; python3 -I scripts/check_docs.py
+echo "== 4/5 SI";      node worker/test.mjs
+echo "== 5/5 test plan"
+out=$(python3 -I scripts/verify_test_plan.py) || { echo "$out"; exit 1; }
+echo "$out" | tail -1
 echo "all checks passed"

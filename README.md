@@ -153,6 +153,7 @@ python3 -I scripts/verify_insights.py   # checks every quote in insights.js and 
 node worker/test.mjs                    # the SI tool agrees with the dashboard; saved answers still pass
 (cd worker && npx wrangler deploy)      # Ask IGNIS; set the key once: npx wrangler secret put OPENROUTER_API_KEY
 node scripts/capture_ask_cache.mjs      # re-record the saved fallback answers from the deployed worker
+python3 -I scripts/verify_test_plan.py  # re-derives the 30-test plan; the math is in docs/TEST-PLAN-MATH.md
 ```
 
 Every table is mapped explicitly in `SPEC` (`scripts/build_dataset.py`). A generic parser silently
@@ -212,9 +213,13 @@ Super-intelligent (SI) tools were used in this project, as required by the 2026 
 - **Saved answers, labelled as such.** `app/data/ask_cache.js` holds real answers recorded from the deployed
   worker by `scripts/capture_ask_cache.mjs` — the six preset questions and three missions, in English and
   Polish, each with its `check`, model name and date. An answer with an unresolved citation, a fraction for
-  oxygen or a cut-off ending is not written. The page shows one only when the live call fails or passes
-  25 s, under the label "saved answer, recorded <date> — not live"; `node worker/test.mjs` re-checks every
-  stored answer.
+  oxygen or a cut-off ending is not written. A preset or mission button shows its saved answer at once,
+  replayed word by word in about two seconds under the label "Instant answer: recorded from the live SI on
+  <date> … and replayed here", with an "Ask the SI live" button that sends the question to the worker. A
+  question typed freely always goes to the worker; its live answer is kept in that browser for a day and, if
+  asked again, is shown with the time it was answered. If a live call fails or passes 25 s, the page falls
+  back to the saved answer under "saved answer, recorded <date> — not live"; `node worker/test.mjs`
+  re-checks every stored answer.
 - **Speed.** With the model's reasoning mode on and `max_tokens` 8000, the five presets (one run each) took 3.8–11.8 s
   against the deployed worker (5–34 s in a local run), and two of five made no data query. With reasoning off
   and `max_tokens` 4000 they took 2.7–7.6 s (four of five queried the points); on an intermediate deployment, 3.3–6.4 s, and all five queried them. Same model. On the final deployment (e4fef2ca, 14 Nov) eleven direct calls across all six presets: ten took 2.6–11.0 s (the two slowest, 7.3 and 11.0 s, were answers the checker sent back for a correction), and one took 26.0 s, past the page's 25 s limit, so the page would have shown the saved answer. Single runs, not a benchmark.
