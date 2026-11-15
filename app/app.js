@@ -331,7 +331,7 @@
     svg.append(svgEl('rect', {
       // Clipped at the plot's floor: below it are the axis labels, not pressure.
       x: xOf(WIN.o2Lo), y: yOf(WIN.pHi), width: xOf(WIN.o2Hi) - xOf(WIN.o2Lo), height: Math.min(yOf(WIN.pLo), M.t + PH) - yOf(WIN.pHi),
-      fill: 'rgba(226,115,58,.09)', stroke: 'rgba(226,115,58,.42)', 'stroke-width': 1, 'stroke-dasharray': '5 4',
+      fill: 'rgba(244,119,51,.09)', stroke: 'rgba(244,119,51,.42)', 'stroke-width': 1, 'stroke-dasharray': '5 4',
     }));
     const inEnv = both.filter(inChallenge);
     const envBy = {};
@@ -339,10 +339,10 @@
     const envList = Object.entries(envBy).map(([k, v]) => `${v} ${phaseShort(k)}`).join(' · ') || L('no points', 'brak punktów');
     // Caption goes inside the band's empty area; the point count goes in the
     // section lede so no label sits on top of the dots.
-    const zl = svgEl('text', { x: xOf(LUNAR_O2) + 12, y: yOf(LUNAR_P) + 18, fill: '#e2733a', 'font-size': 12.5, 'letter-spacing': '1.1' });
+    const zl = svgEl('text', { x: xOf(LUNAR_O2) + 12, y: yOf(LUNAR_P) + 18, fill: '#f47733', 'font-size': 12.5, 'letter-spacing': '1.1' });
     // Two short lines inside the band, not one long one: the caption used to run
     // several times the width of the rectangle it was labelling.
-    const zl1 = svgEl('text', { x: xOf(0.66), y: yOf(CH_P) + 24, fill: '#e2733a', 'font-size': 12.5, 'letter-spacing': '1.1' });
+    const zl1 = svgEl('text', { x: xOf(0.66), y: yOf(CH_P) + 24, fill: '#f47733', 'font-size': 12.5, 'letter-spacing': '1.1' });
     zl1.textContent = L('CHALLENGE', 'OBWIEDNIA');
     svg.append(zl1);
     zl.textContent = L('ENVELOPE', 'Z CHALLENGE');
@@ -483,9 +483,9 @@
     // ---- the challenge line, and the gap to the solid ceiling ----
     svg.append(svgEl('line', {
       x1: xOf(CH_O2), y1: M.t, x2: xOf(CH_O2), y2: stripY + 10,
-      stroke: '#e2733a', 'stroke-width': 1.5,
+      stroke: '#f47733', 'stroke-width': 1.5,
     }));
-    const rt = svgEl('text', { x: xOf(CH_O2) + 8, y: M.t + 12, fill: '#e2733a', 'font-size': 13, 'letter-spacing': '.8' });
+    const rt = svgEl('text', { x: xOf(CH_O2) + 8, y: M.t + 12, fill: '#f47733', 'font-size': 13, 'letter-spacing': '.8' });
     // 30% is the challenge's "likely" level, not a requirement. Calling it one
     // turns a stated expectation into a threshold the data failed to meet.
     rt.textContent = L(`CHALLENGE ${fmt(CH_O2 * 100, 0)}%+`, `CHALLENGE ${fmt(CH_O2 * 100, 0)}%+`);
@@ -520,7 +520,7 @@
     });
     lg.append(el('span', {}, el('i', { style: 'background:transparent;border:1px solid #d9a441;border-radius:0' }),
       L('strip under the axis: solid tests with no pressure recorded', 'pasek pod osią: testy stałe bez zapisanego ciśnienia'), el('b', {}, fmt(solidNoP.length))));
-    lg.append(el('span', {}, el('i', { style: 'background:rgba(226,115,58,.18);border:1px dashed #e2733a;border-radius:0' }),
+    lg.append(el('span', {}, el('i', { style: 'background:rgba(244,119,51,.18);border:1px dashed #f47733;border-radius:0' }),
       L('orange box: the challenge atmosphere (30%+ O₂, 10.2 psi or less)', 'pomarańczowe pole: atmosfera z challenge\'u (30%+ O₂, 10,2 psi lub mniej)'), el('b', {}, fmt(both.filter(inChallenge).length))));
     lg.append(el('span', {}, el('i', { style: 'background:transparent;border-top:2px dotted #cbd5e1;border-radius:0;height:0;margin-top:7px' }),
       L(`dotted curve: the challenge's oxygen partial pressure (${fmt(CH.ppo2_bar, 2)} bar) — solid tests that reach it`, `kropkowana krzywa: ciśnienie cząstkowe O₂ z challenge'u (${fmt(CH.ppo2_bar, 2)} bar) — testy stałe, które je osiągają`), el('b', {}, fmt(CH.solid_at_ppo2))));
@@ -1130,7 +1130,7 @@
         tsvg.append(svgEl('path', { d, fill: 'none', stroke: color, 'stroke-width': 1.6, 'stroke-linejoin': 'round' }));
       };
       path(ion, Yion, '#6aaed6');
-      path(pr, Yp, '#e2733a');
+      path(pr, Yp, '#f47733');
 
       // x axis
       [0, .25, .5, .75, 1].forEach(f => {
