@@ -83,6 +83,8 @@
          data-en-al="Scatter plot of oxygen concentration against chamber pressure for microgravity combustion tests"
          data-pl-al="Wykres rozrzutu stężenia tlenu względem ciśnienia w komorze dla testów spalania w mikrograwitacji"></svg>
   </div>
+  <details class="more fold">
+  <summary data-en="What the map shows — three notes" data-pl="Co pokazuje mapa — trzy notatki"></summary>
   <div class="map-readout">
     <div class="card">
       <h3 data-en="The wall" data-pl="Ściana"></h3>
@@ -104,6 +106,7 @@
          data-pl-html="Co zrobiło tych <strong id=&quot;flex-high2&quot;>—</strong>: <strong id=&quot;dp-ext&quot;>—</strong> zgasło samo, wobec <strong id=&quot;dp-air&quot;>—</strong> z <strong id=&quot;dp-air-n&quot;>—</strong> w tej samej serii rozcieńczanej azotem przy powietrzu kabinowym. Obie osie różnią się między kohortami, więc to analogia, a nie porównanie kontrolowane."></p>
     </div>
   </div>
+  </details>
 </section>
 
 <!-- ============ ASK IGNIS ============ -->
@@ -129,8 +132,8 @@
     <div class="ds" id="ds"></div>
   </div>
   <div id="pane-si" role="tabpanel" aria-labelledby="tab-si">
-  <p class="si-warn" data-en-html="<b>Checked before you see it.</b> Every answer is checked automatically against the corpus: each investigation it cites must exist, each quote must appear word for word in a NASA file, and each number is compared with the corpus summary and the query results — an answer with a number it cannot back goes back to the model for correction, and a citation that still cannot be backed is marked in red. Click any source to open the record behind it."
-     data-pl-html="<b>Sprawdzone, zanim je zobaczysz.</b> Każda odpowiedź jest automatycznie sprawdzana względem korpusu: każde cytowane badanie musi istnieć, każdy cytat musi występować dosłownie w pliku NASA, a każda liczba jest porównywana ze streszczeniem korpusu i wynikami zapytań — odpowiedź z liczbą bez pokrycia wraca do modelu do poprawki, a odnośnik, którego nadal nie da się potwierdzić, jest oznaczony na czerwono. Kliknij dowolne źródło, żeby otworzyć rekord, który za nim stoi."></p>
+  <p class="si-warn" data-en-html="<b>Checked before you see it.</b> Every source, quote and number in an answer is checked against the NASA corpus; anything it cannot back is marked in red. Click a source to open its record."
+     data-pl-html="<b>Sprawdzone, zanim je zobaczysz.</b> Każde źródło, cytat i liczba w odpowiedzi są sprawdzane względem korpusu NASA; czego nie da się potwierdzić, jest oznaczone na czerwono. Kliknij źródło, żeby otworzyć jego rekord."></p>
   <div class="ask-presets" id="ask-presets"></div>
   <form class="ask-form" id="ask-form">
     <textarea id="ask-q" rows="2" maxlength="600"
@@ -163,7 +166,7 @@
   </form>
   <div class="atlas-controls" id="atlas-controls"></div>
   <div class="atlas" id="atlas-list"></div>
-  <p class="footnote" id="atlas-foot"></p>
+  <details class="more"><summary data-en="Which accessions have no test points, and why" data-pl="Które akcesje nie mają punktów testowych i dlaczego"></summary><p class="footnote" id="atlas-foot"></p></details>
 </section>
 
 <!-- ============ SOLVER ============ -->
@@ -236,8 +239,10 @@
   <h2 data-en="For the curious: where the numbers come from" data-pl="Dla dociekliwych: skąd biorą się liczby"></h2>
   <p class="sec-lede" data-en="The main path ends above. The sections below show the second variable (air flow), how the raw NASA tables became test points, the fire-safety areas with the model-ready export, and one real flame test second by second."
      data-pl="Główna ścieżka kończy się wyżej. Sekcje poniżej pokazują drugą zmienną (przepływ powietrza), jak surowe tabele NASA stały się punktami testowymi, obszary bezpieczeństwa pożarowego z eksportem dla modeli i jeden prawdziwy test płomienia sekunda po sekundzie."></p>
+  <button type="button" class="btn-ghost details-toggle" id="details-toggle" aria-expanded="false" aria-controls="details-body"
+          data-en="Show the details: air flow, corpus, export, telemetry" data-pl="Pokaż szczegóły: przepływ, korpus, eksport, telemetria"></button>
 </div>
-
+<div id="details-body" hidden>
 <!-- ============ FLOW ============ -->
 <section id="flowmap" class="sec">
   <div class="sec-head">
@@ -304,6 +309,7 @@
     <div class="tele-side" id="tele-side"></div>
   </div>
 </section>
+</div>
 
 </main>
 

@@ -225,8 +225,10 @@
     cards.forEach(c => host.append(el('article', { class: 'tk' + (c.gap ? ' tk-gap' : ''), html:
       `<span class="tag">${c.tag}</span><div class="tk-n">${c.n}</div><div class="tk-k">${c.k}</div>` +
       `<p class="tk-c">${c.c}</p>` +
-      (c.q ? `<details class="tk-qd"><summary>${L('verified quote', 'cytat zweryfikowany')}</summary><p class="tk-q src-link" role="button" tabindex="0" data-src-kind="quote" data-src-id="${c.id}" data-src-field="conclusion">“${esc(c.q.q)}”<small>${esc(c.q.f)} · <u>${L('open source', 'otwórz źródło')}</u></small></p></details>` : '') +
-      `<p class="tk-lim"><b>${L('Limit', 'Ograniczenie')}:</b> ${c.lim}</p>${link(c.id)}` })));
+      // The limit (and the verified quote, where there is one) is one click away, so the card reads as number + suggestion.
+      `<details class="tk-qd"><summary>${c.q ? L('Limit and verified quote', 'Ograniczenie i cytat zweryfikowany') : L('Limit', 'Ograniczenie')}</summary>` +
+      (c.q ? `<p class="tk-q src-link" role="button" tabindex="0" data-src-kind="quote" data-src-id="${c.id}" data-src-field="conclusion">“${esc(c.q.q)}”<small>${esc(c.q.f)} · <u>${L('open source', 'otwórz źródło')}</u></small></p>` : '') +
+      `<p class="tk-lim"><b>${L('Limit', 'Ograniczenie')}:</b> ${c.lim}</p></details>${link(c.id)}` })));
   };
   const INV_BY = Object.fromEntries(D.investigations.map(i => [i.id, i]));
 
@@ -840,11 +842,12 @@
       // it is interpretation while everything under it is quotation. It is
       // written only from the fields below, so nothing in it is unsourced.
       // Shown without a click; the quotes it rests on stay one click away.
+      // One click away (with the quotes it is written from), so the list stays short.
+      let sum = null;
       if (s.summary) {
-        const sum = el('div', { class: 'si-sum' });
+        sum = el('div', { class: 'si-sum' });
         sum.append(el('span', { class: 'si-sum-k' }, L('SI summary', 'Podsumowanie SI')));
         sum.append(el('p', { class: 'si-sum-t' }, LANG === 'pl' ? s.summary.pl : s.summary.en));
-        wrap.append(sum);
       }
       const box = el('div', { class: 'a-si' });
       Object.keys(SI_LABEL).forEach(k => {
@@ -864,11 +867,13 @@
         }
         box.append(row);
       });
-      wrap.append(el('details', { class: 'a-si-d' },
+      const d = el('details', { class: 'a-si-d' },
         el('summary', {}, any
-          ? L('Source quotes · verified', 'Cytaty źródłowe · zweryfikowane')
-          : L('no document in this accession to extract from', 'brak dokumentu w tej akcesji do wyciągnięcia')),
-        box));
+          ? (sum ? L('SI summary and source quotes · verified', 'Podsumowanie SI i cytaty źródłowe · zweryfikowane') : L('Source quotes · verified', 'Cytaty źródłowe · zweryfikowane'))
+          : L('no document in this accession to extract from', 'brak dokumentu w tej akcesji do wyciągnięcia')));
+      if (sum) d.append(sum);
+      d.append(box);
+      wrap.append(d);
       return wrap;
     };
     const drawRows = () => {
@@ -1516,7 +1521,12 @@
     const showOut = near.some(r => r.o);
     tbl.append(el('table', { html:
       `<thead><tr><th>${L('nearest evidence', 'najbliższy dowód')}</th><th>O₂</th><th>${L('pressure', 'ciśnienie')}</th>${showOut ? `<th>${L('outcome', 'wynik')}</th>` : ''}</tr></thead>
-       <tbody>${near.map(r => `<tr><td class="n">${esc(r.a)} · ${esc(r.i)} #${r.r}</td><td>${fmt(r.o2 * 100, 1)}%</td><td>${fmt(r.p, 3)} bar${r.pd ? L('<br><span class="src">from the report, not a per-test reading</span>', '<br><span class="src">z raportu, nie z pomiaru per test</span>') : ''}</td>${showOut ? `<td>${esc(r.o || '—')}</td>` : ''}</tr>`).join('')}</tbody>` }));
+       <tbody>${near.map((r, k) => `<tr${k >= 3 ? ' class="ev-x" hidden' : ''}><td class="n">${esc(r.a)} · ${esc(r.i)} #${r.r}</td><td>${fmt(r.o2 * 100, 1)}%</td><td>${fmt(r.p, 3)} bar${r.pd ? L('<br><span class="src">from the report, not a per-test reading</span>', '<br><span class="src">z raportu, nie z pomiaru per test</span>') : ''}</td>${showOut ? `<td>${esc(r.o || '—')}</td>` : ''}</tr>`).join('')}</tbody>` }));
+    if (near.length > 3) {
+      const b = el('button', { type: 'button', class: 'chip ev-more' }, L(`Show ${near.length - 3} more`, `Pokaż ${near.length - 3} więcej`));
+      b.onclick = () => { tbl.querySelectorAll('tr.ev-x').forEach(t => { t.hidden = false; }); b.remove(); };
+      tbl.append(b);
+    }
     out.append(tbl);
     finish(ctx);
   };
@@ -1816,13 +1826,14 @@
         `<b>Potem ${fmt(C.tests)} testów:</b> ${fmt(C.classes.length)} klas materiałów badanych do 1 pp od sufitu, przy ${C.o2_levels_pct.map(o => fmt(o, 1) + '%').join(', ')} O₂ i ${C.pressures_bar.map(p => fmt(p, 3)).join(' oraz ')} bar, ` +
         `${fmt(C.replicates)} test na warunek — tyle BASS wykonał dla ${fmt(C.conditions_with_that_many)} ze swoich ${fmt(C.conditions_in_bass)} warunków — w zakresie przepływu z BASS (${fmt(C.flow_cm_s[0])}–${fmt(C.flow_cm_s[1])} cm/s). ` +
         `Każda komórka podaje odległość od najbliższego punktu PSI tej klasy: tlen w pp, ciśnienie w %.`)}</p>` +
+      `<details class="more"><summary>${L(`Show all ${fmt(C.tests)} tests, with each one's distance from evidence`, `Pokaż wszystkie ${fmt(C.tests)} testów z odległością każdego od dowodu`)}</summary>` +
       `<div class="campaign-scroll"><table><thead><tr><th>${L('material class', 'klasa materiału')}</th>${cols.map(([o, p]) => `<th>${fmt(o, 1)}% · ${fmt(p, 3)} bar</th>`).join('')}</tr></thead><tbody>` +
       C.classes.map(cls => `<tr><td class="n">${esc(clsName(cls))}</td>${cols.map(([o, p]) => {
         const c = cell(cls, o, p), n = c && c.nearest;
         return n ? `<td title="${esc(n.i)} #${n.row}: ${fmt(n.o2_pct, 1)}% · ${fmt(n.p_bar, 3)} bar">${sign(n.oxygen_distance_pp)} pp<br><span class="src">${sign(n.pressure_distance_pct)}%</span></td>`
                  : `<td class="src">${L('no point with a pressure', 'brak punktu z ciśnieniem')}</td>`;
       }).join('')}</tr>`).join('') +
-      `</tbody></table></div>`;
+      `</tbody></table></div></details>`;
   };
 
   /* ---------------- ask IGNIS (SI) ---------------- */
@@ -1915,7 +1926,10 @@
       out.innerHTML = note + (ex ? `<p class="ask-saved ask-example">${L(
         `Example answer, saved ${dateFmt(ex.saved)}. Pick a question above to ask the SI live.`,
         `Przykładowa odpowiedź, zapisana ${dateFmt(ex.saved)}. Wybierz pytanie powyżej, żeby zapytać SI na żywo.`)}</p>` +
-        `<p class="ask-asked">${esc(ex.question)}</p><div class="ask-a">${askHtml(ex.answer)}</div>` + askMeta(ex, ex.check || {}) : '');
+        `<p class="ask-asked">${esc(ex.question)}</p><div class="ask-a ask-clamp">${askHtml(ex.answer)}</div>` +
+        `<button type="button" class="chip ask-full">${L('Show the full answer', 'Pokaż całą odpowiedź')}</button>` + askMeta(ex, ex.check || {}) : '');
+      const full = out.querySelector('.ask-full');
+      if (full) full.onclick = () => { out.querySelector('.ask-clamp').classList.remove('ask-clamp'); full.remove(); };
       return;
     }
     const { q, res } = askLast;
@@ -2186,6 +2200,31 @@
       download('ignis-search.csv', 'text/csv;charset=utf-8', head + '\n' + hits.map(r => EXPORT_COLS.map(([, f]) => csvCell(f(r))).join(',')).join('\n') + '\n');
     };
   };
+
+  /* ---------------- details: collapsed until asked for ---------------- */
+  const detBody = $('#details-body'), detBtn = $('#details-toggle');
+  const setDetails = open => {
+    if (!detBody || !detBtn) return;
+    detBody.hidden = !open;
+    detBtn.setAttribute('aria-expanded', String(open));
+    detBtn.dataset.en = open ? 'Hide the details' : 'Show the details: air flow, corpus, export, telemetry';
+    detBtn.dataset.pl = open ? 'Ukryj szczegóły' : 'Pokaż szczegóły: przepływ, korpus, eksport, telemetria';
+    detBtn.textContent = LANG === 'pl' ? detBtn.dataset.pl : detBtn.dataset.en;
+  };
+  if (detBtn) detBtn.onclick = () => setDetails(detBody.hidden);
+  // Anything that scrolls to a section inside the collapsed details opens it first.
+  const sivOrig = Element.prototype.scrollIntoView;
+  Element.prototype.scrollIntoView = function (...a) {
+    if (detBody && detBody.hidden && detBody.contains(this)) setDetails(true);
+    return sivOrig.apply(this, a);
+  };
+  document.addEventListener('click', e => {
+    const a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a || !detBody || !detBody.hidden) return;
+    const t = document.getElementById(a.getAttribute('href').slice(1));
+    if (t && detBody.contains(t)) setDetails(true);
+  }, true);
+  if (location.hash) { const t = document.getElementById(location.hash.slice(1)); if (t && detBody && detBody.contains(t)) setDetails(true); }
 
   /* ---------------- tabs: search / SI ---------------- */
   let TAB = 'si';

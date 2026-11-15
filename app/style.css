@@ -951,3 +951,16 @@ html { scroll-padding-top: 104px; }
 .btn-ghost { color: var(--ink); border: 1px solid var(--line-2); }
 .btn-ghost:hover { border-color: var(--ink-faint); transform: translateY(-1px); }
 .btn-cta:active, .btn-ghost:active { transform: translateY(1px); }
+
+/* ---------- less on screen: notes, tables and the details one click away ---------- */
+details.more.fold, .campaign details.more { max-width: none; }
+details.more.fold > .map-readout { margin-top: 14px; }
+.campaign details.more > .campaign-scroll { margin-top: 12px; }
+.details-toggle { margin-top: 22px; }
+#details-body[hidden] { display: none; }
+.ev-more { margin-top: 10px; }
+.tk .tk-qd { margin-top: 10px; }
+.a-si-d .si-sum { margin: 10px 0 12px; }
+.details-toggle { background: transparent; font-family: inherit; cursor: pointer; }
+.ask-clamp { max-height: 300px; overflow: hidden; -webkit-mask-image: linear-gradient(#000 65%, transparent); mask-image: linear-gradient(#000 65%, transparent); }
+.ask-full { margin: 8px 0 12px; }
