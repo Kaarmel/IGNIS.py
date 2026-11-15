@@ -632,6 +632,10 @@ details.more p { margin: 8px 0 0; }
 .ask-saved span { color: var(--ink-faint); }
 .ask-retry { margin-top: 6px; }
 .ask-saved .ask-retry { margin-top: 0; }
+.ask-saved .ask-live { margin: 0; }
+.ask-caret { display: inline-block; width: .55em; height: 1.05em; margin-left: 2px; vertical-align: -2px; background: var(--fire); animation: askcaret .9s steps(1) infinite; }
+@keyframes askcaret { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .ask-caret { animation: none; } }
 .solver-unstated { grid-column: 1 / -1; margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--solid); border-left: 2px solid var(--solid); padding-left: 12px; }
 /* tighter, so hero + four cards fit a 1366x768 laptop screen */
 .hero { padding: 18px 28px 14px; }

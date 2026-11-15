@@ -882,8 +882,17 @@
       const banner = el('div', { class: 'atlas-active' + (siRank ? ' si' : '') });
       if (siRank) {
         banner.innerHTML = `<b>${L('Active ranking', 'Aktywny ranking')}:</b> ${L('SI for', 'SI dla')}: „${esc(siRank.mission)}”` +
-          (siRank.saved ? ` <span class="ask-saved-inline">${L(`saved ranking, recorded ${dateFmt(siRank.saved)} — not live`, `ranking zapisany ${dateFmt(siRank.saved)}, nie na żywo`)}</span>` : '') +
+          (siRank.replay
+            ? ` <span class="ask-saved-inline">${L(`instant: recorded from the live SI on ${dateFmt(siRank.saved)}${siRank.seconds ? ` (it took ${fmt(siRank.seconds, 0)} s live)` : ''}`,
+                                                   `od ręki: nagrany z SI na żywo ${dateFmt(siRank.saved)}${siRank.seconds ? ` (na żywo zajął ${fmt(siRank.seconds, 0)} s)` : ''}`)}</span>`
+            : siRank.saved ? ` <span class="ask-saved-inline">${L(`saved ranking, recorded ${dateFmt(siRank.saved)} — not live`, `ranking zapisany ${dateFmt(siRank.saved)}, nie na żywo`)}</span>` : '') +
           ` <span class="atlas-active-m">${esc(siRank.model || '')}</span>`;
+        if (siRank.replay) {
+          const lv = el('button', { class: 'chip', type: 'button' }, L('Rank live', 'Uszereguj na żywo'));
+          const { mission, key } = siRank;
+          lv.onclick = () => missionSend(mission, key, true);
+          banner.append(' ', lv);
+        }
         const back = el('button', { class: 'chip', type: 'button' }, L('Back to the rule', 'Wróć do reguły'));
         back.onclick = () => { siRank = null; siRankMsg = ''; renderAtlas(); };
         banner.append(' ', back);
@@ -975,10 +984,23 @@
   // Ask the worker to rank the Atlas for a mission. A response that fails
   // validation (the worker's or ours) leaves the rule in force and says why.
   let missionBusy = false;
-  const missionSend = async (mission, key = null) => {
+  // The worker validated it; check again here that every id is one the Atlas has.
+  const validRank = r => r && Array.isArray(r.ranking) && r.ranking.length
+    && r.ranking.every(x => INV[x.id] && typeof x.why === 'string')
+    && new Set(r.ranking.map(x => x.id)).size === r.ranking.length;
+  const missionSend = async (mission, key = null, live = false) => {
     mission = mission.trim();
     if (!mission || missionBusy) return;
     const lookupKey = key || (MISSIONS().find(([, lab]) => lab === mission) || [])[0] || null;
+    // A mission button with a saved ranking (recorded from the live worker)
+    // shows it at once and says so; "Rank live" asks the worker.
+    const rec = !live && lookupKey && CACHE.rank[`${lookupKey}:${LANG}`];
+    if (validRank(rec)) {
+      siRank = { mission: rec.mission, key: lookupKey, ranking: rec.ranking, model: rec.model, saved: rec.saved, replay: true, seconds: rec.seconds };
+      siRankMsg = '';
+      renderAtlas();
+      return;
+    }
     const go = $('#mission-go');
     missionBusy = true; go.disabled = true;
     const steps = [];
@@ -997,10 +1019,7 @@
     clearTimeout(kill);
     missionBusy = false; go.disabled = false; go.classList.remove('busy');
     go.textContent = L('Rank with SI', 'Uszereguj przez SI');
-    // The worker validated it; check again here that every id is one the Atlas has.
-    const valid = r => r && Array.isArray(r.ranking) && r.ranking.length
-      && r.ranking.every(x => INV[x.id] && typeof x.why === 'string')
-      && new Set(r.ranking.map(x => x.id)).size === r.ranking.length;
+    const valid = validRank;
     const saved = lookupKey && CACHE.rank[`${lookupKey}:${LANG}`];
     if (!res.error && valid(res)) {
       siRank = { mission, key: lookupKey, ranking: res.ranking, model: res.model };
@@ -1908,7 +1927,63 @@
     return key;
   };
   const savedAnswer = key => key && (CACHE.ask[`${key}:${LANG}`] || null);
-  const dateFmt = iso => { try { return new Date(iso + 'T12:00:00Z').toLocaleDateString(LOC(), { year: 'numeric', month: 'long', day: 'numeric' }); } catch (e) { return iso; } };
+  // Preset questions answer at once: the saved answer for that preset — a real
+  // one, recorded from the live worker by scripts/capture_ask_cache.mjs — is
+  // replayed word by word, and the panel says it is a recording. "Ask the SI
+  // live" sends the question to the worker. A live answer to any other
+  // question is kept in this browser for a day, so asking it again is instant.
+  const REPLAY_MS = 2000;
+  const MEM_KEY = 'ignis-ask-mem-v1', MEM_TTL = 864e5;
+  const memKey = q => `${LANG}|${q.trim().replace(/\s+/g, ' ').toLowerCase()}`;
+  const askMem = (() => {
+    try {
+      const m = JSON.parse(localStorage.getItem(MEM_KEY) || '{}'), now = Date.now();
+      return new Map(Object.entries(m).filter(([, v]) => v && v.answer && now - v.at < MEM_TTL));
+    } catch (e) { return new Map(); }
+  })();
+  const memPut = (q, res) => {
+    askMem.set(memKey(q), { ...res, at: Date.now() });
+    try { localStorage.setItem(MEM_KEY, JSON.stringify(Object.fromEntries([...askMem].slice(-20)))); } catch (e) { /* storage off: the tab still remembers */ }
+  };
+  // Where a replay may pause: on a space, never inside a [tag], a **bold**
+  // run or a "PSI-26 row 55" reference, so no half-built link is ever drawn.
+  const replayCuts = s => {
+    const cuts = [];
+    let br = 0, bold = false;
+    for (let i = 0; i < s.length; i++) {
+      const c = s[i];
+      if (c === '[') br++;
+      else if (c === ']') br = Math.max(0, br - 1);
+      else if (c === '*' && s[i + 1] === '*') { bold = !bold; i++; }
+      else if (/\s/.test(c) && !br && !bold
+        && !/PSI-\d+\]?[  ]*(?:rows?|wiersz\w*)?[  ]*$/.test(s.slice(Math.max(0, i - 24), i + 1))) cuts.push(i);
+    }
+    cuts.push(s.length);
+    return cuts;
+  };
+  const withCaret = h => h.replace(/(<\/p>|<\/li><\/ul>)$/, '<span class="ask-caret" aria-hidden="true"></span>$1');
+  const askReplay = (q, key) => {
+    const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const me = { q, key, replay: true, lang: LANG, shown: reduce ? null : 0, steps: [] };
+    askLast = me;
+    $('#ask-go').disabled = false;
+    renderAskOut();
+    if (me.shown === null) return;
+    const text = savedAnswer(key).answer, cuts = replayCuts(text);
+    const per = Math.max(1, Math.ceil(cuts.length / Math.round(REPLAY_MS / 33)));
+    let k = -1;
+    const tick = () => {
+      if (askLast !== me || me.shown === null) return;   // replaced, or the language changed
+      k = Math.min(cuts.length - 1, k + per);
+      if (k === cuts.length - 1) { me.shown = null; renderAskOut(); return; }
+      me.shown = cuts[k];
+      const a = $('#ask-out .ask-a');
+      if (a) a.innerHTML = withCaret(askHtml(text.slice(0, me.shown)));
+      setTimeout(tick, 33);
+    };
+    setTimeout(tick, 33);
+  };
+  const dateFmt =iso => { try { return new Date(iso + 'T12:00:00Z').toLocaleDateString(LOC(), { year: 'numeric', month: 'long', day: 'numeric' }); } catch (e) { return iso; } };
   const askMeta = (res, c) => {
     const bad = (c.unknown_investigations || []).length + (c.unknown_quotes || []).length + (c.unverified_free_quotes || []).length;
     return `<p class="ask-sugg">${L('Checked against the corpus before display. Click any source above to open the record it rests on.', 'Sprawdzone względem korpusu przed wyświetleniem. Kliknij dowolne źródło powyżej, żeby otworzyć rekord, na którym się opiera.')}</p><p class="ask-meta">${esc(res.model || '')} · ${L('data queries', 'zapytania o dane')}: ${fmt(res.queries || 0)} · ` +
@@ -1934,6 +2009,20 @@
       if (full) full.onclick = () => { out.querySelector('.ask-clamp').classList.remove('ask-clamp'); full.remove(); };
       return;
     }
+    if (askLast.replay) {
+      const s = savedAnswer(askLast.key);
+      if (askLast.lang !== LANG) askLast.shown = null;   // a language switch shows the whole saved answer at once
+      const done = askLast.shown == null;
+      out.innerHTML = `<p class="ask-saved ask-replay">${L(
+        `Instant answer: recorded from the live SI on ${dateFmt(s.saved)}${s.seconds ? ` (it took ${fmt(s.seconds, 0)} s live)` : ''} and replayed here.`,
+        `Odpowiedź od ręki: nagrana z SI na żywo ${dateFmt(s.saved)}${s.seconds ? ` (na żywo zajęła ${fmt(s.seconds, 0)} s)` : ''} i odtworzona tutaj.`)} ` +
+        `<button class="chip ask-live" type="button">${L('Ask the SI live', 'Zapytaj SI na żywo')}</button></p>` +
+        `<p class="ask-asked">${esc(s.question)}</p><div class="ask-a">${done ? askHtml(s.answer) : withCaret(askHtml(s.answer.slice(0, askLast.shown)))}</div>` +
+        (done ? askMeta(s, s.check || {}) : '');
+      const key = askLast.key;
+      out.querySelector('.ask-live').onclick = () => { $('#ask-q').value = s.question; askSend(s.question, key, true); };
+      return;
+    }
     const { q, res } = askLast;
     if (res === 'pending') {
       // A step list: finished steps get a tick, the current one pulses.
@@ -1957,10 +2046,16 @@
         out.innerHTML = `<p class="ask-bad">${msg}</p>${retry}`;
       }
       const b = out.querySelector('.ask-retry');
-      if (b) b.onclick = () => askSend(askLast.q, askLast.key);
+      if (b) b.onclick = () => askSend(askLast.q, askLast.key, true);
       return;
     }
-    out.innerHTML = `<p class="ask-asked">${esc(q)}</p><div class="ask-a ask-in">${askHtml(res.answer)}</div>` + askMeta(res, res.check || {});
+    const again = askLast.mem ? `<p class="ask-saved">${L(
+      `Answered live at ${new Date(res.at).toLocaleTimeString(LOC(), { hour: '2-digit', minute: '2-digit' })} in this browser, shown again without a new call.`,
+      `Odpowiedź na żywo z ${new Date(res.at).toLocaleTimeString(LOC(), { hour: '2-digit', minute: '2-digit' })} w tej przeglądarce, pokazana ponownie bez nowego zapytania.`)} ` +
+      `<button class="chip ask-live" type="button">${L('Ask again live', 'Zapytaj ponownie na żywo')}</button></p>` : '';
+    out.innerHTML = again + `<p class="ask-asked">${esc(q)}</p><div class="ask-a ask-in">${askHtml(res.answer)}</div>` + askMeta(res, res.check || {});
+    const lv = out.querySelector('.ask-live');
+    if (lv) lv.onclick = () => askSend(askLast.q, askLast.key, true);
   };
   // Above every answer: what in it can be clicked and what each kind opens,
   // with the first real link of each kind from this answer as the example.
@@ -1985,8 +2080,11 @@
     if (n) ans.before(box);
   };
   const renderAskOut = () => { renderAskOut0(); askLegend(); };
-  const askSend = async (q, key = presetKeyOf(q)) => {
+  const askSend = async (q, key = presetKeyOf(q), live = false) => {
     if (!q.trim()) return;
+    if (!live && savedAnswer(key)) { askReplay(q, key); return; }
+    const hit = !live && askMem.get(memKey(q));
+    if (hit) { askLast = { q, key, res: hit, steps: [], mem: true }; $('#ask-go').disabled = false; renderAskOut(); return; }
     askLast = { q, key, res: 'pending', steps: [] };
     renderAskOut();
     if (!ASK_URL) { askLast.res = { error: 'network' }; renderAskOut(); return; }
@@ -2001,6 +2099,7 @@
       mine.res = { error: e.name === 'AbortError' ? 'timeout' : 'network' };
     }
     clearTimeout(kill);
+    if (mine.res && !mine.res.error && mine.res.answer) memPut(q, mine.res);
     if (askLast !== mine) return;   // a newer question replaced this one
     $('#ask-go').disabled = false;
     renderAskOut();
