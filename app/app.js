@@ -1966,26 +1966,21 @@
     const out = $('#ask-out'), ans = out && out.querySelector('.ask-a');
     if (!ans) return;
     const kinds = [
-      ['.ask-cite', L('the investigation: what it measured, its oxygen and pressure range, its files', 'badanie: co mierzyło, zakres tlenu i ciśnienia, pliki')],
-      ['.ask-row', L('the NASA data row: file, row number and every value', 'wiersz danych NASA: plik, numer wiersza i wszystkie wartości')],
-      ['.ask-q', L('the NASA document the quote comes from', 'dokument NASA, z którego pochodzi cytat')],
+      ['.ask-cite', L('study', 'badanie')],
+      ['.ask-row', L('data row', 'wiersz danych')],
+      ['.ask-q', L('NASA document', 'dokument NASA')],
     ];
-    const items = kinds.map(([sel, t]) => {
+    const box = el('p', { class: 'ask-legend' }, L('Clickable: ', 'Klikalne: '));
+    let n = 0;
+    kinds.forEach(([sel, t]) => {
       const first = ans.querySelector(sel);
-      if (!first) return null;
+      if (!first) return;
       const ex = first.cloneNode(true);
-      if (sel === '.ask-q') { ex.textContent = L('“quote” · open source', '„cytat” · otwórz źródło'); ex.className = 'ask-cite ask-qx src-link'; }
-      const li = el('li', {});
-      li.append(ex, document.createTextNode(' → ' + t));
-      return li;
-    }).filter(Boolean);
-    if (!items.length) return;
-    const box = el('div', { class: 'ask-legend' },
-      el('p', {}, L('Click any highlighted tag in the answer — it opens the source behind it:', 'Kliknij dowolny podświetlony znacznik w odpowiedzi — otworzy źródło, na którym się opiera:')));
-    const ul = el('ul', {});
-    items.forEach(li => ul.append(li));
-    box.append(ul);
-    ans.before(box);
+      if (sel === '.ask-q') { ex.textContent = L('“quote”', '„cytat”'); ex.className = 'ask-cite ask-qx src-link'; }
+      if (n++) box.append(document.createTextNode(' · '));
+      box.append(ex, document.createTextNode(' ' + t));
+    });
+    if (n) ans.before(box);
   };
   const renderAskOut = () => { renderAskOut0(); askLegend(); };
   const askSend = async (q, key = presetKeyOf(q)) => {
