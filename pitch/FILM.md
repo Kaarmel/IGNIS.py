@@ -4,7 +4,7 @@ This file is the brief for the project video. It replaces the talk deck as the m
 `pitch/index.html` stays as the backup for a live presentation. Anyone who edits the
 film (a person or a tool) should be able to work from this file alone.
 
-**Published:** https://youtu.be/EfFLVnlmn70 (also on the project page, https://kaarmel.github.io/IGNIS.py/).
+**Published:** https://youtu.be/5PyqjoD4lmg (also on the project page, https://kaarmel.github.io/IGNIS.py/).
 
 Every number below comes from `app/data/dataset.js` and is checked by `scripts/check_docs.py`
 (timings and video specs are on its allow list). Do not add a number that is not here.

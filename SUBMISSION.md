@@ -80,7 +80,7 @@ corpus. (Prose is written by hand; the numbers are not.)
 
 ## Project Demo
 
-**30-second film:** https://youtu.be/EfFLVnlmn70 · script, shot list and context in [`pitch/FILM.md`](pitch/FILM.md).
+**30-second film:** https://youtu.be/5PyqjoD4lmg · script, shot list and context in [`pitch/FILM.md`](pitch/FILM.md).
 The film's voice-over and music bed are AI-generated (ElevenLabs text-to-speech and sound generation); the
 picture is a scripted screen recording of the live application and a chart drawn from `dataset.js`.
 
