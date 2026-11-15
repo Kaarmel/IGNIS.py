@@ -22,5 +22,7 @@
   "9.4": "pitch/FILM.md: film timing (shot boundaries)",
   "14.4": "pitch/FILM.md: film timing (shot boundaries)",
   "19.2": "pitch/FILM.md: film timing (shot boundaries)",
-  "25.5": "pitch/FILM.md: film timing (shot boundaries)"
+  "25.5": "pitch/FILM.md: film timing (shot boundaries)",
+  "4.4": "measured latency of the deployed worker a7830d4d on 15.11.2026, seconds (not corpus data)",
+  "9.5": "measured latency of the deployed worker a7830d4d on 15.11.2026, seconds (not corpus data)"
 }
