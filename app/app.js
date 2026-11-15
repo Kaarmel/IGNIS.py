@@ -6,7 +6,7 @@
   if (!D) { document.body.innerHTML = '<p style="padding:40px;font-family:monospace">dataset.js missing — run scripts/build_dataset.py</p>'; return; }
 
   const ROWS = D.testpoints;
-  const PHASE_COLOR = { solid: '#f59e0b', droplet: '#38bdf8', gas: '#a78bfa', aerosol: '#34d399', dust: '#94a3b8', emulator: '#fb923c' };
+  const PHASE_COLOR = { solid: '#d9a441', droplet: '#6aaed6', gas: '#9d8fd6', aerosol: '#5fb894', dust: '#94a3b8', emulator: '#d98a52' };
   // The challenge's own numbers are the primary reference point: lunar oxygen
   // "will likely be 30% or greater, with a corresponding pressure of 10.2 psi
   // or less", suits "filled with 100% oxygen to only 4.3 psi". Both come from
@@ -331,7 +331,7 @@
     svg.append(svgEl('rect', {
       // Clipped at the plot's floor: below it are the axis labels, not pressure.
       x: xOf(WIN.o2Lo), y: yOf(WIN.pHi), width: xOf(WIN.o2Hi) - xOf(WIN.o2Lo), height: Math.min(yOf(WIN.pLo), M.t + PH) - yOf(WIN.pHi),
-      fill: 'rgba(255,106,31,.09)', stroke: 'rgba(255,106,31,.42)', 'stroke-width': 1, 'stroke-dasharray': '5 4',
+      fill: 'rgba(226,115,58,.09)', stroke: 'rgba(226,115,58,.42)', 'stroke-width': 1, 'stroke-dasharray': '5 4',
     }));
     const inEnv = both.filter(inChallenge);
     const envBy = {};
@@ -339,10 +339,10 @@
     const envList = Object.entries(envBy).map(([k, v]) => `${v} ${phaseShort(k)}`).join(' · ') || L('no points', 'brak punktów');
     // Caption goes inside the band's empty area; the point count goes in the
     // section lede so no label sits on top of the dots.
-    const zl = svgEl('text', { x: xOf(LUNAR_O2) + 12, y: yOf(LUNAR_P) + 18, fill: '#ff6a1f', 'font-size': 12.5, 'letter-spacing': '1.1' });
+    const zl = svgEl('text', { x: xOf(LUNAR_O2) + 12, y: yOf(LUNAR_P) + 18, fill: '#e2733a', 'font-size': 12.5, 'letter-spacing': '1.1' });
     // Two short lines inside the band, not one long one: the caption used to run
     // several times the width of the rectangle it was labelling.
-    const zl1 = svgEl('text', { x: xOf(0.66), y: yOf(CH_P) + 24, fill: '#ff6a1f', 'font-size': 12.5, 'letter-spacing': '1.1' });
+    const zl1 = svgEl('text', { x: xOf(0.66), y: yOf(CH_P) + 24, fill: '#e2733a', 'font-size': 12.5, 'letter-spacing': '1.1' });
     zl1.textContent = L('CHALLENGE', 'OBWIEDNIA');
     svg.append(zl1);
     zl.textContent = L('ENVELOPE', 'Z CHALLENGE');
@@ -452,14 +452,14 @@
     const npLo = Math.min(...npO2.map(r => r.o2)), npHi = Math.max(...npO2.map(r => r.o2));
     const band = svgEl('rect', {
       x: xOf(npLo), y: stripY - 6, width: xOf(npHi) - xOf(npLo), height: 12,
-      fill: 'rgba(245,158,11,.28)', stroke: '#f59e0b', 'stroke-width': 1,
+      fill: 'rgba(217,164,65,.28)', stroke: '#d9a441', 'stroke-width': 1,
     });
     band.dataset.tip = L(
       `${solidNoP.length} solid-material tests<br>O2 ${fmt(npLo * 100, 1)}–${fmt(npHi * 100, 1)}%<br>pressure: not recorded anywhere`,
       `${solidNoP.length} testów materiałów stałych<br>O2 ${fmt(npLo * 100, 1)}–${fmt(npHi * 100, 1)}%<br>ciśnienie: nigdzie nie zapisane`);
     svg.append(band);
 
-    const st1 = svgEl('text', { x: xOf(npLo) - 10, y: stripY + 4, fill: '#f59e0b', 'font-size': 12.5, 'letter-spacing': '.6', 'text-anchor': 'end' });
+    const st1 = svgEl('text', { x: xOf(npLo) - 10, y: stripY + 4, fill: '#d9a441', 'font-size': 12.5, 'letter-spacing': '.6', 'text-anchor': 'end' });
     st1.textContent = L(`SOLID · ${solidNoP.length}`, `STAŁE · ${solidNoP.length}`);
     svg.append(st1);
     const st2 = svgEl('text', { x: xOf(CH_O2) + 14, y: stripY + 4, fill: '#8b93a0', 'font-size': 12.5 });
@@ -474,18 +474,18 @@
     // ---- the wall at the solid ceiling ----
     svg.append(svgEl('line', {
       x1: xOf(solidMaxO2), y1: M.t, x2: xOf(solidMaxO2), y2: stripY + 10,
-      stroke: '#f59e0b', 'stroke-width': 1.5, 'stroke-dasharray': '6 4', opacity: .8,
+      stroke: '#d9a441', 'stroke-width': 1.5, 'stroke-dasharray': '6 4', opacity: .8,
     }));
-    const wt = svgEl('text', { x: xOf(solidMaxO2) - 8, y: M.t + 12, fill: '#f59e0b', 'font-size': 13, 'letter-spacing': '.8', 'text-anchor': 'end' });
+    const wt = svgEl('text', { x: xOf(solidMaxO2) - 8, y: M.t + 12, fill: '#d9a441', 'font-size': 13, 'letter-spacing': '.8', 'text-anchor': 'end' });
     wt.textContent = L(`SOLIDS STOP ${fmt(solidMaxO2 * 100, 1)}%`, `STAŁE KOŃCZĄ SIĘ ${fmt(solidMaxO2 * 100, 1)}%`);
     svg.append(wt);
 
     // ---- the challenge line, and the gap to the solid ceiling ----
     svg.append(svgEl('line', {
       x1: xOf(CH_O2), y1: M.t, x2: xOf(CH_O2), y2: stripY + 10,
-      stroke: '#ff6a1f', 'stroke-width': 1.5,
+      stroke: '#e2733a', 'stroke-width': 1.5,
     }));
-    const rt = svgEl('text', { x: xOf(CH_O2) + 8, y: M.t + 12, fill: '#ff6a1f', 'font-size': 13, 'letter-spacing': '.8' });
+    const rt = svgEl('text', { x: xOf(CH_O2) + 8, y: M.t + 12, fill: '#e2733a', 'font-size': 13, 'letter-spacing': '.8' });
     // 30% is the challenge's "likely" level, not a requirement. Calling it one
     // turns a stated expectation into a threshold the data failed to meet.
     rt.textContent = L(`CHALLENGE ${fmt(CH_O2 * 100, 0)}%+`, `CHALLENGE ${fmt(CH_O2 * 100, 0)}%+`);
@@ -493,19 +493,19 @@
 
     // ---- the gap annotation, placed in the empty top band ----
     const gy = M.t + 58;
-    svg.append(svgEl('line', { x1: xOf(solidMaxO2), y1: gy, x2: xOf(CH_O2), y2: gy, stroke: '#ef4444', 'stroke-width': 1.5 }));
+    svg.append(svgEl('line', { x1: xOf(solidMaxO2), y1: gy, x2: xOf(CH_O2), y2: gy, stroke: '#d9605a', 'stroke-width': 1.5 }));
     [xOf(solidMaxO2), xOf(CH_O2)].forEach(x =>
-      svg.append(svgEl('line', { x1: x, y1: gy - 6, x2: x, y2: gy + 6, stroke: '#ef4444', 'stroke-width': 1.5 })));
+      svg.append(svgEl('line', { x1: x, y1: gy - 6, x2: x, y2: gy + 6, stroke: '#d9605a', 'stroke-width': 1.5 })));
     // Two lines, not one: the bracket is only ~77 viewBox units wide, and
     // "7.3 pp untested" / "7,3 pp nieprzetestowane" is wider than that.
     const gx = (xOf(solidMaxO2) + xOf(CH_O2)) / 2;
     // paint-order knocks the dashed ceiling line out from behind the label
     // instead of letting it strike through the number.
     const knockout = { stroke: '#08090b', 'stroke-width': 3, 'paint-order': 'stroke' };
-    const gt = svgEl('text', { x: gx, y: gy + 17, fill: '#ef4444', 'font-size': 14, 'text-anchor': 'middle', 'letter-spacing': '.6', 'font-weight': 600, ...knockout });
+    const gt = svgEl('text', { x: gx, y: gy + 17, fill: '#d9605a', 'font-size': 14, 'text-anchor': 'middle', 'letter-spacing': '.6', 'font-weight': 600, ...knockout });
     gt.textContent = `${fmt((CH_O2 - solidMaxO2) * 100, 1)} pp`;
     svg.append(gt);
-    const gt2 = svgEl('text', { x: gx, y: gy + 30, fill: '#ef4444', 'font-size': 12, 'text-anchor': 'middle', 'letter-spacing': '.4', ...knockout });
+    const gt2 = svgEl('text', { x: gx, y: gy + 30, fill: '#d9605a', 'font-size': 12, 'text-anchor': 'middle', 'letter-spacing': '.4', ...knockout });
     gt2.textContent = L('not in PSI', 'brak w PSI');
     svg.append(gt2);
 
@@ -518,9 +518,9 @@
       if (!n) return;   // a class with no point on this chart has no place in its legend
       lg.append(el('span', {}, el('i', { style: `background:${PHASE_COLOR[k]}` }), phaseName(k), el('b', {}, fmt(n))));
     });
-    lg.append(el('span', {}, el('i', { style: 'background:transparent;border:1px solid #f59e0b;border-radius:0' }),
+    lg.append(el('span', {}, el('i', { style: 'background:transparent;border:1px solid #d9a441;border-radius:0' }),
       L('strip under the axis: solid tests with no pressure recorded', 'pasek pod osią: testy stałe bez zapisanego ciśnienia'), el('b', {}, fmt(solidNoP.length))));
-    lg.append(el('span', {}, el('i', { style: 'background:rgba(255,106,31,.18);border:1px dashed #ff6a1f;border-radius:0' }),
+    lg.append(el('span', {}, el('i', { style: 'background:rgba(226,115,58,.18);border:1px dashed #e2733a;border-radius:0' }),
       L('orange box: the challenge atmosphere (30%+ O₂, 10.2 psi or less)', 'pomarańczowe pole: atmosfera z challenge\'u (30%+ O₂, 10,2 psi lub mniej)'), el('b', {}, fmt(both.filter(inChallenge).length))));
     lg.append(el('span', {}, el('i', { style: 'background:transparent;border-top:2px dotted #cbd5e1;border-radius:0;height:0;margin-top:7px' }),
       L(`dotted curve: the challenge's oxygen partial pressure (${fmt(CH.ppo2_bar, 2)} bar) — solid tests that reach it`, `kropkowana krzywa: ciśnienie cząstkowe O₂ z challenge'u (${fmt(CH.ppo2_bar, 2)} bar) — testy stałe, które je osiągają`), el('b', {}, fmt(CH.solid_at_ppo2))));
@@ -556,7 +556,7 @@
     const X0 = Math.max(0, Math.floor(o2Min - 2)), X1 = Math.min(100, Math.ceil(o2Max + 2));
     const X = o2 => M2.l + ((o2 * 100 - X0) / (X1 - X0)) * PW2;
     const Y = f => M2.t + PH2 * (1 - Math.sqrt(Math.max(0, f) / fMax));
-    const OUT_COLOR = { extinction: '#ef4444', blowoff: '#38bdf8', null: '#f59e0b' };
+    const OUT_COLOR = { extinction: '#d9605a', blowoff: '#6aaed6', null: '#d9a441' };
     // The four outcome-bearing cells that never wrote a final setting. They are
     // drawn as an arrow from the start setting, because the flow was reduced
     // until the flame went out and the value it went out at is not recorded.
@@ -646,10 +646,10 @@
       const cnt = f => fmt(rows.filter(f).length);
       lg.append(el('p', { class: 'lg-h' }, L('Each mark is one test: oxygen across, the air-flow setting up. The shape says what the operator\'s log recorded about how the test ended.',
                                             'Każdy znak to jeden test: tlen w poziomie, nastawa przepływu powietrza w pionie. Kształt mówi, co log operatora zapisał o końcu testu.')));
-      lg.append(el('span', {}, el('i', { style: 'background:#f59e0b;opacity:.6' }), L('only the flow setting is logged — how the test ended is not recorded', 'zapisana tylko nastawa przepływu — jak skończył się test, nie wiadomo'), el('b', {}, cnt(r => !(r.fl && r.fl.out)))));
-      lg.append(el('span', {}, el('i', { style: 'background:transparent;border:2.8px solid #ef4444;border-radius:50%' }), L('the flame went out at this flow (the last setting in the log)', 'płomień zgasł przy tym przepływie (ostatnia nastawa w logu)'), el('b', {}, cnt(r => r.fl && r.fl.out === 'extinction' && !r.fl.ramp))));
-      lg.append(el('span', {}, el('i', { style: 'background:transparent;color:#ef4444;font-weight:700;font-size:15px;line-height:1;text-align:center;width:auto' }, '↓'), L('the operator turned the flow down from here until the flame went out; the flow at that moment is not recorded', 'operator zmniejszał przepływ od tej wartości, aż płomień zgasł; przepływ w tej chwili nie jest zapisany'), el('b', {}, cnt(r => r.fl && r.fl.out === 'extinction' && r.fl.ramp))));
-      lg.append(el('span', {}, el('i', { style: 'background:#38bdf8;border-radius:0' }), L('the flame was blown off by the flow', 'płomień został zdmuchnięty przez przepływ'), el('b', {}, cnt(r => r.fl && r.fl.out === 'blowoff'))));
+      lg.append(el('span', {}, el('i', { style: 'background:#d9a441;opacity:.6' }), L('only the flow setting is logged — how the test ended is not recorded', 'zapisana tylko nastawa przepływu — jak skończył się test, nie wiadomo'), el('b', {}, cnt(r => !(r.fl && r.fl.out)))));
+      lg.append(el('span', {}, el('i', { style: 'background:transparent;border:2.8px solid #d9605a;border-radius:50%' }), L('the flame went out at this flow (the last setting in the log)', 'płomień zgasł przy tym przepływie (ostatnia nastawa w logu)'), el('b', {}, cnt(r => r.fl && r.fl.out === 'extinction' && !r.fl.ramp))));
+      lg.append(el('span', {}, el('i', { style: 'background:transparent;color:#d9605a;font-weight:700;font-size:15px;line-height:1;text-align:center;width:auto' }, '↓'), L('the operator turned the flow down from here until the flame went out; the flow at that moment is not recorded', 'operator zmniejszał przepływ od tej wartości, aż płomień zgasł; przepływ w tej chwili nie jest zapisany'), el('b', {}, cnt(r => r.fl && r.fl.out === 'extinction' && r.fl.ramp))));
+      lg.append(el('span', {}, el('i', { style: 'background:#6aaed6;border-radius:0' }), L('the flame was blown off by the flow', 'płomień został zdmuchnięty przez przepływ'), el('b', {}, cnt(r => r.fl && r.fl.out === 'blowoff'))));
     }
     const nOut = rows.filter(r => r.fl && r.fl.out).length;
     const ext = rows.filter(r => r.fl && r.fl.out === 'extinction');
@@ -1116,8 +1116,8 @@
         t.textContent = label;
         tsvg.append(t);
       };
-      mark(s.ignition_s, '#34d399', L('IGNITION', 'ZAPŁON'), 14);
-      mark(s.extinction_s, '#ef4444', L('EXTINCTION', 'WYGAŚNIĘCIE'), 30);
+      mark(s.ignition_s, '#5fb894', L('IGNITION', 'ZAPŁON'), 14);
+      mark(s.extinction_s, '#d9605a', L('EXTINCTION', 'WYGAŚNIĘCIE'), 30);
 
       // paths
       const path = (arr, Y, color) => {
@@ -1129,8 +1129,8 @@
         });
         tsvg.append(svgEl('path', { d, fill: 'none', stroke: color, 'stroke-width': 1.6, 'stroke-linejoin': 'round' }));
       };
-      path(ion, Yion, '#38bdf8');
-      path(pr, Yp, '#ff6a1f');
+      path(ion, Yion, '#6aaed6');
+      path(pr, Yp, '#e2733a');
 
       // x axis
       [0, .25, .5, .75, 1].forEach(f => {
@@ -1358,8 +1358,8 @@
         ctx.metrics = [
           [L('points in this class', 'punktów w tej klasie'), fmt(phaseRows.length)],
           [L('with an oxygen level', 'z poziomem tlenu'), fmt(phaseO2.length)],
-          [L(`at or above ${fmt(o2 * 100, 1)}% O₂`, `przy ${fmt(o2 * 100, 1)}% O₂ lub wyżej`), fmt(o2Only.length), '#f59e0b'],
-          [L('with a pressure', 'z ciśnieniem'), '0', '#ef4444'],
+          [L(`at or above ${fmt(o2 * 100, 1)}% O₂`, `przy ${fmt(o2 * 100, 1)}% O₂ lub wyżej`), fmt(o2Only.length), '#d9a441'],
+          [L('with a pressure', 'z ciśnieniem'), '0', '#d9605a'],
         ];
         out.append(el('div', { class: 's-verdict blind', html: `<h3>${ctx.title}</h3><p>${ctx.summary}</p>` }));
         out.append(el('div', { class: 's-metrics', html: metricHtml(ctx.metrics) }));
@@ -1405,8 +1405,8 @@
          Na to pytanie nie da się odpowiedzieć z tego korpusu — ani w przybliżeniu, ani przez interpolację.`);
       ctx.metrics = [
         [L('points in this class', 'punktów w tej klasie'), fmt(phaseRows.length)],
-        [L('with an oxygen level', 'z poziomem tlenu'), '0', '#ef4444'],
-        [L('with a pressure', 'z ciśnieniem'), '0', '#ef4444'],
+        [L('with an oxygen level', 'z poziomem tlenu'), '0', '#d9605a'],
+        [L('with a pressure', 'z ciśnieniem'), '0', '#d9605a'],
       ];
       out.append(el('div', { class: 's-verdict blind', html: `<h3>${ctx.title}</h3><p>${ctx.summary}</p>` }));
       finish(ctx);
@@ -1506,7 +1506,7 @@
         : L(`No test sits at or below this oxygen level at or above this pressure.${minTxt} The nearest, ${nearTxt}, is ${fmt(dpPct, 0)}% away in pressure and ${fmt(dpO2, 1)} pp away in oxygen.`,
             `Żaden test nie leży przy tym poziomie tlenu lub niżej i przy tym ciśnieniu lub wyżej.${minTxt} Najbliższy, ${nearTxtPl}, jest ${fmt(dpPct, 0)}% odległości w ciśnieniu i ${fmt(dpO2, 1)} pp w tlenie.`);
     ctx.metrics = [
-      [L('points within tolerance', plPts(tight, 'punkt w tolerancji', 'punkty w tolerancji', 'punktów w tolerancji')), tight, state === 'covered' ? '#34d399' : state === 'partial' ? '#f59e0b' : '#ef4444'],
+      [L('points within tolerance', plPts(tight, 'punkt w tolerancji', 'punkty w tolerancji', 'punktów w tolerancji')), tight, state === 'covered' ? '#5fb894' : state === 'partial' ? '#d9a441' : '#d9605a'],
       [L(`${phase} points usable`, plPts(pool.length, `punkt użyteczny ${phaseFor(phase)}`, `punkty użyteczne ${phaseFor(phase)}`, `punktów użytecznych ${phaseFor(phase)}`)), pool.length],
       [L('distance from evidence · O₂', 'odległość od dowodu · O₂'), fmt(dpO2, 1) + ' pp'],
       [L('distance from evidence · pressure', 'odległość od dowodu · ciśnienie'), fmt(dpPct, 0) + '%'],
