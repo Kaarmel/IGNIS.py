@@ -948,7 +948,7 @@
     if (!STAGE[e.stage]) return;
     const last = list[list.length - 1];
     if (last && stageKind(last.stage) === stageKind(e.stage)) { last.stage = e.stage; last.n = (last.n || 1) + 1; }
-    else list.push({ stage: e.stage, n: 1 });
+    else list.push({ stage: e.stage, n: 1, t: performance.now() });
   };
   const stageText = x => L(...STAGE[x.stage]) +
     (stageKind(x.stage) === 'data' && x.n > 1 ? ` · ${fmt(x.n)} ${L('queries', plFew(x.n) ? 'zapytania' : 'zapytań')}` : '');
@@ -1911,6 +1911,19 @@
   };
   const savedAnswer = key => key && (CACHE.ask[`${key}:${LANG}`] || null);
   const dateFmt = iso => { try { return new Date(iso + 'T12:00:00Z').toLocaleDateString(LOC(), { year: 'numeric', month: 'long', day: 'numeric' }); } catch (e) { return iso; } };
+  // How long each step took, as the reader saw it: from one progress event of
+  // the worker to the next, and from the last one to the answer.
+  const secs = v => v < 0.05 ? `< ${fmt(0.1, 1)} s` : `${fmt(v, 1)} s`;   // a data query inside the worker is that fast
+  const stepSecs = (st, i, end) => ((i + 1 < st.length ? st[i + 1].t : end) - st[i].t) / 1000;
+  const stepsHtml = (st, end, live) => st.map((x, i) =>
+    `<li class="${live && i === st.length - 1 ? 'now' : 'done'}"><span class="ask-dot" aria-hidden="true"></span><span class="ask-st">${esc(stageText(x))}</span>` +
+    `<span class="ask-dt"${live ? ' aria-hidden="true"' : ''}>${x.t != null && end ? secs(stepSecs(st, i, end)) : ''}</span></li>`).join('');
+  const askTimeline = (a, ok) => a.end && a.steps.length
+    ? `<details class="ask-time"${ok ? ' open' : ''}><summary>${ok
+        ? L(`Answered live in ${secs(a.took)}`, `Odpowiedź na żywo w ${secs(a.took)}`)
+        : L(`Live attempt: ${secs(a.took)}, step by step`, `Próba na żywo: ${secs(a.took)}, krok po kroku`)}</summary>` +
+      `<ol class="ask-steps">${stepsHtml(a.steps, a.end, false)}</ol></details>`
+    : '';
   const askMeta = (res, c) => {
     const bad = (c.unknown_investigations || []).length + (c.unknown_quotes || []).length + (c.unverified_free_quotes || []).length;
     return `<p class="ask-sugg">${L('Checked against the corpus before display. Click any source above to open the record it rests on.', 'Sprawdzone względem korpusu przed wyświetleniem. Kliknij dowolne źródło powyżej, żeby otworzyć rekord, na którym się opiera.')}</p><p class="ask-meta">${esc(res.model || '')} · ${L('data queries', 'zapytania o dane')}: ${fmt(res.queries || 0)} · ` +
@@ -1940,9 +1953,9 @@
     if (res === 'pending') {
       // A step list: finished steps get a tick, the current one pulses.
       const st = askLast.steps.length ? askLast.steps : [{ stage: 'start', n: 1 }];
-      out.innerHTML = `<p class="ask-asked">${esc(q)}</p><ol class="ask-steps" aria-live="polite">` +
-        st.map((x, i) => `<li class="${i === st.length - 1 ? 'now' : 'done'}"><span class="ask-dot" aria-hidden="true"></span>${esc(stageText(x))}</li>`).join('') +
-        '</ol>';
+      const now = performance.now();
+      out.innerHTML = `<p class="ask-asked">${esc(q)}</p><ol class="ask-steps" aria-live="polite">` + stepsHtml(st, now, true) + '</ol>' +
+        (askLast.t0 ? `<p class="ask-total" aria-hidden="true">${L('Elapsed', 'Upłynęło')} <b>${secs((now - askLast.t0) / 1000)}</b></p>` : '');
       return;
     }
     const retry = `<button class="chip ask-retry" type="button">${L('Try the live SI again', 'Spróbuj ponownie na żywo')}</button>`;
@@ -1952,18 +1965,17 @@
       const saved = savedAnswer(askLast.key);
       if (saved) {
         // A real answer recorded earlier, said to be exactly that.
-        out.innerHTML = `<p class="ask-saved">${L(`Saved answer, recorded ${dateFmt(saved.saved)}${saved.seconds ? ` (it took ${fmt(saved.seconds, 1)} s live then)` : ''} — not live.`, `Odpowiedź zapisana ${dateFmt(saved.saved)}${saved.seconds ? ` (wtedy na żywo zajęła ${fmt(saved.seconds, 1)} s)` : ''}, nie na żywo.`)} ` +
+        out.innerHTML = askTimeline(askLast, false) + `<p class="ask-saved">${L(`Saved answer, recorded ${dateFmt(saved.saved)}${saved.seconds ? ` (it took ${fmt(saved.seconds, 1)} s live then)` : ''} — not live.`, `Odpowiedź zapisana ${dateFmt(saved.saved)}${saved.seconds ? ` (wtedy na żywo zajęła ${fmt(saved.seconds, 1)} s)` : ''}, nie na żywo.`)} ` +
           `<span>${msg}</span> ${retry}</p>` +
           `<p class="ask-asked">${esc(saved.question)}</p><div class="ask-a">${askHtml(saved.answer)}</div>` + askMeta(saved, saved.check || {});
       } else {
-        out.innerHTML = `<p class="ask-bad">${msg}</p>${retry}`;
+        out.innerHTML = askTimeline(askLast, false) + `<p class="ask-bad">${msg}</p>${retry}`;
       }
       const b = out.querySelector('.ask-retry');
       if (b) b.onclick = () => askSend(askLast.q, askLast.key);
       return;
     }
-    const took = askLast.took != null ? `<p class="ask-took">${L(`Answered live in ${fmt(askLast.took, 1)} s`, `Odpowiedź na żywo w ${fmt(askLast.took, 1)} s`)}</p>` : '';
-    out.innerHTML = `<p class="ask-asked">${esc(q)}</p>${took}<div class="ask-a ask-in">${askHtml(res.answer)}</div>` + askMeta(res, res.check || {});
+    out.innerHTML = `<p class="ask-asked">${esc(q)}</p>${askTimeline(askLast, true)}<div class="ask-a ask-in">${askHtml(res.answer)}</div>` + askMeta(res, res.check || {});
   };
   // Above every answer: what in it can be clicked and what each kind opens,
   // with the first real link of each kind from this answer as the example.
@@ -1990,14 +2002,22 @@
   const renderAskOut = () => { renderAskOut0(); askLegend(); };
   const askSend = async (q, key = presetKeyOf(q)) => {
     if (!q.trim()) return;
-    askLast = { q, key, res: 'pending', steps: [] };
+    const t0 = performance.now();
+    askLast = { q, key, res: 'pending', steps: [{ stage: 'start', n: 1, t: t0 }], t0 };
     renderAskOut();
     if (!ASK_URL) { askLast.res = { error: 'network' }; renderAskOut(); return; }
     $('#ask-go').disabled = true;
     const ctl = new AbortController();
     const kill = setTimeout(() => ctl.abort(), ASK_LIMIT_S * 1000);
     const mine = askLast;
-    const t0 = performance.now();
+    // The running step and the total count up while the worker works.
+    const tick = setInterval(() => {
+      if (askLast !== mine || mine.res !== 'pending') { clearInterval(tick); return; }
+      const now = performance.now(), st = mine.steps, dts = document.querySelectorAll('#ask-out .ask-steps .ask-dt');
+      if (dts.length && st.length) dts[dts.length - 1].textContent = secs((now - st[st.length - 1].t) / 1000);
+      const tot = $('#ask-out .ask-total b');
+      if (tot) tot.textContent = secs((now - t0) / 1000);
+    }, 100);
     try {
       mine.res = await askWorker({ question: q, lang: LANG },
         e => { addStage(mine.steps, e); if (askLast === mine) renderAskOut(); }, ctl.signal);
@@ -2005,7 +2025,9 @@
       mine.res = { error: e.name === 'AbortError' ? 'timeout' : 'network' };
     }
     clearTimeout(kill);
-    mine.took = (performance.now() - t0) / 1000;   // send to answer, as the reader waited for it
+    clearInterval(tick);
+    mine.end = performance.now();
+    mine.took = (mine.end - t0) / 1000;   // send to answer, as the reader waited for it
     if (askLast !== mine) return;   // a newer question replaced this one
     $('#ask-go').disabled = false;
     renderAskOut();
