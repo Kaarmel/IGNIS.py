@@ -883,8 +883,8 @@
       if (siRank) {
         banner.innerHTML = `<b>${L('Active ranking', 'Aktywny ranking')}:</b> ${L('SI for', 'SI dla')}: „${esc(siRank.mission)}”` +
           (siRank.replay
-            ? ` <span class="ask-saved-inline">${L(`instant: recorded from the live SI on ${dateFmt(siRank.saved)}${siRank.seconds ? ` (it took ${fmt(siRank.seconds, 0)} s live)` : ''}`,
-                                                   `od ręki: nagrany z SI na żywo ${dateFmt(siRank.saved)}${siRank.seconds ? ` (na żywo zajął ${fmt(siRank.seconds, 0)} s)` : ''}`)}</span>`
+            ? ` <span class="ask-saved-inline">${L(`instant: recorded from the live SI on ${dateFmt(siRank.saved)}${siRank.seconds ? ` (it took ${fmt(siRank.seconds, 0)} s live)` : ''}. Only the mission buttons are recorded: type your own mission and the SI ranks it live.`,
+                                                   `od ręki: nagrany z SI na żywo ${dateFmt(siRank.saved)}${siRank.seconds ? ` (na żywo zajął ${fmt(siRank.seconds, 0)} s)` : ''}. Nagrane są tylko przyciski misji: wpisz własną misję, a SI uszereguje badania na żywo.`)}</span>`
             : siRank.saved ? ` <span class="ask-saved-inline">${L(`saved ranking, recorded ${dateFmt(siRank.saved)} — not live`, `ranking zapisany ${dateFmt(siRank.saved)}, nie na żywo`)}</span>` : '') +
           ` <span class="atlas-active-m">${esc(siRank.model || '')}</span>`;
         if (siRank.replay) {
@@ -2014,8 +2014,8 @@
       if (askLast.lang !== LANG) askLast.shown = null;   // a language switch shows the whole saved answer at once
       const done = askLast.shown == null;
       out.innerHTML = `<p class="ask-saved ask-replay">${L(
-        `Instant answer: recorded from the live SI on ${dateFmt(s.saved)}${s.seconds ? ` (it took ${fmt(s.seconds, 0)} s live)` : ''} and replayed here.`,
-        `Odpowiedź od ręki: nagrana z SI na żywo ${dateFmt(s.saved)}${s.seconds ? ` (na żywo zajęła ${fmt(s.seconds, 0)} s)` : ''} i odtworzona tutaj.`)} ` +
+        `Instant answer: recorded from the live SI on ${dateFmt(s.saved)}${s.seconds ? ` (it took ${fmt(s.seconds, 0)} s live)` : ''} and replayed here. Only the preset questions are recorded: type your own question in the box above and the SI answers it live.`,
+        `Odpowiedź od ręki: nagrana z SI na żywo ${dateFmt(s.saved)}${s.seconds ? ` (na żywo zajęła ${fmt(s.seconds, 0)} s)` : ''} i odtworzona tutaj. Nagrane są tylko gotowe pytania: wpisz własne pytanie w polu powyżej, a SI odpowie na żywo.`)} ` +
         `<button class="chip ask-live" type="button">${L('Ask the SI live', 'Zapytaj SI na żywo')}</button></p>` +
         `<p class="ask-asked">${esc(s.question)}</p><div class="ask-a">${done ? askHtml(s.answer) : withCaret(askHtml(s.answer.slice(0, askLast.shown)))}</div>` +
         (done ? askMeta(s, s.check || {}) : '');
