@@ -19,7 +19,8 @@
   "1080": "video frame size in pixels (pitch/FILM.md), not corpus data",
   "2.5": "pitch/FILM.md: film timing (shot boundaries, words per second)",
   "5.2": "pitch/FILM.md: film timing (shot boundaries, words per second)",
-  "13.5": "pitch/FILM.md: film timing (shot boundaries, words per second)",
-  "16.5": "pitch/FILM.md: film timing (shot boundaries, words per second)",
-  "27.2": "pitch/FILM.md: film timing (shot boundaries, words per second)"
+  "9.4": "pitch/FILM.md: film timing (shot boundaries)",
+  "14.4": "pitch/FILM.md: film timing (shot boundaries)",
+  "19.2": "pitch/FILM.md: film timing (shot boundaries)",
+  "25.5": "pitch/FILM.md: film timing (shot boundaries)"
 }
