@@ -68,19 +68,22 @@ section { scroll-margin-top: 72px; }
 .btn:hover .arr { transform: translateX(3px); }
 @media (max-width: 380px) { .nav .btn .arr { display: none; } }
 .btn-play::before { content: ''; border-left: 11px solid var(--fire); border-top: 7px solid transparent; border-bottom: 7px solid transparent; }
-.gh-link {
-  display: flex; align-items: center; gap: 16px; margin-top: 20px; padding: 16px 20px; max-width: 540px;
-  border: 1px solid var(--line-2); background: var(--panel); color: var(--ink); text-decoration: none;
-  transition: border-color .2s, transform .2s var(--ease);
+/* The one action the judges need: larger than everything else, said in words. */
+.hero .hero-cta { flex-direction: column; align-items: stretch; max-width: 540px; }
+.judge-k { margin: 0 0 -2px; font: 600 12px/1.2 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--fire); }
+.btn-main {
+  min-height: 84px; padding: 14px 28px; gap: 18px; justify-content: space-between; white-space: normal;
+  font-size: 24px; font-weight: 700; letter-spacing: -.01em; line-height: 1.15;
+  animation: mainpulse 2.4s ease-out 1.4s 3;
 }
-.gh-link:hover { border-color: var(--ink-faint); transform: translateY(-1px); }
-.gh-mark { width: 36px; height: 36px; flex: 0 0 36px; fill: currentColor; }
-.gh-t { min-width: 0; }
-.gh-t b { display: block; font: 650 clamp(16px, 1.7vw, 21px)/1.25 var(--mono); letter-spacing: -.01em; overflow-wrap: anywhere; }
-.gh-t small { display: block; margin-top: 4px; font-size: 14px; color: var(--ink-faint); }
-.gh-arrow { margin-left: auto; padding-left: 8px; font-size: 24px; color: var(--fire); transition: transform .2s var(--ease); }
-.gh-link:hover .gh-arrow { transform: translateX(3px); }
-@media (max-width: 720px) { .gh-link { padding: 14px 14px; gap: 12px; } .gh-mark { width: 28px; height: 28px; flex-basis: 28px; } .gh-t b { font-size: clamp(12.5px, 3.6vw, 15px); overflow-wrap: normal; } .gh-t small { font-size: 13px; } .gh-arrow { font-size: 20px; padding-left: 4px; } }
+.btn-main small { display: block; margin-top: 6px; font: 500 14px/1.35 var(--sans); letter-spacing: 0; color: #3a1606; }
+.btn-main .arr { font-size: 30px; }
+@keyframes mainpulse { 0% { box-shadow: 0 0 0 0 rgba(244,119,51,.55); } 100% { box-shadow: 0 0 0 16px rgba(244,119,51,0); } }
+@media (prefers-reduced-motion: reduce) { .btn-main { animation: none; } }
+.cta-2 { display: flex; flex-wrap: wrap; gap: 12px; }
+.cta-2 .btn { flex: 1 1 200px; justify-content: center; }
+.btn-gh .gh-mark { width: 20px; height: 20px; flex: 0 0 20px; fill: currentColor; }
+@media (max-width: 720px) { .btn-main { min-height: 76px; padding: 12px 20px; font-size: 21px; } .btn-main small { font-size: 13px; } .btn-main .arr { font-size: 26px; } }
 
 /* ---------- type ---------- */
 h1, h2, h3 { margin: 0; letter-spacing: -.02em; text-wrap: balance; }
