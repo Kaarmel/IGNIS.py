@@ -986,3 +986,6 @@ details.lede-fold > .sec-lede { margin-top: 8px; }
 /* quieter per-row toggle in the Atlas */
 .a-si-d > summary { color: var(--ink-faint); }
 .a-si-d > summary:hover, .a-si-d[open] > summary { color: var(--data); }
+/* One offset for jumps, not two: JS places headings under the bar; plain #hash links use this. */
+html { scroll-padding-top: 112px; }
+.sec, .hero, #top, #details { scroll-margin-top: 0; }

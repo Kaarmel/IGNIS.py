@@ -2237,11 +2237,19 @@
     detBtn.textContent = LANG === 'pl' ? detBtn.dataset.pl : detBtn.dataset.en;
   };
   if (detBtn) detBtn.onclick = () => setDetails(detBody.hidden);
-  // Anything that scrolls to a section inside the collapsed details opens it first.
+  // Every jump on the page goes through here: a section lands with its heading
+  // just under the sticky bar (measured now, so it is right on a phone too), and
+  // a section inside the collapsed details opens first.
   const sivOrig = Element.prototype.scrollIntoView;
-  Element.prototype.scrollIntoView = function (...a) {
+  Element.prototype.scrollIntoView = function (opt) {
     if (detBody && detBody.hidden && detBody.contains(this)) setDetails(true);
-    return sivOrig.apply(this, a);
+    const o = opt && typeof opt === 'object' ? opt : {};
+    if ((o.block && o.block !== 'start') || opt === false) return sivOrig.call(this, opt);
+    const bar = document.querySelector('.nav');
+    const off = (bar ? bar.getBoundingClientRect().height : 0) + 16;
+    const anchor = this.matches('section.sec, #details') ? (this.querySelector('.sec-head, .kicker') || this) : this;
+    const y = this.id === 'top' ? 0 : anchor.getBoundingClientRect().top + window.scrollY - off;
+    window.scrollTo({ top: Math.max(0, Math.round(y)), behavior: o.behavior || 'auto' });
   };
   document.addEventListener('click', e => {
     const a = e.target.closest && e.target.closest('a[href^="#"]');
